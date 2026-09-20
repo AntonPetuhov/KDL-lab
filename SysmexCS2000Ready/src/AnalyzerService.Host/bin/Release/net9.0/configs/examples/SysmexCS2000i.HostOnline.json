@@ -1,0 +1,17 @@
+{
+  "AnalyzerName": "Sysmex cs-2000i Host Online",
+  "ConnectionType": "TCPIP",
+  "IPaddress": "10.129.1.40",
+  "Port": 8027,
+  "Isdll": true,
+  "DllPath": "drivers\\SysmexCS2000HostOnline\\SysmexCS2000.HostOnline.Driver.dll",
+  "ResultsFolder": "Results",
+  "ActiveStatus": true,
+  "WorkStatus": true,
+  "ResultHandlerStatus": true,
+  "OutputFolder": "E:\\Services\\FileGetterService\\Exchange",
+  "ConnectionString": "Server=CGM-APP11\\SQLCGMAPP11;Database=KDLPROD;MultipleActiveResultSets=true;TrustServerCertificate=True;",
+  "AnalyzerCode": "915",
+  "AnalyzerConfigurationCode": "SYS2000",
+  "Protocol": "SYSMEX_HOST_ONLINE"
+}

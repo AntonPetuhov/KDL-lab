@@ -1,0 +1,14 @@
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.csproj.AssemblyReference.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.GeneratedMSBuildEditorConfig.editorconfig
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.AssemblyInfoInputs.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.AssemblyInfo.cs
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.csproj.CoreCompileInputs.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Debug\net9.0\SysmexCS2000.Driver.deps.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Debug\net9.0\SysmexCS2000.Driver.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Debug\net9.0\SysmexCS2000.Driver.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Debug\net9.0\SysmexCS2000.Driver.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\refint\SysmexCS2000.Driver.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\SysmexCS2000.Driver.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Debug\net9.0\ref\SysmexCS2000.Driver.dll

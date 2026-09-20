@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
+    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnalyzerService.Contracts</name>
+    </assembly>
+    <members>
+        <member name="T:AnalyzerService.Contracts.AnalyzerSettings">
+            <summary>
+            Представляет конфигурацию одного анализатора, прочитанную из JSON.
+            Используется службой-хостом и загружаемым DLL-драйвером.
+            </summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.AnalyzerId">
+            <summary>Получает или задаёт необязательный уникальный идентификатор прибора.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.AnalyzerName">
+            <summary>Получает или задаёт отображаемое уникальное имя анализатора.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.ConnectionType">
+            <summary>Получает или задаёт тип подключения, поддерживается TCPIP.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.IPaddress">
+            <summary>Получает или задаёт локальный IP-адрес ЛИС, который слушает служба.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.Port">
+            <summary>Получает или задаёт локальный TCP-порт ЛИС.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.Isdll">
+            <summary>Получает или задаёт признак загрузки драйвера из DLL.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.DllPath">
+            <summary>Получает или задаёт путь к DLL относительно каталога службы или абсолютный путь.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.ActiveStatus">
+            <summary>Получает или задаёт признак активности конфигурации.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.WorkStatus">
+            <summary>Получает или задаёт признак запуска обмена.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.ResultHandlerStatus">
+            <summary>Получает или задаёт признак обработки результатов.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.ResultsFolder">
+            <summary>Получает или задаёт каталог сырых результатов.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.LogsFolder">
+            <summary>Получает или задаёт необязательный каталог логов.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.OutputFolder">
+            <summary>Получает или задаёт каталог результирующих файлов для ЛИС.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.ConnectionString">
+            <summary>Получает или задаёт строку подключения к БД ЛИС.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.AnalyzerCode">
+            <summary>Получает или задаёт код анализатора в выходном сообщении.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.AnalyzerConfigurationCode">
+            <summary>Получает или задаёт код прибора в Analyzer Configuration.</summary>
+        </member>
+        <member name="P:AnalyzerService.Contracts.AnalyzerSettings.Protocol">
+            <summary>
+            Получает или задаёт формат протокола. Поле добавлено как расширение,
+            поскольку TCP/IP поддерживает более одного формата Sysmex.
+            </summary>
+        </member>
+        <member name="T:AnalyzerService.Contracts.IAnalyzerDriver">
+            <summary>
+            Определяет стабильный контракт управляемого DLL-драйвера анализатора.
+            Реализация загружается службой через изолированный AssemblyLoadContext.
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.Initialize(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
+            <summary>
+            Синхронно проверяет и сохраняет зависимости до запуска сетевого цикла.
+            </summary>
+            <param name="logger">Логгер конкретного анализатора.</param>
+            <param name="settings">Проверенная JSON-конфигурация.</param>
+            <exception cref="T:System.ArgumentNullException">Зависимость не передана.</exception>
+            <exception cref="T:System.ArgumentException">Настройки не поддерживаются драйвером.</exception>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно выполняет обмен, поскольку ожидание подключения и TCP-данных
+            имеет неопределённую длительность и не должно блокировать поток службы.
+            </summary>
+            <param name="cancellationToken">Сигнал штатной остановки.</param>
+            <returns>Задача полного жизненного цикла обмена.</returns>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно останавливает транспорт и ожидает завершение активного обмена.
+            </summary>
+            <param name="cancellationToken">Ограничение времени остановки.</param>
+            <returns>Задача остановки.</returns>
+        </member>
+        <member name="T:AnalyzerService.Contracts.IAnalyzerLogger">
+            <summary>
+            Определяет синхронное структурированное логирование операций одного анализатора.
+            Короткие файловые записи синхронны, чтобы гарантировать порядок и запись при остановке.
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerLogger.Service(System.String)">
+            <summary>Записывает событие жизненного цикла.</summary><param name="message">Текст события.</param>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerLogger.Transport(System.String)">
+            <summary>Записывает сетевое событие.</summary><param name="message">Текст события.</param>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerLogger.Protocol(System.String)">
+            <summary>Записывает событие протокола.</summary><param name="message">Текст события.</param>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerLogger.Result(System.String)">
+            <summary>Записывает событие обработки результата.</summary><param name="message">Текст события.</param>
+        </member>
+        <member name="M:AnalyzerService.Contracts.IAnalyzerLogger.Error(System.String,System.Exception)">
+            <summary>Записывает ошибку с контекстом.</summary><param name="message">Контекст.</param><param name="exception">Исключение.</param>
+        </member>
+    </members>
+</doc>

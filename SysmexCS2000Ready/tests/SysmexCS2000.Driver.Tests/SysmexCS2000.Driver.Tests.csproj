@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\..\src\SysmexCS2000.Driver\SysmexCS2000.Driver.csproj" /></ItemGroup>
+</Project>

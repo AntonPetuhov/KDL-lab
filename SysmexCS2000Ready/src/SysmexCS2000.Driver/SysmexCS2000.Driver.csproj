@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>SysmexCS2000.Driver</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" />
+    <ProjectReference Include="..\AnalyzerService.Lis\AnalyzerService.Lis.csproj" />
+  </ItemGroup>
+</Project>

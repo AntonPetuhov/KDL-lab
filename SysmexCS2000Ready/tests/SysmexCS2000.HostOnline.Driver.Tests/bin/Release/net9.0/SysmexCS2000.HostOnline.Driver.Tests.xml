@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SysmexCS2000.HostOnline.Driver.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Program">
+            <summary>Выполняет автономные проверки фиксированного формата Sysmex Host Online.</summary>
+        </member>
+        <member name="M:Program.Main">
+            <summary>Запускает проверки и возвращает код процесса.</summary>
+        </member>
+        <member name="M:Program.ParseInquiry">
+            <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>
+        </member>
+        <member name="M:Program.ParseResult">
+            <summary>Проверяет разбор D121: код, данные и флаг.</summary>
+        </member>
+        <member name="M:Program.BuildOrder">
+            <summary>Проверяет S221, фиксированную длину и специальный код 000.</summary>
+        </member>
+        <member name="M:Program.Header(System.Char,System.Char,System.String,System.String)">
+            <summary>Формирует 58-символьный тестовый заголовок.</summary>
+        </member>
+        <member name="M:Program.Equal``1(``0,``0,System.String)">
+            <summary>Сравнивает ожидаемое и фактическое значение.</summary>
+        </member>
+    </members>
+</doc>

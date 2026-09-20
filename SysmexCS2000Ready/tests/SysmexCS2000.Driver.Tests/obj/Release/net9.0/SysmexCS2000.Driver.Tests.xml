@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SysmexCS2000.Driver.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Program">
+            <summary>Выполняет пакет независимых от сети проверок ASTM без стороннего test framework.</summary>
+        </member>
+        <member name="M:Program.Main">
+            <summary>Запускает проверки и возвращает ненулевой код при первой ошибке.</summary><returns>Код процесса.</returns>
+        </member>
+        <member name="M:Program.ChecksumMatchesKnownFrame">
+            <summary>Проверяет сумму по известному содержимому ASTM-кадра.</summary>
+        </member>
+        <member name="M:Program.FrameRoundTrip">
+            <summary>Проверяет симметрию кодирования и декодирования.</summary>
+        </member>
+        <member name="M:Program.ParserReadsQuery">
+            <summary>Проверяет извлечение Sample ID из Q-записи.</summary>
+        </member>
+        <member name="M:Program.Equal``1(``0,``0,System.String)">
+            <summary>Сравнивает значения и выбрасывает диагностическую ошибку.</summary>
+        </member>
+    </members>
+</doc>

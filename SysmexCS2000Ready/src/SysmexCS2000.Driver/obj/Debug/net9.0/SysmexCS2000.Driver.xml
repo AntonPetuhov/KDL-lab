@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SysmexCS2000.Driver</name>
+    </assembly>
+    <members>
+        <member name="T:SysmexCS2000.Driver.AnalyzerSysmexCS2000">
+            <summary>
+            Координирует TCP-host, ASTM-сессию, запросы заказов и результаты CS-2000i.
+            Загрузка DLL остаётся ответственностью службы-хоста.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.AnalyzerSysmexCS2000.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
+            <summary>Создаёт обработчик и его синхронные зависимости.</summary><param name="logger">Логгер.</param><param name="settings">Настройки JSON.</param>
+        </member>
+        <member name="M:SysmexCS2000.Driver.AnalyzerSysmexCS2000.RunAsync(System.Threading.CancellationToken)">
+            <summary>Асинхронно принимает подключения и сообщения, поскольку TCP-ожидания нельзя выполнять синхронно без блокировки.</summary><param name="token">Сигнал остановки.</param><returns>Задача рабочего цикла.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.AnalyzerSysmexCS2000.HandleClientAsync(System.Net.Sockets.TcpClient,System.Threading.CancellationToken)">
+            <summary>Асинхронно обслуживает последовательные ASTM-транзакции одного IPU.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.AnalyzerSysmexCS2000.StopAsync(System.Threading.CancellationToken)">
+            <summary>Синхронно закрывает сокеты; задача завершена сразу после инициирования отмены.</summary><param name="token">Не используется, сохранён для контракта.</param><returns>Завершённая задача.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.AnalyzerSysmexCS2000.Dispose">
+            <summary>Освобождает transport и token source.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Lis.LisOrder">
+            <summary>Содержит заказ ЛИС для ответа анализатору.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.LisOrder.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>Содержит заказ ЛИС для ответа анализатору.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Lis.LisResult">
+            <summary>Содержит один результат, принятый от анализатора.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.LisResult.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>Содержит один результат, принятый от анализатора.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Lis.LisRepository">
+            <summary>
+            Выполняет синхронные параметризованные запросы к существующей БД ЛИС.
+            Использует таблицы и связи эталонного проекта OrthoVision.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.LisRepository.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>
+            Выполняет синхронные параметризованные запросы к существующей БД ЛИС.
+            Использует таблицы и связи эталонного проекта OrthoVision.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.LisRepository.GetOrder(System.String)">
+            <summary>
+            Синхронно получает пациента и незавершённые тесты. Используется синхронный SQL API,
+            поскольку вызов выполняется последовательно внутри одного запроса прибора.
+            </summary>
+            <param name="sampleId">RID образца.</param><returns>Заказ либо null.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.LisRepository.TranslateResultCode(System.String)">
+            <summary>Синхронно переводит код теста прибора в код PSMV2.</summary><param name="analyzerCode">Код Sysmex.</param><returns>Код PSMV2 либо null.</returns>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Lis.SysmexResultHandler">
+            <summary>Извлекает R-записи и атомарно создаёт файлы результата и подтверждения для ЛИС.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger,SysmexCS2000.Driver.Lis.LisRepository)">
+            <summary>Извлекает R-записи и атомарно создаёт файлы результата и подтверждения для ЛИС.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.Handle(SysmexCS2000.Driver.Protocol.AstmMessage)">
+            <summary>
+            Синхронно обрабатывает принятое и уже подтверждённое структурно сообщение.
+            Файлы малы, а последовательная запись гарантирует порядок .res/.ok.
+            </summary>
+            <param name="message">ASTM-сообщение результата.</param>
+            <exception cref="T:System.IO.InvalidDataException">Нет Sample ID или результатов.</exception>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.WriteAtomically(System.String,System.String)">
+            <summary>Атомарно заменяет целевой файл после полной записи временного.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.Sanitize(System.String)">
+            <summary>Удаляет недопустимые символы из части имени файла.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmChecksum">
+            <summary>Вычисляет ASTM checksum как младшие восемь бит суммы байтов.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmChecksum.Calculate(System.ReadOnlySpan{System.Byte})">
+            <summary>Синхронно вычисляет checksum для данных от F# до ETX/ETB включительно.</summary><param name="bytes">Байты диапазона.</param><returns>Контрольная сумма.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmChecksum.ToAscii(System.Byte)">
+            <summary>Преобразует checksum в два заглавных ASCII hex-символа.</summary><param name="value">Сумма.</param><returns>Два байта ASCII.</returns>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmControl">
+            <summary>Содержит управляющие байты ASTM E1381-02, используемые CS-2000i.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Stx">
+            <summary>Start of text.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Etx">
+            <summary>End of text.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Eot">
+            <summary>End of transmission.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Enq">
+            <summary>Enquiry.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Ack">
+            <summary>Acknowledge.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Lf">
+            <summary>Line feed.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Cr">
+            <summary>Carriage return.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Nak">
+            <summary>Negative acknowledge.</summary>
+        </member>
+        <member name="F:SysmexCS2000.Driver.Protocol.AstmControl.Etb">
+            <summary>End of transmission block.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmFrame">
+            <summary>Представляет проверенный кадр ASTM с номером, текстом и признаком последнего блока.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmFrame.#ctor(System.Int32,System.String,System.Boolean)">
+            <summary>Представляет проверенный кадр ASTM с номером, текстом и признаком последнего блока.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmFrameCodec">
+            <summary>Кодирует и декодирует кадры ASTM E1381-02, включая границы и checksum.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmFrameCodec.Encode(SysmexCS2000.Driver.Protocol.AstmFrame)">
+            <summary>Синхронно кодирует один кадр.</summary><param name="frame">Кадр.</param><returns>Байты для TCP.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Номер вне 0..7.</exception>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmFrameCodec.Decode(System.ReadOnlySpan{System.Byte})">
+            <summary>Синхронно декодирует полный кадр и проверяет checksum.</summary><param name="bytes">Полный кадр.</param><returns>Проверенный кадр.</returns>
+            <exception cref="T:SysmexCS2000.Driver.Protocol.SysmexProtocolException">Структура или checksum ошибочны.</exception>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmFrameCodec.Split(System.String,System.Int32,System.Int32)">
+            <summary>Делит одну ASTM-запись на кадры заданного размера.</summary><param name="record">Запись с CR.</param><param name="maximumTextLength">Максимум символов текста.</param><param name="firstNumber">Первый номер.</param><returns>Последовательность кадров.</returns>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmMessageBuilder">
+            <summary>Формирует документированные H/P/O/L ответы на запрос заказа CS-2000i.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageBuilder.BuildOrder(SysmexCS2000.Driver.Lis.LisOrder)">
+            <summary>Синхронно формирует ответ с заказом.</summary><param name="order">Данные ЛИС.</param><returns>ASTM-текст.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageBuilder.BuildEmpty(System.String,System.String)">
+            <summary>Формирует ответ без параметров: 000 либо 999 по спецификации.</summary><param name="sampleId">Sample ID.</param><param name="code">Документированный код 000/999.</param><returns>ASTM-текст.</returns>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmMessageParser">
+            <summary>Разбирает H/P/Q/O/R/L записи и проверяет обязательный порядок сообщения.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageParser.Parse(System.String)">
+            <summary>Синхронно разбирает сообщение в записи; операция выполняется только в памяти.</summary><param name="text">Объединённый текст кадров.</param><returns>Типизированное сообщение.</returns>
+            <exception cref="T:SysmexCS2000.Driver.Protocol.SysmexProtocolException">Записи пусты или нарушают порядок.</exception>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageParser.GetQuerySampleId(SysmexCS2000.Driver.Protocol.AstmMessage)">
+            <summary>Извлекает Sample ID из Q-записи, включая компонент после ^.</summary><param name="message">Сообщение запроса.</param><returns>Sample ID.</returns>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmMessage">
+            <summary>Представляет полное ASTM-сообщение.</summary><param name="Records">Записи сообщения.</param>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessage.#ctor(System.Collections.Generic.IReadOnlyList{SysmexCS2000.Driver.Protocol.AstmRecord})">
+            <summary>Представляет полное ASTM-сообщение.</summary><param name="Records">Записи сообщения.</param>
+        </member>
+        <member name="P:SysmexCS2000.Driver.Protocol.AstmMessage.Records">
+            ><summary>Записи сообщения.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmRecord">
+            <summary>Представляет одну ASTM-запись.</summary><param name="Type">Идентификатор.</param><param name="Fields">Поля.</param>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmRecord.#ctor(System.Char,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>Представляет одну ASTM-запись.</summary><param name="Type">Идентификатор.</param><param name="Fields">Поля.</param>
+        </member>
+        <member name="P:SysmexCS2000.Driver.Protocol.AstmRecord.Type">
+            ><summary>Идентификатор.</summary>
+        </member>
+        <member name="P:SysmexCS2000.Driver.Protocol.AstmRecord.Fields">
+            ><summary>Поля.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.AstmSession">
+            <summary>
+            Реализует ASTM E1381-02: ENQ/ACK/NAK/EOT, кадры, нумерацию,
+            максимум шесть попыток и таймауты 15/30 секунд из спецификации.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmSession.#ctor(AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>
+            Реализует ASTM E1381-02: ENQ/ACK/NAK/EOT, кадры, нумерацию,
+            максимум шесть попыток и таймауты 15/30 секунд из спецификации.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmSession.ReceiveMessageAsync(System.Net.Sockets.NetworkStream,System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно принимает одно полное сообщение; сеть требует неблокирующего ожидания.
+            </summary>
+            <param name="stream">TCP-поток.</param><param name="token">Сигнал остановки.</param><returns>Текст записей.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmSession.SendMessageAsync(System.Net.Sockets.NetworkStream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно отправляет сообщение, ожидая ACK для ENQ и каждого кадра.
+            </summary>
+            <param name="stream">TCP-поток.</param><param name="message">ASTM-текст.</param><param name="token">Сигнал остановки.</param><returns>Задача передачи.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmSession.ReadByteAsync(System.Net.Sockets.NetworkStream,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>Асинхронно читает один байт с документированным timeout.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmSession.ReadFrameRemainderAsync(System.Net.Sockets.NetworkStream,System.Threading.CancellationToken)">
+            <summary>Читает остаток кадра до LF с receiver timeout.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmSession.WriteControlAsync(System.Net.Sockets.NetworkStream,System.Byte,System.Threading.CancellationToken)">
+            <summary>Асинхронно отправляет управляющий байт.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Protocol.SysmexProtocolException">
+            <summary>Описывает нарушение ASTM с фазой и документированным именем ошибки.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Protocol.SysmexProtocolException.#ctor(System.String,System.String)">
+            <summary>Создаёт ошибку протокола.</summary><param name="code">Код или имя из спецификации.</param><param name="message">Описание.</param>
+        </member>
+        <member name="P:SysmexCS2000.Driver.Protocol.SysmexProtocolException.Code">
+            <summary>Получает документированное имя или код ошибки.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.SysmexCS2000Driver">
+            <summary>Является единственной публичной точкой входа DLL-плагина Sysmex CS-2000i.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.SysmexCS2000Driver.Initialize(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
+            <inheritdoc />
+        </member>
+        <member name="M:SysmexCS2000.Driver.SysmexCS2000Driver.RunAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:SysmexCS2000.Driver.SysmexCS2000Driver.StopAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:SysmexCS2000.Driver.SysmexCS2000Driver.Dispose">
+            <summary>Освобождает объект анализатора и сетевые ресурсы.</summary>
+        </member>
+        <member name="T:SysmexCS2000.Driver.Transport.TcpHost">
+            <summary>Слушает TCP как host; Sysmex IPU подключается к нему как клиент.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>Слушает TCP как host; Sysmex IPU подключается к нему как клиент.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.Start(System.Net.IPAddress,System.Int32)">
+            <summary>Синхронно запускает listener на адресе и порту из JSON.</summary><param name="address">Локальный адрес.</param><param name="port">Локальный порт.</param>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.AcceptAsync(System.Threading.CancellationToken)">
+            <summary>Асинхронно ожидает IPU без блокировки потока службы.</summary><param name="token">Сигнал остановки.</param><returns>Подключённый клиент.</returns>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.Stop">
+            <summary>Синхронно прекращает listener и активное соединение.</summary>
+        </member>
+        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.Dispose">
+            <summary>Освобождает сетевые ресурсы.</summary>
+        </member>
+    </members>
+</doc>

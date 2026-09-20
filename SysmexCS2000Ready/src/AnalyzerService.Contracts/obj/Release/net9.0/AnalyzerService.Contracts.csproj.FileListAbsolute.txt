@@ -1,0 +1,13 @@
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Release\net9.0\AnalyzerService.Contracts.deps.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Release\net9.0\AnalyzerService.Contracts.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Release\net9.0\AnalyzerService.Contracts.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Release\net9.0\AnalyzerService.Contracts.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.AssemblyInfoInputs.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.AssemblyInfo.cs
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.csproj.CoreCompileInputs.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\refint\AnalyzerService.Contracts.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\AnalyzerService.Contracts.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Release\net9.0\ref\AnalyzerService.Contracts.dll
