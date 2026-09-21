@@ -133,23 +133,5 @@
         <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.Dispose">
             <summary>Освобождает обработчик и TCP-ресурсы.</summary>
         </member>
-        <member name="T:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost">
-            <summary>Реализует TCP-сервер ЛИС и тексты STX/ETX собственного протокола.</summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger)">
-            <summary>Реализует TCP-сервер ЛИС и тексты STX/ETX собственного протокола.</summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.Start(System.Net.IPAddress,System.Int32)">
-            <summary>Синхронно запускает listener.</summary><param name="address">Локальный адрес.</param><param name="port">Порт.</param>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.AcceptAsync(System.Threading.CancellationToken)">
-            <summary>Асинхронно ожидает подключение IPU.</summary><param name="token">Сигнал остановки.</param><returns>Клиент.</returns>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.Stop">
-            <summary>Синхронно прекращает listener и соединение.</summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.Dispose">
-            <summary>Освобождает TCP-ресурсы.</summary>
-        </member>
     </members>
 </doc>

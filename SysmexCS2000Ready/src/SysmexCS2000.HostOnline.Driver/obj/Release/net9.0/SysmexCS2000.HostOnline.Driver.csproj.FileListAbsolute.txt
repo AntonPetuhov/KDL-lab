@@ -16,3 +16,6 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\SysmexCS2000.HostOnline.Driver.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\SysmexCS2000.HostOnline.Driver.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\ref\SysmexCS2000.HostOnline.Driver.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\AnalyzerService.Transport.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\AnalyzerService.Transport.xml

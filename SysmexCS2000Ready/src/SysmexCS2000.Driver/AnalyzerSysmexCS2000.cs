@@ -2,9 +2,9 @@ using System.Net;
 using System.Net.Sockets;
 using AnalyzerService.Contracts;
 using AnalyzerService.Lis;
+using AnalyzerService.Transport;
 using SysmexCS2000.Driver.Lis;
 using SysmexCS2000.Driver.Protocol;
-using SysmexCS2000.Driver.Transport;
 
 namespace SysmexCS2000.Driver;
 
@@ -30,7 +30,7 @@ public sealed class AnalyzerSysmexCS2000 : IDisposable
     {
         this.logger = logger;
         this.settings = settings;
-        tcpHost = new TcpHost(logger);
+        tcpHost = new TcpHost(logger, "Sysmex CS-2000i ASTM");
         session = new AstmSession(logger);
         repository = new LisRepository(settings, logger);
         resultHandler = new SysmexResultHandler(settings, logger, repository);

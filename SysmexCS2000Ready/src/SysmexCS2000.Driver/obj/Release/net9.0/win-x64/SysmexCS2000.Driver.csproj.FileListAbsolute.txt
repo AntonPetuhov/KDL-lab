@@ -16,3 +16,6 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Lis.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Lis.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Release\net9.0\win-x64\SysmexCS.1C712F1F.Up2Date
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.xml

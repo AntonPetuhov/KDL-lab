@@ -486,12 +486,26 @@
           "bin/placeholder/AnalyzerService.Lis.dll": {}
         }
       },
+      "AnalyzerService.Transport/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/AnalyzerService.Transport.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AnalyzerService.Transport.dll": {}
+        }
+      },
       "SysmexCS2000.Driver/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
-          "AnalyzerService.Lis": "1.0.0"
+          "AnalyzerService.Lis": "1.0.0",
+          "AnalyzerService.Transport": "1.0.0"
         },
         "compile": {
           "bin/placeholder/SysmexCS2000.Driver.dll": {}
@@ -1218,6 +1232,11 @@
       "type": "project",
       "path": "../../src/AnalyzerService.Lis/AnalyzerService.Lis.csproj",
       "msbuildProject": "../../src/AnalyzerService.Lis/AnalyzerService.Lis.csproj"
+    },
+    "AnalyzerService.Transport/1.0.0": {
+      "type": "project",
+      "path": "../../src/AnalyzerService.Transport/AnalyzerService.Transport.csproj",
+      "msbuildProject": "../../src/AnalyzerService.Transport/AnalyzerService.Transport.csproj"
     },
     "SysmexCS2000.Driver/1.0.0": {
       "type": "project",

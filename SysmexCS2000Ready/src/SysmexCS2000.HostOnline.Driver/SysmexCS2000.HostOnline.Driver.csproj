@@ -3,5 +3,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" />
     <ProjectReference Include="..\AnalyzerService.Lis\AnalyzerService.Lis.csproj" />
+    <ProjectReference Include="..\AnalyzerService.Transport\AnalyzerService.Transport.csproj" />
   </ItemGroup>
 </Project>

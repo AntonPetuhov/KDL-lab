@@ -9,8 +9,8 @@
       "SysmexCS2000.Driver/1.0.0": {
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
-          "Microsoft.Data.SqlClient": "7.0.0",
-          "AnalyzerService.Lis": "1.0.0.0"
+          "AnalyzerService.Lis": "1.0.0",
+          "AnalyzerService.Transport": "1.0.0"
         },
         "runtime": {
           "SysmexCS2000.Driver.dll": {}
@@ -345,9 +345,24 @@
           }
         }
       },
-      "AnalyzerService.Lis/1.0.0.0": {
+      "AnalyzerService.Lis/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0",
+          "Microsoft.Data.SqlClient": "7.0.0"
+        },
         "runtime": {
           "AnalyzerService.Lis.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "AnalyzerService.Transport/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "AnalyzerService.Transport.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -522,8 +537,13 @@
       "path": "system.security.cryptography.protecteddata/9.0.13",
       "hashPath": "system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
     },
-    "AnalyzerService.Lis/1.0.0.0": {
-      "type": "reference",
+    "AnalyzerService.Lis/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AnalyzerService.Transport/1.0.0": {
+      "type": "project",
       "serviceable": false,
       "sha512": ""
     }

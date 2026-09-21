@@ -10,7 +10,8 @@
       "SysmexCS2000.HostOnline.Driver/1.0.0": {
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
-          "AnalyzerService.Lis": "1.0.0"
+          "AnalyzerService.Lis": "1.0.0",
+          "AnalyzerService.Transport": "1.0.0"
         },
         "runtime": {
           "SysmexCS2000.HostOnline.Driver.dll": {}
@@ -312,6 +313,17 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "AnalyzerService.Transport/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "AnalyzerService.Transport.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -483,6 +495,11 @@
       "hashPath": "system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
     },
     "AnalyzerService.Lis/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AnalyzerService.Transport/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

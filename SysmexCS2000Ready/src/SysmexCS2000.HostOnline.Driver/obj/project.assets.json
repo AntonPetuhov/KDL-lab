@@ -485,6 +485,19 @@
         "runtime": {
           "bin/placeholder/AnalyzerService.Lis.dll": {}
         }
+      },
+      "AnalyzerService.Transport/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/AnalyzerService.Transport.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AnalyzerService.Transport.dll": {}
+        }
       }
     }
   },
@@ -1204,12 +1217,18 @@
       "type": "project",
       "path": "../AnalyzerService.Lis/AnalyzerService.Lis.csproj",
       "msbuildProject": "../AnalyzerService.Lis/AnalyzerService.Lis.csproj"
+    },
+    "AnalyzerService.Transport/1.0.0": {
+      "type": "project",
+      "path": "../AnalyzerService.Transport/AnalyzerService.Transport.csproj",
+      "msbuildProject": "../AnalyzerService.Transport/AnalyzerService.Transport.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "AnalyzerService.Contracts >= 1.0.0",
-      "AnalyzerService.Lis >= 1.0.0"
+      "AnalyzerService.Lis >= 1.0.0",
+      "AnalyzerService.Transport >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1249,6 +1268,9 @@
             },
             "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj": {
               "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj"
+            },
+            "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj": {
+              "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj"
             }
           }
         }

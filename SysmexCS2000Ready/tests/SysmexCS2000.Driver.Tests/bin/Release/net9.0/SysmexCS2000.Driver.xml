@@ -201,23 +201,5 @@
         <member name="M:SysmexCS2000.Driver.SysmexCS2000Driver.Dispose">
             <summary>Освобождает объект анализатора и сетевые ресурсы.</summary>
         </member>
-        <member name="T:SysmexCS2000.Driver.Transport.TcpHost">
-            <summary>Слушает TCP как host; Sysmex IPU подключается к нему как клиент.</summary>
-        </member>
-        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger)">
-            <summary>Слушает TCP как host; Sysmex IPU подключается к нему как клиент.</summary>
-        </member>
-        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.Start(System.Net.IPAddress,System.Int32)">
-            <summary>Синхронно запускает listener на адресе и порту из JSON.</summary><param name="address">Локальный адрес.</param><param name="port">Локальный порт.</param>
-        </member>
-        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.AcceptAsync(System.Threading.CancellationToken)">
-            <summary>Асинхронно ожидает IPU без блокировки потока службы.</summary><param name="token">Сигнал остановки.</param><returns>Подключённый клиент.</returns>
-        </member>
-        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.Stop">
-            <summary>Синхронно прекращает listener и активное соединение.</summary>
-        </member>
-        <member name="M:SysmexCS2000.Driver.Transport.TcpHost.Dispose">
-            <summary>Освобождает сетевые ресурсы.</summary>
-        </member>
     </members>
 </doc>

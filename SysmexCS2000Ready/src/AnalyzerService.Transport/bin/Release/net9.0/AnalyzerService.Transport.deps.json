@@ -1,0 +1,26 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "AnalyzerService.Transport/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "AnalyzerService.Transport.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AnalyzerService.Transport/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

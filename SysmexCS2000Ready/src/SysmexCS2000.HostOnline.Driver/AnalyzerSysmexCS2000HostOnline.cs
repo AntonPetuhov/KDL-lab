@@ -3,9 +3,9 @@ using System.Net.Sockets;
 using System.Text;
 using AnalyzerService.Contracts;
 using AnalyzerService.Lis;
+using AnalyzerService.Transport;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using SysmexCS2000.HostOnline.Driver.Protocol;
-using SysmexCS2000.HostOnline.Driver.Transport;
 
 namespace SysmexCS2000.HostOnline.Driver;
 
@@ -16,7 +16,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     private const byte Etx = 0x03;
     private readonly IAnalyzerLogger logger;
     private readonly AnalyzerSettings settings;
-    private readonly HostOnlineTcpHost host;
+    private readonly TcpHost host;
     private readonly HostOnlineCodec codec = new();
     private readonly LisRepository repository;
     private readonly HostOnlineResultHandler resultHandler;
@@ -29,7 +29,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     {
         this.logger = logger;
         this.settings = settings;
-        host = new HostOnlineTcpHost(logger);
+        host = new TcpHost(logger, "Sysmex CS-2000i Host Online");
         repository = new LisRepository(settings, logger);
         resultHandler = new HostOnlineResultHandler(settings, logger, repository);
     }

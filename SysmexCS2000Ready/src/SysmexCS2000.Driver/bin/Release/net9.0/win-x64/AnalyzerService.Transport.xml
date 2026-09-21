@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnalyzerService.Transport</name>
+    </assembly>
+    <members>
+        <member name="T:AnalyzerService.Transport.ITcpHost">
+            <summary>
+            Определяет общий жизненный цикл TCP-сервера, к которому анализатор подключается как клиент.
+            Реализации протоколов используют этот контракт и не создают собственные <see cref="T:System.Net.Sockets.TcpListener"/>.
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.Start(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Синхронно открывает локальный endpoint до запуска рабочего цикла драйвера.
+            </summary>
+            <param name="address">Адрес локального сетевого интерфейса из JSON-конфигурации.</param>
+            <param name="port">Порт из JSON-конфигурации.</param>
+            <exception cref="T:System.InvalidOperationException">Сервер уже запущен.</exception>
+            <exception cref="T:System.Net.Sockets.SocketException">Не удалось привязать адрес или открыть порт.</exception>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.AcceptAsync(System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно ожидает подключение прибора, поскольку блокирующее ожидание заняло бы поток службы.
+            </summary>
+            <param name="cancellationToken">Сигнал остановки службы или драйвера.</param>
+            <returns>Подключённый TCP-клиент, которым владеет сервер до следующего подключения или остановки.</returns>
+            <exception cref="T:System.InvalidOperationException">Сервер не запущен.</exception>
+            <exception cref="T:System.OperationCanceledException">Ожидание отменено.</exception>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.Stop">
+            <summary>
+            Синхронно закрывает активное подключение и listener; сетевые объекты не требуют асинхронного освобождения.
+            </summary>
+        </member>
+        <member name="T:AnalyzerService.Transport.TcpHost">
+            <summary>
+            Общая реализация TCP-сервера для подключаемых DLL анализаторов, работающих в роли TCP-клиента.
+            Управляет только транспортом и не зависит от ASTM, Sysmex Host Online или другого прикладного протокола.
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,System.String)">
+            <summary>
+            Создаёт общий TCP-host. Конструктор синхронный, поскольку только сохраняет зависимости.
+            </summary>
+            <param name="logger">Логгер драйвера, предоставленный службой.</param>
+            <param name="connectionName">Понятное имя прибора или протокола для сообщений журнала.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="logger"/> равен <see langword="null"/>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="connectionName"/> пуст.</exception>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.Start(System.Net.IPAddress,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.AcceptAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.Stop">
+            <inheritdoc />
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.Dispose">
+            <summary>
+            Синхронно и идемпотентно освобождает listener и активный сокет.
+            </summary>
+        </member>
+    </members>
+</doc>
