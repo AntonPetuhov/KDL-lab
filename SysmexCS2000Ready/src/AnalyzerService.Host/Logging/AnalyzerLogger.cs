@@ -7,13 +7,13 @@ namespace AnalyzerService.Host.Logging;
 /// Записывает журналы одного анализатора по категориям и дням.
 /// Связан с драйвером только через IAnalyzerLogger.
 /// </summary>
-public sealed class FileAnalyzerLogger : IAnalyzerLogger
+public class AnalyzerLogger : IAnalyzerLogger
 {
     private readonly string root;
     private readonly object gate = new();
 
     /// <summary>Создаёт логгер и каталог журналов.</summary><param name="root">Каталог журналов.</param>
-    public FileAnalyzerLogger(string root)
+    public AnalyzerLogger(string root)
     {
         this.root = root;
         Directory.CreateDirectory(root);

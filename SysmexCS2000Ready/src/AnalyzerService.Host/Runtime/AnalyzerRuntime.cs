@@ -4,11 +4,10 @@ using AnalyzerService.Host.Logging;
 
 namespace AnalyzerService.Host.Runtime;
 
-/// <summary>Управляет загрузкой, запуском и остановкой одного DLL-драйвера.</summary>
-public sealed class AnalyzerRuntime(
-    AnalyzerSettings settings,
-    DriverLoader loader,
-    AnalyzerLoggerFactory loggerFactory) : IDisposable
+/// <summary>
+/// Управляет загрузкой, запуском и остановкой одного DLL-драйвера. Здесь не важно как именно реализована работа анализатора.
+/// </summary>
+public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader loader, AnalyzerLoggerFactory loggerFactory) : IDisposable
 {
     private readonly CancellationTokenSource stop = new();
     private CancellationTokenSource? linkedStop;

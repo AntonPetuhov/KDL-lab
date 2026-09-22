@@ -4,34 +4,31 @@ using AnalyzerService.Host.Runtime;
 namespace AnalyzerService.Host;
 
 /// <summary>
-/// Реализует жизненный цикл Windows Service: читает JSON, запускает драйверы
+/// Реализует жизненный цикл Windows Service: 
+/// Загружает конфигурации JSON, запускает и останавливает AnalyzerManager
 /// и завершает их при сигнале Service Control Manager.
 /// </summary>
-public sealed class Worker(
-    JsonAnalyzerSettingsProvider settingsProvider,
-    AnalyzerSettingsValidator validator,
-    AnalyzerManager manager,
-    ILogger<Worker> logger) : BackgroundService
+public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSettingsValidator validator, AnalyzerManager analyzerManager, ILogger<Worker> logger) : BackgroundService
 {
     /// <summary>
-    /// Асинхронно запускает анализаторы и ожидает остановку. Асинхронность нужна
-    /// для длительных сетевых циклов, выполняемых драйверами.
+    /// Запуск службы и начало работы
     /// </summary>
-    /// <param name="stoppingToken">Сигнал остановки службы.</param>
-    /// <returns>Задача жизненного цикла службы.</returns>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         string directory = Path.Combine(AppContext.BaseDirectory, "configs");
         try
         {
-            foreach (var item in settingsProvider.LoadAll(directory))
+            foreach (var configFile in settingsProvider.LoadAll(directory))
             {
-                validator.ValidateAndThrow(item.Settings, item.SourcePath);
-                if (item.Settings.ActiveStatus)
-                    manager.Add(item.Settings);
+                // проверка корректности конфигурационных данных
+                validator.ValidateAndThrow(configFile.Settings, configFile.SourcePath);
+                // Если ActiveStatus = true, то добавляем в менеджер анализаторов
+                if (configFile.Settings.ActiveStatus)
+                    analyzerManager.Add(configFile.Settings);
             }
 
-            await manager.StartAllAsync(stoppingToken).ConfigureAwait(false);
+            // запускаем все анализаторы, которые должны быть запущены, согласно конфигурации
+            await analyzerManager.StartAllAsync(stoppingToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {
@@ -45,14 +42,13 @@ public sealed class Worker(
     }
 
     /// <summary>
-    /// Асинхронно останавливает все драйверы, потому что закрытие активного TCP-сеанса
-    /// требует ожидания завершения сетевых операций.
+    /// Остановка службы
     /// </summary>
-    /// <param name="cancellationToken">Ограничение времени остановки.</param>
-    /// <returns>Задача остановки.</returns>
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        await manager.StopAllAsync(cancellationToken).ConfigureAwait(false);
-        await base.StopAsync(cancellationToken).ConfigureAwait(false);
+        //await analyzerManager.StopAllAsync(cancellationToken).ConfigureAwait(false);
+        //await base.StopAsync(cancellationToken).ConfigureAwait(false);
+        await analyzerManager.StopAllAsync(cancellationToken);
+        await base.StopAsync(cancellationToken);
     }
 }

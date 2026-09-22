@@ -4,44 +4,44 @@ using AnalyzerService.Contracts;
 namespace AnalyzerService.Host.Configuration;
 
 /// <summary>
-/// Синхронно читает малые JSON-файлы конфигурации при запуске службы.
-/// Синхронный ввод выбран потому, что операция разовая и выполняется до сетевого цикла.
+/// Читает JSON-файлы конфигурации при запуске службы.
 /// </summary>
-public sealed class JsonAnalyzerSettingsProvider
+public class JsonAnalyzerSettingsProvider
 {
-    private static readonly JsonSerializerOptions Options = new() { PropertyNameCaseInsensitive = true };
+    // Настройка десериализации: не учитывать регистр имён свойств
+    private static readonly JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
 
-    /// <summary>
-    /// Загружает все JSON-конфигурации в стабильном порядке имён файлов.
-    /// </summary>
-    /// <param name="directory">Каталог конфигураций.</param>
-    /// <returns>Настройки вместе с исходными путями.</returns>
-    /// <exception cref="DirectoryNotFoundException">Каталог отсутствует.</exception>
+    // Получает все файлы конфигурации в директории и создается класс с настройками
     public IReadOnlyList<SettingsFile> LoadAll(string directory)
     {
         if (!Directory.Exists(directory))
             throw new DirectoryNotFoundException($"Каталог конфигурации не найден: {directory}");
 
+        // Для каждого пути создаётся SettingsFile
         return Directory.GetFiles(directory, "*.json")
             .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
-            .Select(path => new SettingsFile(path, Load(path)))
+            .Select(path => new SettingsFile(path, Load(path))) 
             .ToArray();
     }
 
     /// <summary>
-    /// Загружает один JSON-файл синхронно.
+    /// Загружает один JSON-файл.
     /// </summary>
-    /// <param name="path">Полный путь к файлу.</param>
-    /// <returns>Десериализованные настройки.</returns>
-    /// <exception cref="FileNotFoundException">Файл отсутствует.</exception>
-    /// <exception cref="JsonException">JSON некорректен.</exception>
     public AnalyzerSettings Load(string path)
     {
-        if (!File.Exists(path)) throw new FileNotFoundException("Файл конфигурации не найден.", path);
-        return JsonSerializer.Deserialize<AnalyzerSettings>(File.ReadAllText(path), Options)
+        if (string.IsNullOrWhiteSpace(path))
+            throw new ArgumentException("Путь не может быть пустым.", nameof(path));
+        if (!File.Exists(path)) 
+            throw new FileNotFoundException("Файл конфигурации не найден.", path);
+
+        // возвращаем десериализованные настройки
+        // Десериализация JSON в объект AnalyzerSettings
+        // ?? null?объединяющий оператор (null?coalescing operator)
+        // возвращает результат своего левого операнда, если он существует и не равен null, а в противном случае возвращает правый операнд
+        return JsonSerializer.Deserialize<AnalyzerSettings>(File.ReadAllText(path), options)
             ?? throw new JsonException($"Конфигурация {path} содержит null.");
     }
 }
 
-/// <summary>Связывает настройки с файлом, из которого они были прочитаны.</summary>
-public sealed record SettingsFile(string SourcePath, AnalyzerSettings Settings);
+// Связывает настройки с файлом, из которого они были прочитаны.
+public record SettingsFile(string SourcePath, AnalyzerSettings Settings);

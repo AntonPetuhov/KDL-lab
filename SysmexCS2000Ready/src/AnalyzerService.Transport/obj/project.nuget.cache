@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3+psl709yR0=",
+  "dgSpecHash": "Ht//Tdxuu6I=",
   "success": true,
-  "projectFilePath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+  "projectFilePath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
