@@ -9,11 +9,14 @@ using SysmexCS2000.HostOnline.Driver.Protocol;
 
 namespace SysmexCS2000.HostOnline.Driver;
 
-/// <summary>Координирует TCP, R221/S221, D121/D221, ЛИС и результаты собственного протокола.</summary>
+/// <summary>Координирует работу реализации драйвера анализатора</summary>
 public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
 {
-    private const byte Stx = 0x02;
-    private const byte Etx = 0x03;
+    #region Управляющие символы ASTM
+    private const byte STX = 0x02;
+    private const byte ETX = 0x03;
+    #endregion
+
     private readonly IAnalyzerLogger logger;
     private readonly AnalyzerSettings settings;
     private readonly TcpHost host;
@@ -24,7 +27,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     private readonly Dictionary<string, SortedDictionary<int, string>> blocks = new(StringComparer.Ordinal);
     private TcpClient? client;
 
-    /// <summary>Создаёт анализатор и синхронные зависимости.</summary><param name="logger">Логгер.</param><param name="settings">JSON-настройки.</param>
+    /// <summary>Создаёт анализатор и синхронные зависимости.</summary>
     public AnalyzerSysmexCS2000HostOnline(IAnalyzerLogger logger, AnalyzerSettings settings)
     {
         this.logger = logger;

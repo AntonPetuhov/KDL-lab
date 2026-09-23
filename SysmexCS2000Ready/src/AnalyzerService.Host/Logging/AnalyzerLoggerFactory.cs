@@ -13,7 +13,8 @@ public class AnalyzerLoggerFactory
     public IAnalyzerLogger Create(AnalyzerSettings settings)
     {
         string basePath = Path.Combine(AppContext.BaseDirectory, settings.AnalyzerName);
-        string logs = string.IsNullOrWhiteSpace(settings.LogsFolder) ? "Logs" : settings.LogsFolder;
+        // Если в настройках не указана папка для логов или указана пустая строка, использовать папку "Logs"
+        string logs = string.IsNullOrWhiteSpace(settings.LogsFolder) ? "Logs" : settings.LogsFolder; 
         return new AnalyzerLogger(Path.GetFullPath(logs, basePath));
     }
 }

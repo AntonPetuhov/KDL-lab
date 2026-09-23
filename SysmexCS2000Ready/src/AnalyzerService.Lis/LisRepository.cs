@@ -3,10 +3,14 @@ using Microsoft.Data.SqlClient;
 
 namespace AnalyzerService.Lis;
 
-/// <summary>Выполняет параметризованные запросы к схеме ЛИС из эталонного проекта.</summary>
+/// <summary>
+/// Выполняет запросы к БД ЛИС
+/// </summary>
 public sealed class LisRepository(AnalyzerSettings settings, IAnalyzerLogger logger)
 {
-    /// <summary>Синхронно получает пациента и незавершённые тесты по RID.</summary><param name="sampleId">RID.</param><returns>Заказ либо null.</returns>
+    /// <summary>
+    /// Получаем пациента и незавершённые тесты по RID.
+    /// </summary>
     public LisOrder? GetOrder(string sampleId)
     {
         using SqlConnection connection = new(settings.ConnectionString);

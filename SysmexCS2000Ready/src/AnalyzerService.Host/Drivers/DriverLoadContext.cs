@@ -5,19 +5,23 @@ using AnalyzerService.Contracts;
 namespace AnalyzerService.Host.Drivers;
 
 /// <summary>
-/// Загружает зависимости драйвера в выгружаемый контекст, но разделяет
-/// сборку контрактов с default context для сохранения совместимости типов.
+/// класс изолированного контекста загрузки dll драйвера
 /// </summary>
-public sealed class DriverLoadContext(string mainAssemblyPath) : AssemblyLoadContext(isCollectible: true)
+public class DriverLoadContext(string mainAssemblyPath) : AssemblyLoadContext(isCollectible: true)
 {
-    private readonly AssemblyDependencyResolver resolver = new(mainAssemblyPath);
+    private readonly AssemblyDependencyResolver resolver = new(mainAssemblyPath); // позволяет изолировать зависимости каждого плагина в отдельном контексте загрузки (AssemblyLoadContext)
 
-    /// <summary>Синхронно разрешает managed-зависимость DLL.</summary><param name="assemblyName">Имя сборки.</param><returns>Сборка или null для default context.</returns>
+    // Переопределяем метод Load, чтобы разрешать зависимости сборок
     protected override Assembly? Load(AssemblyName assemblyName)
     {
         if (assemblyName.Name == typeof(IAnalyzerDriver).Assembly.GetName().Name) return null;
-        string? path = resolver.ResolveAssemblyToPath(assemblyName);
-        return path is null ? null : LoadFromAssemblyPath(path);
+
+        // Пытаемся разрешить сборку через Resolver
+        // принимает объект сборки AssemblyName
+        // ищет соответствующий .dll
+        // возвращает полный путь к найденному .dll
+        string? assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
+        return assemblyPath is null ? null : LoadFromAssemblyPath(assemblyPath);
     }
 
     /// <summary>Синхронно разрешает нативную зависимость рядом с драйвером.</summary><param name="unmanagedDllName">Имя библиотеки.</param><returns>Дескриптор или zero.</returns>

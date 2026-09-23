@@ -28,7 +28,8 @@ public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSetti
             }
 
             // запускаем все анализаторы, которые должны быть запущены, согласно конфигурации
-            await analyzerManager.StartAllAsync(stoppingToken).ConfigureAwait(false);
+            //await analyzerManager.StartAllAsync(stoppingToken).ConfigureAwait(false);
+            await analyzerManager.StartAllAsync(stoppingToken);
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {

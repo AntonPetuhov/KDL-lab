@@ -7,26 +7,17 @@ namespace AnalyzerService.Contracts;
 public interface IAnalyzerDriver : IDisposable
 {
     /// <summary>
-    /// Синхронно проверяет и сохраняет зависимости до запуска сетевого цикла.
+    /// Инициализация драйвера, передаем логгер конкретного анализатора и проверенную JSON-конфигурацию
     /// </summary>
-    /// <param name="logger">Логгер конкретного анализатора.</param>
-    /// <param name="settings">Проверенная JSON-конфигурация.</param>
-    /// <exception cref="ArgumentNullException">Зависимость не передана.</exception>
-    /// <exception cref="ArgumentException">Настройки не поддерживаются драйвером.</exception>
     void Initialize(IAnalyzerLogger logger, AnalyzerSettings settings);
 
     /// <summary>
-    /// Асинхронно выполняет обмен, поскольку ожидание подключения и TCP-данных
-    /// имеет неопределённую длительность и не должно блокировать поток службы.
+    /// Запуск работы анализатора
     /// </summary>
-    /// <param name="cancellationToken">Сигнал штатной остановки.</param>
-    /// <returns>Задача полного жизненного цикла обмена.</returns>
     Task RunAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Асинхронно останавливает транспорт и ожидает завершение активного обмена.
+    /// Остановка работы анализатора
     /// </summary>
-    /// <param name="cancellationToken">Ограничение времени остановки.</param>
-    /// <returns>Задача остановки.</returns>
     Task StopAsync(CancellationToken cancellationToken);
 }

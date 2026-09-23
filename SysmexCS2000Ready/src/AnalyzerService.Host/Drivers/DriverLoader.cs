@@ -3,31 +3,45 @@ using AnalyzerService.Contracts;
 
 namespace AnalyzerService.Host.Drivers;
 
-/// <summary>Загружает ровно одну реализацию IAnalyzerDriver из указанной DLL.</summary>
-public sealed class DriverLoader
+/// <summary>
+/// Загружает одну реализацию IAnalyzerDriver из указанной DLL.
+/// </summary>
+public class DriverLoader
 {
     /// <summary>
-    /// Синхронно загружает сборку и создаёт драйвер; reflection не требует async.
+    /// Reflection. Синхронно загружает сборку и создаёт драйвер; 
     /// </summary>
-    /// <param name="configuredPath">Абсолютный либо относительный путь из JSON.</param>
-    /// <returns>Объект владения драйвером.</returns>
-    /// <exception cref="FileNotFoundException">DLL отсутствует.</exception>
-    /// <exception cref="InvalidOperationException">Реализация отсутствует или неоднозначна.</exception>
     public LoadedDriver Load(string configuredPath)
     {
-        string path = Path.IsPathRooted(configuredPath)
+        // проверка, существует ли dll файл по заданному пути
+        string assemblyPath = Path.IsPathRooted(configuredPath)
             ? Path.GetFullPath(configuredPath)
             : Path.GetFullPath(configuredPath, AppContext.BaseDirectory);
-        if (!File.Exists(path)) throw new FileNotFoundException("DLL драйвера не найдена.", path);
 
-        DriverLoadContext context = new(path);
+        if (!File.Exists(assemblyPath)) throw new FileNotFoundException("DLL файл драйвера не найден.", assemblyPath);
+
+        // Создаём изолированный контекст
+        DriverLoadContext context = new(assemblyPath);
         try
         {
-            Assembly assembly = context.LoadFromAssemblyPath(path);
-            Type[] types = assembly.GetTypes().Where(t => !t.IsAbstract && !t.IsInterface && typeof(IAnalyzerDriver).IsAssignableFrom(t)).ToArray();
-            if (types.Length != 1) throw new InvalidOperationException($"Ожидалась одна реализация IAnalyzerDriver, найдено: {types.Length}.");
-            var driver = (IAnalyzerDriver?)Activator.CreateInstance(types[0]) ?? throw new InvalidOperationException("Не удалось создать драйвер.");
-            return new LoadedDriver(driver, context);
+            // Загружаем сборку в контекст
+            Assembly assembly = context.LoadFromAssemblyPath(assemblyPath);
+
+            // Можно найти все тип
+            //Type[] types = assembly.GetTypes().Where(t => !t.IsAbstract && !t.IsInterface && typeof(IAnalyzerDriver).IsAssignableFrom(t)).ToArray();
+            //if (types.Length != 1) throw new InvalidOperationException($"Ожидалась одна реализация IAnalyzerDriver, найдено: {types.Length}.");
+            //var driver = (IAnalyzerDriver?)Activator.CreateInstance(types[0]) ?? throw new InvalidOperationException("Не удалось создать драйвер.");
+
+            // Ищем класс, реализующий IAnalyzerDriver, не интерфейс и не абстрактный класс
+            var driverType = assembly.GetTypes().FirstOrDefault(t => typeof(IAnalyzerDriver).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+
+            if (driverType is null) 
+                throw new InvalidOperationException($"Не найден тип, реализующий интерфейс IAnalyzerDriver в сборке {assemblyPath}");
+
+            // Создаём экземпляр драйвера (вызов конструктора без параметров)
+            var driverInstance = (IAnalyzerDriver?)Activator.CreateInstance(driverType) ?? throw new InvalidOperationException("Не удалось создать драйвер.");
+
+            return new LoadedDriver(driverInstance, context);
         }
         catch
         {

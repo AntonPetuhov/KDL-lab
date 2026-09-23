@@ -57,7 +57,8 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
             }
             finally
             {
-                analyzer.Dispose();
+                // поидее не нужно так как есть Dispose ниже
+                analyzer.Dispose(); // переиспользовать объект анализатора будет нельзя, только создать новый, тк освобождаем ресурсы
             }
         }
             

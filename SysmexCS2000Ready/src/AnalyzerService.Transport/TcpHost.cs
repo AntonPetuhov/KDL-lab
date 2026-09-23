@@ -6,24 +6,20 @@ namespace AnalyzerService.Transport;
 
 /// <summary>
 /// Общая реализация TCP-сервера для подключаемых DLL анализаторов, работающих в роли TCP-клиента.
-/// Управляет только транспортом и не зависит от ASTM, Sysmex Host Online или другого прикладного протокола.
+/// Управляет только транспортом и не зависит от протокола.
 /// </summary>
 public sealed class TcpHost : ITcpHost
 {
     private readonly IAnalyzerLogger logger;
     private readonly string connectionName;
     private readonly object stateLock = new();
-    private TcpListener? listener;
+    private TcpListener? listener; // общее состояние, которое видят все потоки
     private TcpClient? activeClient;
     private bool disposed;
 
     /// <summary>
     /// Создаёт общий TCP-host. Конструктор синхронный, поскольку только сохраняет зависимости.
     /// </summary>
-    /// <param name="logger">Логгер драйвера, предоставленный службой.</param>
-    /// <param name="connectionName">Понятное имя прибора или протокола для сообщений журнала.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="logger"/> равен <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException"><paramref name="connectionName"/> пуст.</exception>
     public TcpHost(IAnalyzerLogger logger, string connectionName)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -32,53 +28,67 @@ public sealed class TcpHost : ITcpHost
             : connectionName;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Запуск TCP сервера
+    /// </summary>
     public void Start(IPAddress address, int port)
     {
         ArgumentNullException.ThrowIfNull(address);
         lock (stateLock)
         {
             ObjectDisposedException.ThrowIf(disposed, this);
-            if (listener is not null) throw new InvalidOperationException("TCP host уже запущен.");
+            if (listener is not null) 
+                throw new InvalidOperationException("TCP host уже запущен.");
 
             TcpListener newListener = new(address, port);
             newListener.Start();
             listener = newListener;
+
+            // не стоило использовать listener т.к. на момент запуска listener был бы не null, но Start выдал бы исключение (например порт мог быть занят)
+            // Следующий вызов Start() увидит listener is not null и скажет «уже запущен». Запуск больше невозможен, хотя на деле ничего не работает.
         }
 
-        logger.Transport($"{connectionName}: TCP host запущен на {address}:{port}.");
+        logger.Transport($"{connectionName}: TCP host запущен на {address}:{port}. Ожидание подключений...");
     }
 
-    /// <inheritdoc />
+
+    /// <summary>
+    /// получает подключения клиента (прибора), если tcp сервер запущен
+    /// </summary>
     public async Task<TcpClient> AcceptAsync(CancellationToken cancellationToken)
     {
         TcpListener currentListener;
         lock (stateLock)
         {
             ObjectDisposedException.ThrowIf(disposed, this);
+
+            //if(listener is null)
+            //    throw new InvalidOperationException("TCP host не запущен.");
             currentListener = listener ?? throw new InvalidOperationException("TCP host не запущен.");
         }
 
-        TcpClient connected = await currentListener.AcceptTcpClientAsync(cancellationToken).ConfigureAwait(false);
-        connected.NoDelay = true;
+        //TcpClient connected = await currentListener.AcceptTcpClientAsync(cancellationToken).ConfigureAwait(false);
+        TcpClient connectedClient = await currentListener.AcceptTcpClientAsync(cancellationToken);
+        connectedClient.NoDelay = true; // нужно ли?????
 
         lock (stateLock)
         {
+            // После await нужно убедиться, что мы всё ещё работаем с тем же listener'ом, поэтому сравниваем через локальную переменную
+            // в теории хост могли остановить и быстро заново запустить, тогда listener уже будет указывать на новый объект
             if (disposed || listener != currentListener)
             {
-                connected.Dispose();
+                connectedClient.Dispose();
                 throw new OperationCanceledException("TCP host остановлен.", cancellationToken);
             }
 
             activeClient?.Dispose();
-            activeClient = connected;
+            activeClient = connectedClient;
         }
 
-        logger.Transport($"{connectionName}: подключён клиент {connected.Client.RemoteEndPoint}.");
-        return connected;
+        logger.Transport($"{connectionName}: подключён клиент {connectedClient.Client.RemoteEndPoint}.");
+        return connectedClient;
     }
 
-    /// <inheritdoc />
     public void Stop()
     {
         TcpClient? clientToDispose;
@@ -97,9 +107,6 @@ public sealed class TcpHost : ITcpHost
             logger.Transport($"{connectionName}: TCP host остановлен.");
     }
 
-    /// <summary>
-    /// Синхронно и идемпотентно освобождает listener и активный сокет.
-    /// </summary>
     public void Dispose()
     {
         lock (stateLock)
