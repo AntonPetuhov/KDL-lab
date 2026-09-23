@@ -8,7 +8,7 @@ namespace AnalyzerService.Transport;
 /// Общая реализация TCP-сервера для подключаемых DLL анализаторов, работающих в роли TCP-клиента.
 /// Управляет только транспортом и не зависит от протокола.
 /// </summary>
-public sealed class TcpHost : ITcpHost
+public class TcpHost : ITcpHost
 {
     private readonly IAnalyzerLogger logger;
     private readonly string connectionName;
@@ -73,7 +73,7 @@ public sealed class TcpHost : ITcpHost
 
         lock (stateLock)
         {
-            // После await нужно убедиться, что мы всё ещё работаем с тем же listener'ом, поэтому сравниваем через локальную переменную
+            // После await нужно убедиться, что мы всё ещё работаем с тем же listener, поэтому сравниваем через локальную переменную
             // в теории хост могли остановить и быстро заново запустить, тогда listener уже будет указывать на новый объект
             if (disposed || listener != currentListener)
             {

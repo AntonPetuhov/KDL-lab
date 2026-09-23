@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net9.0": {
       "Microsoft.Bcl.Cryptography/9.0.13": {
@@ -1250,23 +1250,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\anton.petuhov\\.nuget\\packages\\": {},
+    "C:\\Users\\petuk\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
       "projectName": "SysmexCS2000.Driver.Tests",
-      "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
-      "packagesPath": "C:\\Users\\anton.petuhov\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\obj\\",
+      "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
+      "packagesPath": "C:\\Users\\petuk\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\anton.petuhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\petuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1279,11 +1279,10 @@
       },
       "frameworks": {
         "net9.0": {
-          "framework": "net9.0",
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj": {
-              "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj"
+            "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj": {
+              "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj"
             }
           }
         }
@@ -1298,11 +1297,10 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.400"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
-        "framework": "net9.0",
         "targetAlias": "net9.0",
         "imports": [
           "net461",
@@ -1320,7 +1318,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

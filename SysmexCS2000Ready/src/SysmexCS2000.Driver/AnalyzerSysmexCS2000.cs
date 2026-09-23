@@ -12,7 +12,7 @@ namespace SysmexCS2000.Driver;
 /// Координирует TCP-host, ASTM-сессию, запросы заказов и результаты CS-2000i.
 /// Загрузка DLL остаётся ответственностью службы-хоста.
 /// </summary>
-public sealed class AnalyzerSysmexCS2000 : IDisposable
+public class AnalyzerSysmexCS2000 : IDisposable
 {
     private readonly IAnalyzerLogger logger;
     private readonly AnalyzerSettings settings;
@@ -30,7 +30,7 @@ public sealed class AnalyzerSysmexCS2000 : IDisposable
     {
         this.logger = logger;
         this.settings = settings;
-        tcpHost = new TcpHost(logger, "Sysmex CS-2000i ASTM");
+        tcpHost = new TcpHost(logger, "Sysmex CS-2000i");
         session = new AstmSession(logger);
         repository = new LisRepository(settings, logger);
         resultHandler = new SysmexResultHandler(settings, logger, repository);

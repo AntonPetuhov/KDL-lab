@@ -61,7 +61,9 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         }
     }
 
-    /// <summary>Асинхронно принимает ограниченные STX/ETX-тексты одного соединения.</summary>
+    /// <summary>
+    /// Асинхронно принимает ограниченные STX/ETX-тексты одного соединения.
+    /// </summary>
     private async Task HandleClientAsync(TcpClient connected, CancellationToken token)
     {
         NetworkStream stream = connected.GetStream();
@@ -93,10 +95,15 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// <summary>Собирает разделённые тексты по номерам блоков и возвращает полное тело.</summary>
     private string? AddBlock(string body)
     {
-        if (body.Length < HostOnlineCodec.HeaderLength) throw new HostOnlineProtocolException("Text Length Error", "Короткий блок.");
+        // Проверка минимальной длины
+        if (body.Length < HostOnlineCodec.HeaderLength) 
+            throw new HostOnlineProtocolException("Text Length Error", "Короткий блок.");
+        // Извлечение номера блока и общего числа блоков
         int number = int.Parse(body.Substring(4, 2));
         int total = int.Parse(body.Substring(6, 2));
+        // Тип + Sample ID
         string key = body[0] + body.Substring(27, 15);
+        // 
         if (!blocks.TryGetValue(key, out SortedDictionary<int, string>? parts)) blocks[key] = parts = [];
         parts[number] = body;
         if (parts.Count < total) return null;
@@ -107,27 +114,43 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         return complete[..4] + "01" + total.ToString("00") + complete[8..];
     }
 
-    /// <summary>Асинхронно читает один текст между STX и ETX; TCP не имеет собственных границ сообщений.</summary>
+    /// <summary>
+    /// Читает один текст между STX и ETX
+    /// </summary>
     private static async Task<string> ReadTextAsync(NetworkStream stream, CancellationToken token)
     {
-        List<byte> body = [];
-        bool started = false;
+        List<byte> body = []; // накопитель байт тела фрейма
+        bool started = false; // флаг, когда начали читать тело фрейма
         byte[] one = new byte[1];
+
         while (true)
         {
+            // Читаем один байт из потока
             int count = await stream.ReadAsync(one, token).ConfigureAwait(false);
-            if (count == 0) throw new EndOfStreamException("IPU закрыл соединение.");
-            if (!started) { if (one[0] == Stx) started = true; continue; }
-            if (one[0] == Etx) return Encoding.ASCII.GetString(body.ToArray());
+            // Если поток закрыт, пробрасываем исключение
+            if (count == 0) 
+                throw new EndOfStreamException("IPU закрыл соединение.");
+            // Пока не встретили STX — игнорируем всё
+            if (!started) 
+            { 
+                if (one[0] == STX) started = true; // начинаем накапливать байты, читаем тело фрейма
+                continue; 
+            }
+            // Если ETX - возвращаем накопленное тело сообщения
+            if (one[0] == ETX) 
+                return Encoding.ASCII.GetString(body.ToArray());
+            // Иначе добавляем байт в тело
             body.Add(one[0]);
-            if (body.Count > 253) throw new HostOnlineProtocolException("Text Length Error", "Текст превышает 255 символов со STX/ETX.");
+            // Контроль длины фрейма: STX + тело + ETX ≤ 255
+            if (body.Count > 253) 
+                throw new HostOnlineProtocolException("Text Length Error", "Текст превышает 255 символов со STX/ETX.");
         }
     }
 
     /// <summary>Асинхронно отправляет STX, тело и ETX без ACK/NAK согласно TCP-разделу PDF.</summary>
     private async Task WriteTextAsync(NetworkStream stream, string body, CancellationToken token)
     {
-        byte[] bytes = [Stx, .. Encoding.ASCII.GetBytes(body), Etx];
+        byte[] bytes = [STX, .. Encoding.ASCII.GetBytes(body), ETX];
         if (bytes.Length > 255) throw new HostOnlineProtocolException("Text Length Error", "Исходящий текст превышает 255 символов.");
         await stream.WriteAsync(bytes, token).ConfigureAwait(false);
         await stream.FlushAsync(token).ConfigureAwait(false);
