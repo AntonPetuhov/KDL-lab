@@ -1,4 +1,4 @@
-using AnalyzerService.Lis;
+using AnalyzerService.LisDatabase;
 
 namespace SysmexCS2000.Driver.Protocol;
 

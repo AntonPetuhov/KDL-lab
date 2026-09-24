@@ -1,12 +1,12 @@
 using System.Text;
 using AnalyzerService.Contracts;
-using AnalyzerService.Lis;
+using AnalyzerService.LisDatabase;
 using SysmexCS2000.Driver.Protocol;
 
 namespace SysmexCS2000.Driver.Lis;
 
 /// <summary>Извлекает R-записи и атомарно создаёт файлы результата и подтверждения для ЛИС.</summary>
-public sealed class SysmexResultHandler(AnalyzerSettings settings, IAnalyzerLogger logger, LisRepository repository)
+public sealed class SysmexResultHandler(AnalyzerSettings settings, IAnalyzerLogger logger, LisDBProvider repository)
 {
     static SysmexResultHandler() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

@@ -2,7 +2,7 @@
   <PropertyGroup><AssemblyName>SysmexCS2000.HostOnline.Driver</AssemblyName></PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" />
-    <ProjectReference Include="..\AnalyzerService.Lis\AnalyzerService.Lis.csproj" />
+    <ProjectReference Include="..\AnalyzerService.LisDatabase\AnalyzerService.LisDatabase.csproj" />
     <ProjectReference Include="..\AnalyzerService.Transport\AnalyzerService.Transport.csproj" />
   </ItemGroup>
 </Project>

@@ -17,80 +17,72 @@
         </member>
         <member name="T:AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider">
             <summary>
-            Синхронно читает малые JSON-файлы конфигурации при запуске службы.
-            Синхронный ввод выбран потому, что операция разовая и выполняется до сетевого цикла.
+            Читает JSON-файлы конфигурации при запуске службы.
             </summary>
-        </member>
-        <member name="M:AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider.LoadAll(System.String)">
-            <summary>
-            Загружает все JSON-конфигурации в стабильном порядке имён файлов.
-            </summary>
-            <param name="directory">Каталог конфигураций.</param>
-            <returns>Настройки вместе с исходными путями.</returns>
-            <exception cref="T:System.IO.DirectoryNotFoundException">Каталог отсутствует.</exception>
         </member>
         <member name="M:AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider.Load(System.String)">
             <summary>
-            Загружает один JSON-файл синхронно.
+            Загружает один JSON-файл.
             </summary>
-            <param name="path">Полный путь к файлу.</param>
-            <returns>Десериализованные настройки.</returns>
-            <exception cref="T:System.IO.FileNotFoundException">Файл отсутствует.</exception>
-            <exception cref="T:System.Text.Json.JsonException">JSON некорректен.</exception>
-        </member>
-        <member name="T:AnalyzerService.Host.Configuration.SettingsFile">
-            <summary>Связывает настройки с файлом, из которого они были прочитаны.</summary>
-        </member>
-        <member name="M:AnalyzerService.Host.Configuration.SettingsFile.#ctor(System.String,AnalyzerService.Contracts.AnalyzerSettings)">
-            <summary>Связывает настройки с файлом, из которого они были прочитаны.</summary>
         </member>
         <member name="T:AnalyzerService.Host.Drivers.DriverLoadContext">
             <summary>
-            Загружает зависимости драйвера в выгружаемый контекст, но разделяет
-            сборку контрактов с default context для сохранения совместимости типов.
+            класс изолированного контекста загрузки dll драйвера
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Drivers.DriverLoadContext.#ctor(System.String)">
             <summary>
-            Загружает зависимости драйвера в выгружаемый контекст, но разделяет
-            сборку контрактов с default context для сохранения совместимости типов.
+            класс изолированного контекста загрузки dll драйвера
             </summary>
-        </member>
-        <member name="M:AnalyzerService.Host.Drivers.DriverLoadContext.Load(System.Reflection.AssemblyName)">
-            <summary>Синхронно разрешает managed-зависимость DLL.</summary><param name="assemblyName">Имя сборки.</param><returns>Сборка или null для default context.</returns>
         </member>
         <member name="M:AnalyzerService.Host.Drivers.DriverLoadContext.LoadUnmanagedDll(System.String)">
             <summary>Синхронно разрешает нативную зависимость рядом с драйвером.</summary><param name="unmanagedDllName">Имя библиотеки.</param><returns>Дескриптор или zero.</returns>
         </member>
         <member name="T:AnalyzerService.Host.Drivers.DriverLoader">
-            <summary>Загружает ровно одну реализацию IAnalyzerDriver из указанной DLL.</summary>
+            <summary>
+            Загружает одну реализацию IAnalyzerDriver из указанной DLL.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Drivers.DriverLoader.Load(System.String)">
             <summary>
-            Синхронно загружает сборку и создаёт драйвер; reflection не требует async.
+            Reflection. Синхронно загружает сборку и создаёт драйвер; 
             </summary>
-            <param name="configuredPath">Абсолютный либо относительный путь из JSON.</param>
-            <returns>Объект владения драйвером.</returns>
-            <exception cref="T:System.IO.FileNotFoundException">DLL отсутствует.</exception>
-            <exception cref="T:System.InvalidOperationException">Реализация отсутствует или неоднозначна.</exception>
         </member>
         <member name="T:AnalyzerService.Host.Drivers.LoadedDriver">
-            <summary>Владеет экземпляром драйвера и контекстом его загрузки.</summary>
+            <summary>
+            Владеет экземпляром драйвера и контекстом его загрузки.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Drivers.LoadedDriver.#ctor(AnalyzerService.Contracts.IAnalyzerDriver,AnalyzerService.Host.Drivers.DriverLoadContext)">
-            <summary>Владеет экземпляром драйвера и контекстом его загрузки.</summary>
+            <summary>
+            Владеет экземпляром драйвера и контекстом его загрузки.
+            </summary>
         </member>
         <member name="P:AnalyzerService.Host.Drivers.LoadedDriver.Instance">
-            <summary>Получает загруженный драйвер.</summary>
+            <summary>
+            Получает загруженный драйвер.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Drivers.LoadedDriver.Dispose">
-            <summary>Синхронно освобождает драйвер и помечает контекст для выгрузки.</summary>
+            <summary>
+            Синхронно освобождает драйвер и помечает контекст для выгрузки.
+            </summary>
+        </member>
+        <member name="T:AnalyzerService.Host.Logging.AnalyzerLogger">
+            <summary>
+            Записывает журналы одного анализатора по категориям и дням.
+            Связан с драйвером только через IAnalyzerLogger.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Host.Logging.AnalyzerLoggerFactory">
-            <summary>Создаёт отдельный файловый логгер для каждого анализатора.</summary>
+            <summary>
+            Создаёт отдельный файловый логгер для каждого анализатора.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Logging.AnalyzerLoggerFactory.Create(AnalyzerService.Contracts.AnalyzerSettings)">
-            <summary>Создаёт логгер в каталоге анализатора.</summary><param name="settings">Настройки анализатора.</param><returns>Новый логгер.</returns>
+            <summary>
+            Создаёт логгер в каталоге анализатора.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Host.Logging.FileAnalyzerLogger">
             <summary>
@@ -120,28 +112,42 @@
             <summary>Синхронно добавляет одну запись, сохраняя порядок сообщений.</summary>
         </member>
         <member name="T:AnalyzerService.Host.Runtime.AnalyzerManager">
-            <summary>Хранит анализаторы, предотвращает дубликаты и координирует их жизненный цикл.</summary>
+            <summary>
+            Менеджер анализаторов,
+            Хранит анализаторы, предотвращает дубликаты и координирует их жизненный цикл.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.#ctor(AnalyzerService.Host.Logging.AnalyzerLoggerFactory)">
-            <summary>Хранит анализаторы, предотвращает дубликаты и координирует их жизненный цикл.</summary>
+            <summary>
+            Менеджер анализаторов,
+            Хранит анализаторы, предотвращает дубликаты и координирует их жизненный цикл.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.Add(AnalyzerService.Contracts.AnalyzerSettings)">
-            <summary>Синхронно добавляет конфигурацию анализатора.</summary><param name="settings">Проверенные настройки.</param>
+            <summary>
+            Регистрируем новый анализатор в словаре analyzers (анализаторы, которые будут запущены). 
+            Выбрасывается исключение, если анализатор с таким именем уже есть.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.StartAllAsync(System.Threading.CancellationToken)">
-            <summary>Запускает все драйверы и ожидает их рабочие циклы.</summary><param name="token">Сигнал остановки.</param><returns>Задача до завершения всех драйверов.</returns>
+            <summary>
+            Запускает все драйвера приборов и ожидает их рабочие циклы.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.StopAllAsync(System.Threading.CancellationToken)">
-            <summary>Последовательно останавливает все драйверы и агрегирует ошибки.</summary><param name="token">Ограничение остановки.</param><returns>Задача остановки.</returns>
-        </member>
-        <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.Dispose">
-            <summary>Освобождает все runtime.</summary>
+            <summary>
+            Последовательно останавливает все драйвера и аггрегирует ошибки.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Host.Runtime.AnalyzerRuntime">
-            <summary>Управляет загрузкой, запуском и остановкой одного DLL-драйвера.</summary>
+            <summary>
+            Управляет загрузкой, запуском и остановкой одного DLL-драйвера. Здесь не важно как именно реализована работа анализатора.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Host.Drivers.DriverLoader,AnalyzerService.Host.Logging.AnalyzerLoggerFactory)">
-            <summary>Управляет загрузкой, запуском и остановкой одного DLL-драйвера.</summary>
+            <summary>
+            Управляет загрузкой, запуском и остановкой одного DLL-драйвера. Здесь не важно как именно реализована работа анализатора.
+            </summary>
         </member>
         <member name="P:AnalyzerService.Host.Runtime.AnalyzerRuntime.Name">
             <summary>Получает имя анализатора.</summary>
@@ -153,42 +159,40 @@
             <summary>
             Инициализирует DLL синхронно и запускает асинхронный сетевой цикл.
             </summary>
-            <param name="serviceToken">Сигнал остановки службы.</param>
-            <returns>Завершённая задача после запуска.</returns>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.StopAsync(System.Threading.CancellationToken)">
-            <summary>Асинхронно прекращает сеть и ожидает драйвер.</summary><param name="cancellationToken">Ограничение остановки.</param><returns>Задача остановки.</returns>
+            <summary>
+            Асинхронно прекращает сеть и ожидает драйвер.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.Dispose">
-            <summary>Освобождает драйвер и token source.</summary>
+            <summary>
+            Освобождает драйвер и token source.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Host.Worker">
             <summary>
-            Реализует жизненный цикл Windows Service: читает JSON, запускает драйверы
+            Реализует жизненный цикл Windows Service: 
+            Загружает конфигурации JSON, запускает и останавливает AnalyzerManager
             и завершает их при сигнале Service Control Manager.
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Worker.#ctor(AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider,AnalyzerService.Host.Configuration.AnalyzerSettingsValidator,AnalyzerService.Host.Runtime.AnalyzerManager,Microsoft.Extensions.Logging.ILogger{AnalyzerService.Host.Worker})">
             <summary>
-            Реализует жизненный цикл Windows Service: читает JSON, запускает драйверы
+            Реализует жизненный цикл Windows Service: 
+            Загружает конфигурации JSON, запускает и останавливает AnalyzerManager
             и завершает их при сигнале Service Control Manager.
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Worker.ExecuteAsync(System.Threading.CancellationToken)">
             <summary>
-            Асинхронно запускает анализаторы и ожидает остановку. Асинхронность нужна
-            для длительных сетевых циклов, выполняемых драйверами.
+            Запуск службы и начало работы
             </summary>
-            <param name="stoppingToken">Сигнал остановки службы.</param>
-            <returns>Задача жизненного цикла службы.</returns>
         </member>
         <member name="M:AnalyzerService.Host.Worker.StopAsync(System.Threading.CancellationToken)">
             <summary>
-            Асинхронно останавливает все драйверы, потому что закрытие активного TCP-сеанса
-            требует ожидания завершения сетевых операций.
+            Остановка службы
             </summary>
-            <param name="cancellationToken">Ограничение времени остановки.</param>
-            <returns>Задача остановки.</returns>
         </member>
     </members>
 </doc>

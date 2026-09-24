@@ -14,19 +14,25 @@
             <summary>
             Синхронно открывает локальный endpoint до запуска рабочего цикла драйвера.
             </summary>
-            <param name="address">Адрес локального сетевого интерфейса из JSON-конфигурации.</param>
-            <param name="port">Порт из JSON-конфигурации.</param>
-            <exception cref="T:System.InvalidOperationException">Сервер уже запущен.</exception>
-            <exception cref="T:System.Net.Sockets.SocketException">Не удалось привязать адрес или открыть порт.</exception>
         </member>
         <member name="M:AnalyzerService.Transport.ITcpHost.AcceptAsync(System.Threading.CancellationToken)">
             <summary>
             Асинхронно ожидает подключение прибора, поскольку блокирующее ожидание заняло бы поток службы.
             </summary>
-            <param name="cancellationToken">Сигнал остановки службы или драйвера.</param>
-            <returns>Подключённый TCP-клиент, которым владеет сервер до следующего подключения или остановки.</returns>
-            <exception cref="T:System.InvalidOperationException">Сервер не запущен.</exception>
-            <exception cref="T:System.OperationCanceledException">Ожидание отменено.</exception>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.RecordRead">
+            <summary>Синхронно отмечает успешное чтение сообщения.</summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.RecordWrite">
+            <summary>Синхронно отмечает успешную запись сообщения.</summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.RecordError(System.Exception)">
+            <summary>Синхронно сохраняет ошибку для журнала состояния.</summary>
+            <param name="exception">Ошибка.</param>
+        </member>
+        <member name="M:AnalyzerService.Transport.ITcpHost.ReleaseClient(System.Net.Sockets.TcpClient)">
+            <summary>Синхронно закрывает завершённый сеанс, не останавливая listener.</summary>
+            <param name="connected">Принятый клиент.</param>
         </member>
         <member name="M:AnalyzerService.Transport.ITcpHost.Stop">
             <summary>
@@ -34,33 +40,47 @@
             </summary>
         </member>
         <member name="T:AnalyzerService.Transport.TcpHost">
-            <summary>
-            Общая реализация TCP-сервера для подключаемых DLL анализаторов, работающих в роли TCP-клиента.
-            Управляет только транспортом и не зависит от ASTM, Sysmex Host Online или другого прикладного протокола.
-            </summary>
+            <summary>Общий TCP-сервер для DLL-драйверов; прикладной протокол остаётся в драйвере.</summary>
         </member>
-        <member name="M:AnalyzerService.Transport.TcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,System.String)">
-            <summary>
-            Создаёт общий TCP-host. Конструктор синхронный, поскольку только сохраняет зависимости.
-            </summary>
-            <param name="logger">Логгер драйвера, предоставленный службой.</param>
-            <param name="connectionName">Понятное имя прибора или протокола для сообщений журнала.</param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="logger"/> равен <see langword="null"/>.</exception>
-            <exception cref="T:System.ArgumentException"><paramref name="connectionName"/> пуст.</exception>
+        <member name="M:AnalyzerService.Transport.TcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,System.String,System.Nullable{System.TimeSpan})">
+            <summary>Синхронно сохраняет журнал и имя подключения; сокет пока не открывается.</summary>
+            <param name="logger">Журнал анализатора.</param><param name="connectionName">Имя для диагностики.</param>
+            <param name="statusInterval">Период снимков состояния; стандартно 30 секунд.</param>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.Start(System.Net.IPAddress,System.Int32)">
-            <inheritdoc />
+            <summary>Синхронно открывает listener и запускает журнал состояния раз в 30 секунд.</summary>
+            <param name="address">Локальный IP из JSON.</param><param name="port">Порт из JSON.</param>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.AcceptAsync(System.Threading.CancellationToken)">
-            <inheritdoc />
+            <summary>Асинхронно ждёт подключения, чтобы не блокировать поток службы.</summary>
+            <param name="cancellationToken">Сигнал остановки.</param><returns>Принятый клиент.</returns>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.RecordRead">
+            <summary>Синхронно отмечает успешное чтение сообщения для диагностики.</summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.RecordWrite">
+            <summary>Синхронно отмечает успешную отправку сообщения для диагностики.</summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.RecordError(System.Exception)">
+            <summary>Синхронно запоминает последнюю ошибку соединения.</summary>
+            <param name="exception">Ошибка для очередного снимка состояния.</param>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.ReleaseClient(System.Net.Sockets.TcpClient)">
+            <summary>Синхронно закрывает завершённый сеанс, сохраняя работающий listener.</summary>
+            <param name="connected">Клиент, полученный от AcceptAsync.</param>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.Stop">
-            <inheritdoc />
+            <summary>Синхронно закрывает сокеты и таймер; повторный вызов безопасен.</summary>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.Dispose">
-            <summary>
-            Синхронно и идемпотентно освобождает listener и активный сокет.
-            </summary>
+            <summary>Синхронно и идемпотентно освобождает TCP-ресурсы.</summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.LogStatus">
+            <summary>Пишет снимок наблюдаемого состояния; молчание прибора не считается доказательством отказа.</summary>
+        </member>
+        <member name="M:AnalyzerService.Transport.TcpHost.Format(System.Nullable{System.DateTimeOffset})">
+            <summary>Синхронно форматирует время события для журнала.</summary>
+            <param name="value">Время или null.</param><returns>ISO-время либо «нет».</returns>
         </member>
     </members>
 </doc>

@@ -4,9 +4,9 @@ namespace SysmexCS2000.HostOnline.Driver.Protocol;
 /// Представляет общий 58-символьный заголовок Sysmex Host Online.
 /// </summary>
 public record HostOnlineHeader(
-    char type, char subtype, string version, int blockNumber, int totalBlocks,
-    char sampleType, string date, string time, string rackNumber,
-    string tubePosition, string sampleId, char idInformation, string patientName);
+    char Kind, char Subtype, string Version, int BlockNumber, int TotalBlocks,
+    char SampleType, string Date, string Time, string RackNumber,
+    string TubePosition, string SampleId, char IdInformation, string PatientName);
 
 /// <summary>
 /// Представляет запрос заказа R221 от IPU.

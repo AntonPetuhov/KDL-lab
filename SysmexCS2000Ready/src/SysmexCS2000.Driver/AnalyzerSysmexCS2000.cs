@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using AnalyzerService.Contracts;
-using AnalyzerService.Lis;
+using AnalyzerService.LisDatabase;
 using AnalyzerService.Transport;
 using SysmexCS2000.Driver.Lis;
 using SysmexCS2000.Driver.Protocol;
@@ -20,7 +20,7 @@ public class AnalyzerSysmexCS2000 : IDisposable
     private readonly AstmSession session;
     private readonly AstmMessageParser parser = new();
     private readonly AstmMessageBuilder builder = new();
-    private readonly LisRepository repository;
+    private readonly LisDBProvider repository;
     private readonly SysmexResultHandler resultHandler;
     private readonly CancellationTokenSource localStop = new();
     private TcpClient? client;
@@ -32,7 +32,7 @@ public class AnalyzerSysmexCS2000 : IDisposable
         this.settings = settings;
         tcpHost = new TcpHost(logger, "Sysmex CS-2000i");
         session = new AstmSession(logger);
-        repository = new LisRepository(settings, logger);
+        repository = new LisDBProvider(settings, logger);
         resultHandler = new SysmexResultHandler(settings, logger, repository);
     }
 
@@ -51,11 +51,19 @@ public class AnalyzerSysmexCS2000 : IDisposable
                 await HandleClientAsync(client, linked.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (linked.IsCancellationRequested) { break; }
+            catch (Exception) when (linked.IsCancellationRequested) { break; }
+            catch (EndOfStreamException)
+            {
+                logger.Transport("IPU закрыл ASTM-соединение; сервер ожидает новое подключение.");
+            }
             catch (Exception ex)
             {
+                tcpHost.RecordError(ex);
                 logger.Error("Ошибка соединения Sysmex; ожидается новое подключение IPU.", ex);
-                client?.Dispose();
-                client = null;
+            }
+            finally
+            {
+                if (client is not null) { tcpHost.ReleaseClient(client); client = null; }
             }
         }
         logger.Service("Рабочий цикл Sysmex CS-2000i остановлен.");
@@ -68,6 +76,7 @@ public class AnalyzerSysmexCS2000 : IDisposable
         while (connectedClient.Connected && !token.IsCancellationRequested)
         {
             string raw = await session.ReceiveMessageAsync(stream, token).ConfigureAwait(false);
+            tcpHost.RecordRead();
             logger.Protocol($"Получено ASTM-сообщение длиной {raw.Length}.");
             AstmMessage message;
             try { message = parser.Parse(raw); }
@@ -81,6 +90,7 @@ public class AnalyzerSysmexCS2000 : IDisposable
                     : order.Parameters.Count == 0 ? builder.BuildEmpty(sampleId, "000")
                     : builder.BuildOrder(order);
                 await session.SendMessageAsync(stream, response, token).ConfigureAwait(false);
+                tcpHost.RecordWrite();
             }
             else if (message.Records.Any(r => r.Type == 'R') && settings.ResultHandlerStatus)
             {

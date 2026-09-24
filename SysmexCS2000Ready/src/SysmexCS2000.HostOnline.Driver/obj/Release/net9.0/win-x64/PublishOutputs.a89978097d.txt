@@ -38,10 +38,10 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\Analyzer
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\zh-Hans\Microsoft.Data.SqlClient.resources.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\zh-Hant\Microsoft.Data.SqlClient.resources.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\Microsoft.Data.SqlClient.SNI.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.Lis.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.LisDatabase.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.Transport.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.Lis.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.Lis.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.LisDatabase.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\AnalyzerService.Transport.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.xml

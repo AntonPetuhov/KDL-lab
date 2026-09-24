@@ -28,7 +28,7 @@
         <member name="T:SysmexCS2000.Driver.Lis.SysmexResultHandler">
             <summary>Извлекает R-записи и атомарно создаёт файлы результата и подтверждения для ЛИС.</summary>
         </member>
-        <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Lis.LisRepository)">
+        <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.LisDatabase.LisDBProvider)">
             <summary>Извлекает R-записи и атомарно создаёт файлы результата и подтверждения для ЛИС.</summary>
         </member>
         <member name="M:SysmexCS2000.Driver.Lis.SysmexResultHandler.Handle(SysmexCS2000.Driver.Protocol.AstmMessage)">
@@ -107,7 +107,7 @@
         <member name="T:SysmexCS2000.Driver.Protocol.AstmMessageBuilder">
             <summary>Формирует документированные H/P/O/L ответы на запрос заказа CS-2000i.</summary>
         </member>
-        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageBuilder.BuildOrder(AnalyzerService.Lis.LisOrder)">
+        <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageBuilder.BuildOrder(AnalyzerService.LisDatabase.LisOrder)">
             <summary>Синхронно формирует ответ с заказом.</summary><param name="order">Данные ЛИС.</param><returns>ASTM-текст.</returns>
         </member>
         <member name="M:SysmexCS2000.Driver.Protocol.AstmMessageBuilder.BuildEmpty(System.String,System.String)">

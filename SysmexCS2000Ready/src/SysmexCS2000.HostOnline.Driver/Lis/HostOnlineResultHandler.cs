@@ -1,12 +1,12 @@
 using System.Text;
 using AnalyzerService.Contracts;
-using AnalyzerService.Lis;
+using AnalyzerService.LisDatabase;
 using SysmexCS2000.HostOnline.Driver.Protocol;
 
 namespace SysmexCS2000.HostOnline.Driver.Lis;
 
 /// <summary>Преобразует D121/D221 в атомарные .res/.ok файлы для ЛИС.</summary>
-public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzerLogger logger, LisRepository repository)
+public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzerLogger logger, LisDBProvider repository)
 {
     static HostOnlineResultHandler() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

@@ -1,5 +1,5 @@
 using System.Text;
-using AnalyzerService.Lis;
+using AnalyzerService.LisDatabase;
 
 namespace SysmexCS2000.HostOnline.Driver.Protocol;
 
@@ -21,7 +21,7 @@ public class HostOnlineCodec
     public HostOnlineInquiry ParseInquiry(string message)
     {
         HostOnlineHeader header = ParseHeader(message);
-        if (header.type != 'R' || header.subtype != '2' || header.version != "21")
+        if (header.Kind != 'R' || header.Subtype != '2' || header.Version != "21")
             throw new HostOnlineProtocolException("Text Distinction Error", "Ожидался запрос задания R221.");
 
         return new HostOnlineInquiry(header, ParseParameterCodes(message));

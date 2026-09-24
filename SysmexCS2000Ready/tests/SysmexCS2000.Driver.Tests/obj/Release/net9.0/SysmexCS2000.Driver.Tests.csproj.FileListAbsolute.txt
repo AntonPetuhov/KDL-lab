@@ -65,9 +65,9 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS20
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\obj\Release\net9.0\SysmexCS2000.Driver.Tests.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\obj\Release\net9.0\SysmexCS2000.Driver.Tests.genruntimeconfig.cache
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\obj\Release\net9.0\ref\SysmexCS2000.Driver.Tests.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.Lis.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.Lis.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.Lis.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.Transport.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.LisDatabase.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.Driver.Tests\bin\Release\net9.0\AnalyzerService.LisDatabase.xml

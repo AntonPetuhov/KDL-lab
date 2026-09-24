@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using AnalyzerService.Contracts;
-using AnalyzerService.Lis;
+using AnalyzerService.LisDatabase;
 using AnalyzerService.Transport;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using SysmexCS2000.HostOnline.Driver.Protocol;
@@ -21,8 +21,9 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
     private readonly AnalyzerSettings settings;
     private readonly TcpHost host;
     private readonly HostOnlineCodec codec = new();
-    private readonly LisRepository dbProvider;
+    private readonly LisDBProvider dbProvider;
     private readonly HostOnlineResultHandler resultHandler;
+    private readonly HostOnlineQualityControlHandler qualityControlHandler;
     private readonly CancellationTokenSource localStop = new();
     private readonly Dictionary<string, SortedDictionary<int, string>> blocks = new(StringComparer.Ordinal); // для складывания фреймов
     private TcpClient? client;
@@ -33,8 +34,9 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         this.logger = logger;
         this.settings = settings;
         host = new TcpHost(logger, "Sysmex CS-2000i Host Online");
-        dbProvider = new LisRepository(settings, logger);
+        dbProvider = new LisDBProvider(settings, logger);
         resultHandler = new HostOnlineResultHandler(settings, logger, dbProvider);
+        qualityControlHandler = new HostOnlineQualityControlHandler(settings, logger);
     }
 
     /// <summary>Асинхронно ожидает подключения и данные TCP без блокировки потока службы.</summary><param name="token">Сигнал остановки.</param><returns>Рабочая задача.</returns>
@@ -61,12 +63,21 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
                 await HandleClientAsync(client, linked.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (linked.IsCancellationRequested) { break; }
+            catch (Exception) when (linked.IsCancellationRequested) { break; }
+            catch (EndOfStreamException)
+            {
+                logger.Transport("IPU закрыл соединение Host Online; сервер ожидает новое подключение.");
+                blocks.Clear();
+            }
             catch (Exception ex)
             {
+                host.RecordError(ex);
                 logger.Error("Ошибка Sysmex Host Online; ожидается новое подключение.", ex);
-                client?.Dispose();
-                client = null;
                 blocks.Clear();
+            }
+            finally
+            {
+                if (client is not null) { host.ReleaseClient(client); client = null; }
             }
         }
     }
@@ -81,7 +92,14 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         {
             // читаем полный фрейм
             string block = await ReadTextAsync(stream, token).ConfigureAwait(false);
+            host.RecordRead();
             logger.Protocol($"RX: {block}");
+            // DS21 - текст информации о пробе, не содержит блоков результата.
+            if (block.StartsWith("DS21", StringComparison.Ordinal))
+            {
+                logger.Protocol("Получен DS21 с информацией о пробе; результат не создаётся.");
+                continue;
+            }
             // собираем полное сообщение
             string? completeMsg = AddBlock(block);
 
@@ -91,14 +109,16 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
             if (completeMsg[0] == 'R')
             {
                 HostOnlineInquiry inquiry = codec.ParseInquiry(completeMsg);
-                LisOrder? order = dbProvider.GetOrder(inquiry.Header.sampleId);
+                LisOrder? order = dbProvider.GetOrder(inquiry.Header.SampleId);
                 string emptyCode = order is null ? "999" : "000";
                 foreach (string response in codec.BuildOrder(inquiry, order, emptyCode))
                     await WriteTextAsync(stream, response, token).ConfigureAwait(false);
             }
             else if (completeMsg[0] == 'D' && settings.ResultHandlerStatus)
             {
-                resultHandler.Handle(codec.ParseResult(completeMsg));
+                HostOnlineResult result = codec.ParseResult(completeMsg);
+                if (result.Header.SampleType == 'C') qualityControlHandler.Handle(result);
+                else resultHandler.Handle(result);
             }
             else
             {
@@ -192,6 +212,7 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         if (bytes.Length > 255) throw new HostOnlineProtocolException("Text Length Error", "Исходящий текст превышает 255 символов.");
         await stream.WriteAsync(bytes, token).ConfigureAwait(false);
         await stream.FlushAsync(token).ConfigureAwait(false);
+        host.RecordWrite();
         logger.Protocol($"Host Online TX: {body}");
     }
 

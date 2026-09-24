@@ -7,7 +7,7 @@ namespace AnalyzerService.Contracts;
 public sealed class AnalyzerSettings
 {
     /// <summary>Уникальный ID прибора</summary>
-    public string AnalyzerId { get; set; } 
+    public string AnalyzerId { get; set; }
     /// <summary>Уникальное имя анализатора.</summary>
     public required string AnalyzerName { get; set; }
     /// <summary>Тип подключения ("TCPIP", "Serial", "File")</summary>

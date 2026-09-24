@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysmexCS2000.Driver", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysmexCS2000.Driver.Tests", "tests\SysmexCS2000.Driver.Tests\SysmexCS2000.Driver.Tests.csproj", "{44444444-4444-4444-8444-444444444444}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerService.Lis", "src\AnalyzerService.Lis\AnalyzerService.Lis.csproj", "{55555555-5555-4555-8555-555555555555}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerService.LisDatabase", "src\AnalyzerService.LisDatabase\AnalyzerService.LisDatabase.csproj", "{55555555-5555-4555-8555-555555555555}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysmexCS2000.HostOnline.Driver", "src\SysmexCS2000.HostOnline.Driver\SysmexCS2000.HostOnline.Driver.csproj", "{66666666-6666-4666-8666-666666666666}"
 EndProject

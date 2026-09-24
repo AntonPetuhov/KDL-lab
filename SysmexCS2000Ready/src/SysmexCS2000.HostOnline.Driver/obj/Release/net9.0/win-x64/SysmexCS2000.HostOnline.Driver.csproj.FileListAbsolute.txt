@@ -2,9 +2,6 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.xml
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Lis.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Lis.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Lis.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.csproj.AssemblyReference.cache
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.GeneratedMSBuildEditorConfig.editorconfig
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.AssemblyInfoInputs.cache
@@ -19,3 +16,6 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.xml

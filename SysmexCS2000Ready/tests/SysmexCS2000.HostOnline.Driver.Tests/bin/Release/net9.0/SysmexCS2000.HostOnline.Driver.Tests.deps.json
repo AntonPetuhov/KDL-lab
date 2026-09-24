@@ -351,13 +351,13 @@
           }
         }
       },
-      "AnalyzerService.Lis/1.0.0": {
+      "AnalyzerService.LisDatabase/1.0.0": {
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
           "Microsoft.Data.SqlClient": "7.0.0"
         },
         "runtime": {
-          "AnalyzerService.Lis.dll": {
+          "AnalyzerService.LisDatabase.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -377,7 +377,7 @@
       "SysmexCS2000.HostOnline.Driver/1.0.0": {
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
-          "AnalyzerService.Lis": "1.0.0",
+          "AnalyzerService.LisDatabase": "1.0.0",
           "AnalyzerService.Transport": "1.0.0"
         },
         "runtime": {
@@ -561,7 +561,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AnalyzerService.Lis/1.0.0": {
+    "AnalyzerService.LisDatabase/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

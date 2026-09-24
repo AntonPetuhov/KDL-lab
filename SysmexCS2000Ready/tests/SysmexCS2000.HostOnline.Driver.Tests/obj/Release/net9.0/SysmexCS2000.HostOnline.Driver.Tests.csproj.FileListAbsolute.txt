@@ -48,14 +48,11 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS20
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\runtimes\win\lib\net9.0\System.Security.Cryptography.Pkcs.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Contracts.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Lis.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\SysmexCS2000.HostOnline.Driver.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\SysmexCS2000.HostOnline.Driver.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\SysmexCS2000.HostOnline.Driver.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Contracts.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Contracts.xml
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Lis.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Lis.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\obj\Release\net9.0\SysmexCS2000.HostOnline.Driver.Tests.csproj.AssemblyReference.cache
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\obj\Release\net9.0\SysmexCS2000.HostOnline.Driver.Tests.GeneratedMSBuildEditorConfig.editorconfig
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\obj\Release\net9.0\SysmexCS2000.HostOnline.Driver.Tests.AssemblyInfoInputs.cache
@@ -71,3 +68,6 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS20
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Transport.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.LisDatabase.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\tests\SysmexCS2000.HostOnline.Driver.Tests\bin\Release\net9.0\AnalyzerService.LisDatabase.xml

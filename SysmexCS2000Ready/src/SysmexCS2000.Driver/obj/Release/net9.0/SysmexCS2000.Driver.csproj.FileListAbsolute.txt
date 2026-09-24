@@ -12,10 +12,10 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Release\net9.0\SysmexCS2000.Driver.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Release\net9.0\SysmexCS2000.Driver.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Release\net9.0\ref\SysmexCS2000.Driver.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.Lis.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.Lis.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.Lis.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\obj\Release\net9.0\SysmexCS.1C712F1F.Up2Date
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.Transport.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.LisDatabase.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\AnalyzerService.LisDatabase.xml
