@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj": {}
+    "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
+    "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj",
+        "projectUniqueName": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj",
         "projectName": "AnalyzerService.Contracts",
-        "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj",
-        "packagesPath": "C:\\Users\\petuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\obj\\",
+        "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj",
+        "packagesPath": "C:\\Users\\anton.petuhov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\petuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\anton.petuhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -30,6 +30,7 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -44,10 +45,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "imports": [
             "net461",
@@ -65,24 +67,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj": {
+    "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj",
+        "projectUniqueName": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj",
         "projectName": "AnalyzerService.Lis",
-        "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj",
-        "packagesPath": "C:\\Users\\petuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\obj\\",
+        "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj",
+        "packagesPath": "C:\\Users\\anton.petuhov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\petuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\anton.petuhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -95,10 +97,11 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
-                "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
+              "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
+                "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
               }
             }
           }
@@ -113,10 +116,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.Data.SqlClient": {
@@ -140,24 +144,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj": {
+    "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+        "projectUniqueName": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
         "projectName": "AnalyzerService.Transport",
-        "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
-        "packagesPath": "C:\\Users\\petuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\obj\\",
+        "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+        "packagesPath": "C:\\Users\\anton.petuhov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\petuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\anton.petuhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -170,10 +174,11 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
-                "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
+              "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
+                "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
               }
             }
           }
@@ -188,10 +193,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "imports": [
             "net461",
@@ -209,24 +215,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj": {
+    "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj",
+        "projectUniqueName": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj",
         "projectName": "SysmexCS2000.Driver",
-        "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj",
-        "packagesPath": "C:\\Users\\petuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\obj\\",
+        "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj",
+        "packagesPath": "C:\\Users\\anton.petuhov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\petuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\anton.petuhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -239,16 +245,17 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
-                "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
+              "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
+                "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
               },
-              "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj": {
-                "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj"
+              "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj": {
+                "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Lis\\AnalyzerService.Lis.csproj"
               },
-              "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj": {
-                "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj"
+              "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj": {
+                "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj"
               }
             }
           }
@@ -263,10 +270,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "imports": [
             "net461",
@@ -284,24 +292,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj": {
+    "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
         "projectName": "SysmexCS2000.Driver.Tests",
-        "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
-        "packagesPath": "C:\\Users\\petuk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\obj\\",
+        "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\SysmexCS2000.Driver.Tests.csproj",
+        "packagesPath": "C:\\Users\\anton.petuhov\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\tests\\SysmexCS2000.Driver.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\petuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\anton.petuhov\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -314,10 +322,11 @@
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj": {
-                "projectPath": "C:\\Users\\petuk\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj"
+              "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj": {
+                "projectPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.Driver\\SysmexCS2000.Driver.csproj"
               }
             }
           }
@@ -332,10 +341,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "imports": [
             "net461",
@@ -353,7 +363,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

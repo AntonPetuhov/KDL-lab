@@ -10,7 +10,7 @@ using SysmexCS2000.HostOnline.Driver.Protocol;
 namespace SysmexCS2000.HostOnline.Driver;
 
 /// <summary>Координирует работу реализации драйвера анализатора</summary>
-public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
+public class AnalyzerSysmexCS2000HostOnline : IDisposable
 {
     #region Управляющие символы ASTM
     private const byte STX = 0x02;
@@ -21,10 +21,10 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     private readonly AnalyzerSettings settings;
     private readonly TcpHost host;
     private readonly HostOnlineCodec codec = new();
-    private readonly LisRepository repository;
+    private readonly LisRepository dbProvider;
     private readonly HostOnlineResultHandler resultHandler;
     private readonly CancellationTokenSource localStop = new();
-    private readonly Dictionary<string, SortedDictionary<int, string>> blocks = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, SortedDictionary<int, string>> blocks = new(StringComparer.Ordinal); // для складывания фреймов
     private TcpClient? client;
 
     /// <summary>Создаёт анализатор и синхронные зависимости.</summary>
@@ -33,16 +33,26 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         this.logger = logger;
         this.settings = settings;
         host = new TcpHost(logger, "Sysmex CS-2000i Host Online");
-        repository = new LisRepository(settings, logger);
-        resultHandler = new HostOnlineResultHandler(settings, logger, repository);
+        dbProvider = new LisRepository(settings, logger);
+        resultHandler = new HostOnlineResultHandler(settings, logger, dbProvider);
     }
 
     /// <summary>Асинхронно ожидает подключения и данные TCP без блокировки потока службы.</summary><param name="token">Сигнал остановки.</param><returns>Рабочая задача.</returns>
     public async Task RunAsync(CancellationToken token)
     {
+        // Проверка, что Initialize был вызван
+        if (logger == null || host == null || dbProvider == null || resultHandler == null)
+            throw new InvalidOperationException("Драйвер не инициализирован. Вызовите Initialize().");
+        // Освобождаем старый CTS, если есть
+        // using освобождает?
         using CancellationTokenSource linked = CancellationTokenSource.CreateLinkedTokenSource(token, localStop.Token);
+
+        if (settings == null)
+            throw new InvalidOperationException("Настройки не инициализированы.");
+
         host.Start(IPAddress.Parse(settings.IPaddress!), settings.Port);
         logger.Service("Sysmex CS-2000i Host Online запущен.");
+
         while (!linked.IsCancellationRequested)
         {
             try
@@ -62,37 +72,46 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     }
 
     /// <summary>
-    /// Асинхронно принимает ограниченные STX/ETX-тексты одного соединения.
+    /// Асинхронно принимает ограниченные STX/ETX-фреймы одного соединения.
     /// </summary>
-    private async Task HandleClientAsync(TcpClient connected, CancellationToken token)
+    private async Task HandleClientAsync(TcpClient connectedClient, CancellationToken token)
     {
-        NetworkStream stream = connected.GetStream();
-        while (connected.Connected && !token.IsCancellationRequested)
+        NetworkStream stream = connectedClient.GetStream();
+        while (connectedClient.Connected && !token.IsCancellationRequested)
         {
+            // читаем полный фрейм
             string block = await ReadTextAsync(stream, token).ConfigureAwait(false);
-            logger.Protocol($"Host Online RX: {block}");
-            string? complete = AddBlock(block);
-            if (complete is null) continue;
-            if (complete[0] == 'R')
+            logger.Protocol($"RX: {block}");
+            // собираем полное сообщение
+            string? completeMsg = AddBlock(block);
+
+            if (completeMsg is null) 
+                continue;
+            // Если запрос задания, сообщение начинается с R
+            if (completeMsg[0] == 'R')
             {
-                HostOnlineInquiry inquiry = codec.ParseInquiry(complete);
-                LisOrder? order = repository.GetOrder(inquiry.Header.SampleId);
+                HostOnlineInquiry inquiry = codec.ParseInquiry(completeMsg);
+                LisOrder? order = dbProvider.GetOrder(inquiry.Header.sampleId);
                 string emptyCode = order is null ? "999" : "000";
                 foreach (string response in codec.BuildOrder(inquiry, order, emptyCode))
                     await WriteTextAsync(stream, response, token).ConfigureAwait(false);
             }
-            else if (complete[0] == 'D' && settings.ResultHandlerStatus)
+            else if (completeMsg[0] == 'D' && settings.ResultHandlerStatus)
             {
-                resultHandler.Handle(codec.ParseResult(complete));
+                resultHandler.Handle(codec.ParseResult(completeMsg));
             }
             else
             {
-                logger.Protocol($"Текст типа {complete[0]} принят без прикладной обработки.");
+                logger.Protocol($"Текст типа {completeMsg[0]} принят без прикладной обработки.");
             }
         }
     }
 
-    /// <summary>Собирает разделённые тексты по номерам блоков и возвращает полное тело.</summary>
+    #region Сборка полного сообщения
+    /// <summary>
+    /// Собирает разделённые фреймы по номерам блоков и возвращает полное тело, полное сообщение.
+    /// Нужно, если прибор будет посылать большое сообщение, которое будет разделено на блоки
+    /// </summary>
     private string? AddBlock(string body)
     {
         // Проверка минимальной длины
@@ -103,17 +122,34 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         int total = int.Parse(body.Substring(6, 2));
         // Тип + Sample ID
         string key = body[0] + body.Substring(27, 15);
-        // 
-        if (!blocks.TryGetValue(key, out SortedDictionary<int, string>? parts)) blocks[key] = parts = [];
+        // Если для данного ключа еще нет записи в словаре
+        // Через out-параметр parts возвращает само значение, если ключ найден.
+        if (!blocks.TryGetValue(key, out SortedDictionary<int, string>? parts))
+        {
+            // создаём пустой словарь, куда будут складываться блок сообщения
+            parts = new SortedDictionary<int, string>();
+            blocks[key] = parts;
+        }
+        // помещаем текущий фрейм в этот словарь
         parts[number] = body;
-        if (parts.Count < total) return null;
+        // Если количество блоков, которые мы сложили, меньше заявленного кол-ва блоков total - выходим, полное сообщение еще не готово
+        if (parts.Count < total) 
+            return null;
+        // Проверяем полноту последовательности, все ли блоки собрали
         if (parts.Keys.Count != total || parts.Keys.First() != 1 || parts.Keys.Last() != total)
             throw new HostOnlineProtocolException("Block Number Error", "Последовательность блоков неполна.");
-        string complete = parts[1] + string.Concat(parts.Skip(1).Select(item => item.Value[HostOnlineCodec.HeaderLength..]));
+        // собираем целое сообщение
+        // берем первый блок, с заголовком, берем остальные части (skip проспускает 1 элемент словаря), и удаляем у них заголовок, после склеиваем в одну строку concat
+        string completeMessage = parts[1] + string.Concat(parts.Skip(1).Select(item => item.Value[HostOnlineCodec.HeaderLength..]));
+        // очистка буфера
         blocks.Remove(key);
-        return complete[..4] + "01" + total.ToString("00") + complete[8..];
-    }
 
+        // нормализация строки, но поидее избыточно, можно просто возвращать completeMessage
+        return completeMessage[..4] + "01" + total.ToString("00") + completeMessage[8..];
+    }
+    #endregion
+
+    #region чтение данных из потока
     /// <summary>
     /// Читает один текст между STX и ETX
     /// </summary>
@@ -126,9 +162,9 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         while (true)
         {
             // Читаем один байт из потока
-            int count = await stream.ReadAsync(one, token).ConfigureAwait(false);
+            int received_bytes = await stream.ReadAsync(one, token).ConfigureAwait(false);
             // Если поток закрыт, пробрасываем исключение
-            if (count == 0) 
+            if (received_bytes == 0) 
                 throw new EndOfStreamException("IPU закрыл соединение.");
             // Пока не встретили STX — игнорируем всё
             if (!started) 
@@ -146,6 +182,8 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                 throw new HostOnlineProtocolException("Text Length Error", "Текст превышает 255 символов со STX/ETX.");
         }
     }
+
+    #endregion
 
     /// <summary>Асинхронно отправляет STX, тело и ETX без ACK/NAK согласно TCP-разделу PDF.</summary>
     private async Task WriteTextAsync(NetworkStream stream, string body, CancellationToken token)

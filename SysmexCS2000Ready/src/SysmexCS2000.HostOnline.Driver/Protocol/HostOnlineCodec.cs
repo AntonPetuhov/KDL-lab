@@ -4,23 +4,27 @@ using AnalyzerService.Lis;
 namespace SysmexCS2000.HostOnline.Driver.Protocol;
 
 /// <summary>
-/// Кодирует и разбирает фиксированные поля собственного Sysmex Host Online.
+/// Кодирует и разбирает фиксированные поля согласно протоколу Sysmex Host Online.
 /// STX/ETX обрабатываются транспортом; тело ограничено 253 символами.
 /// </summary>
-public sealed class HostOnlineCodec
+public class HostOnlineCodec
 {
     /// <summary>Длина общей части текста до первого 9-символьного блока.</summary>
     public const int HeaderLength = 58;
+
     /// <summary>Максимальное число параметров в одном тексте по спецификации.</summary>
     public const int MaximumParametersPerBlock = 22;
 
-    /// <summary>Синхронно разбирает запрос R221.</summary><param name="body">Текст без STX/ETX.</param><returns>Запрос.</returns>
-    public HostOnlineInquiry ParseInquiry(string body)
+    /// <summary>
+    /// Разбирает сообщение с запросом задания
+    /// </summary>
+    public HostOnlineInquiry ParseInquiry(string message)
     {
-        HostOnlineHeader header = ParseHeader(body);
-        if (header.Kind != 'R' || header.Subtype != '2' || header.Version != "21")
-            throw new HostOnlineProtocolException("Text Distinction Error", "Ожидался запрос R221.");
-        return new HostOnlineInquiry(header, ParseParameterCodes(body));
+        HostOnlineHeader header = ParseHeader(message);
+        if (header.type != 'R' || header.subtype != '2' || header.version != "21")
+            throw new HostOnlineProtocolException("Text Distinction Error", "Ожидался запрос задания R221.");
+
+        return new HostOnlineInquiry(header, ParseParameterCodes(message));
     }
 
     /// <summary>Синхронно разбирает результат D121 или D221.</summary><param name="body">Текст без STX/ETX.</param><returns>Результат.</returns>
@@ -57,31 +61,44 @@ public sealed class HostOnlineCodec
         return blocks;
     }
 
-    /// <summary>Синхронно разбирает фиксированный заголовок.</summary>
-    private static HostOnlineHeader ParseHeader(string body)
+    /// <summary>
+    /// Разбирает фиксированный заголовок.
+    /// </summary>
+    private static HostOnlineHeader ParseHeader(string message)
     {
-        if (body.Length < HeaderLength) throw new HostOnlineProtocolException("Text Length Error", $"Текст короче {HeaderLength} символов.");
-        if (!int.TryParse(body.Substring(4, 2), out int block) || !int.TryParse(body.Substring(6, 2), out int total) || block < 1 || total < block)
+        if (message.Length < HeaderLength) 
+            throw new HostOnlineProtocolException("Text Length Error", $"Текст короче {HeaderLength} символов.");
+
+        if (!int.TryParse(message.Substring(4, 2), out int blockNum) || !int.TryParse(message.Substring(6, 2), out int total) || blockNum < 1 || total < blockNum)
             throw new HostOnlineProtocolException("Block Number Error", "Недопустимые номер или количество блоков.");
-        return new HostOnlineHeader(body[0], body[1], body.Substring(2, 2), block, total, body[8],
-            body.Substring(9, 6), body.Substring(15, 4), body.Substring(19, 6), body.Substring(25, 2),
-            body.Substring(27, 15).Trim(), body[42], body.Substring(43, 15).TrimEnd());
+
+        // собираем объект заголовка сообщения на основании переданной строки сообщения
+        return new HostOnlineHeader(message[0], message[1], message.Substring(2, 2), blockNum, total, message[8],
+            message.Substring(9, 6), message.Substring(15, 4), message.Substring(19, 6), message.Substring(25, 2),
+            message.Substring(27, 15).Trim(), message[42], message.Substring(43, 15).TrimEnd());
     }
 
-    /// <summary>Проверяет кратность хвоста 9-символьным блокам.</summary>
-    private static void EnsureDataBlocks(string body)
+    /// <summary>
+    /// Проверяет кратность хвоста 9-символьным блокам. 
+    /// Согласно документации апарметры имеют по 9 символов
+    /// </summary>
+    private static void EnsureDataBlocks(string message)
     {
-        if ((body.Length - HeaderLength) % 9 != 0)
+        if ((message.Length - HeaderLength) % 9 != 0)
             throw new HostOnlineProtocolException("Text Length Error", "Длина области данных не кратна 9.");
     }
 
-    /// <summary>Извлекает трёхсимвольные коды параметров.</summary>
-    private static IReadOnlyList<string> ParseParameterCodes(string body)
+    /// <summary>
+    /// Извлекает трёхсимвольные коды параметров.
+    /// </summary>
+    private static IReadOnlyList<string> ParseParameterCodes(string message)
     {
-        EnsureDataBlocks(body);
-        List<string> result = [];
-        for (int offset = HeaderLength; offset < body.Length; offset += 9) result.Add(body.Substring(offset, 3));
-        return result;
+        EnsureDataBlocks(message);
+        List<string> parameters = [];
+        for (int offset = HeaderLength; offset < message.Length; offset += 9) 
+            parameters.Add(message.Substring(offset, 3));
+
+        return parameters;
     }
 
     /// <summary>Создаёт заголовок S221 с полями запроса и данными пациента.</summary>
