@@ -11,3 +11,18 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerServ
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\ref\AnalyzerService.Contracts.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Debug\net9.0\AnalyzerService.Contracts.deps.json
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Debug\net9.0\AnalyzerService.Contracts.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Debug\net9.0\AnalyzerService.Contracts.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\bin\Debug\net9.0\AnalyzerService.Contracts.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.AssemblyInfoInputs.cache
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.AssemblyInfo.cs
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.sourcelink.json
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\refint\AnalyzerService.Contracts.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\AnalyzerService.Contracts.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\ref\AnalyzerService.Contracts.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Contracts\obj\Debug\net9.0\Analyzer.3092BAB4.Up2Date

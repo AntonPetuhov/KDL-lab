@@ -27,30 +27,42 @@ public class HostOnlineCodec
         return new HostOnlineInquiry(header, ParseParameterCodes(message));
     }
 
-    /// <summary>Синхронно разбирает результат D121 или D221.</summary><param name="body">Текст без STX/ETX.</param><returns>Результат.</returns>
-    public HostOnlineResult ParseResult(string body)
+    /// <summary>
+    /// Синхронно разбирает результат D121 или D221.
+    /// </summary>
+    public HostOnlineResult ParseResult(string message)
     {
-        HostOnlineHeader header = ParseHeader(body);
+        HostOnlineHeader header = ParseHeader(message);
         if (header.Kind != 'D' || header.Subtype is not ('1' or '2') || header.Version != "21")
             throw new HostOnlineProtocolException("Text Distinction Error", "Ожидался результат D121 или D221.");
-        EnsureDataBlocks(body);
+
+        // проверяем размер секций с тестами
+        EnsureDataBlocks(message);
         List<HostOnlineResultItem> items = [];
-        for (int offset = HeaderLength; offset < body.Length; offset += 9)
+        for (int offset = HeaderLength; offset < message.Length; offset += 9)
         {
-            string block = body.Substring(offset, 9);
+            string block = message.Substring(offset, 9);
             items.Add(new HostOnlineResultItem(block[..3], block.Substring(3, 5).Trim(), block[8]));
         }
         return new HostOnlineResult(header, items);
     }
 
-    /// <summary>Формирует один или несколько ответов S221, максимум по 22 параметра.</summary><param name="inquiry">Исходный запрос.</param><param name="order">Заказ или null.</param><param name="emptyCode">Код 000/999 при отсутствии заказа.</param><returns>Тела блоков без STX/ETX.</returns>
+    /// <summary>
+    /// Формирует один или несколько ответов (Задания для анализатора из ЛИС) S221, максимум по 22 параметра.
+    /// Возвращает список строк - блоки ответа хоста
+    /// </summary>
     public IReadOnlyList<string> BuildOrder(HostOnlineInquiry inquiry, LisOrder? order, string emptyCode)
     {
+        // Если заказ отсутствует или у него нет параметров — берётся код заглушка
+        // иначе - список параметров
         IReadOnlyList<string> codes = order is null || order.Parameters.Count == 0
             ? [ValidateEmptyCode(emptyCode)]
             : order.Parameters;
+
+        // максимум в одном сообщении согласно документации 22 параметра, отсюда считаем, сколько будет блоков сообщений
         int total = (codes.Count + MaximumParametersPerBlock - 1) / MaximumParametersPerBlock;
         List<string> blocks = [];
+
         for (int index = 0; index < total; index++)
         {
             IEnumerable<string> part = codes.Skip(index * MaximumParametersPerBlock).Take(MaximumParametersPerBlock);
@@ -80,7 +92,7 @@ public class HostOnlineCodec
 
     /// <summary>
     /// Проверяет кратность хвоста 9-символьным блокам. 
-    /// Согласно документации апарметры имеют по 9 символов
+    /// Согласно документации параметры имеют по 9 символов
     /// </summary>
     private static void EnsureDataBlocks(string message)
     {

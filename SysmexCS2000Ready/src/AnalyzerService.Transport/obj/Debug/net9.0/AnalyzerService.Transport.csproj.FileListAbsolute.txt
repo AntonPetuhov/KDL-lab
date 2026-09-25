@@ -1,0 +1,16 @@
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.deps.json
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.csproj.AssemblyReference.cache
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.AssemblyInfoInputs.cache
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.AssemblyInfo.cs
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.csproj.CoreCompileInputs.cache
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.sourcelink.json
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\refint\AnalyzerService.Transport.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\ref\AnalyzerService.Transport.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\Analyzer.4DF8B4BC.Up2Date

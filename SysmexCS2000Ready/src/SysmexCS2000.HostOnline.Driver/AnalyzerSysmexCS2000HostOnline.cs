@@ -28,7 +28,9 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
     private readonly Dictionary<string, SortedDictionary<int, string>> blocks = new(StringComparer.Ordinal); // для складывания фреймов
     private TcpClient? client;
 
-    /// <summary>Создаёт анализатор и синхронные зависимости.</summary>
+    /// <summary>
+    /// Создаёт анализатор и зависимости.
+    /// </summary>
     public AnalyzerSysmexCS2000HostOnline(IAnalyzerLogger logger, AnalyzerSettings settings)
     {
         this.logger = logger;
@@ -39,7 +41,9 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         qualityControlHandler = new HostOnlineQualityControlHandler(settings, logger);
     }
 
-    /// <summary>Асинхронно ожидает подключения и данные TCP без блокировки потока службы.</summary><param name="token">Сигнал остановки.</param><returns>Рабочая задача.</returns>
+    /// <summary>
+    /// Ожидает подключения и данные TCP без блокировки потока службы.
+    /// </summary>
     public async Task RunAsync(CancellationToken token)
     {
         // Проверка, что Initialize был вызван
@@ -77,7 +81,11 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
             }
             finally
             {
-                if (client is not null) { host.ReleaseClient(client); client = null; }
+                if (client is not null) 
+                { 
+                    host.ReleaseClient(client); 
+                    client = null; 
+                }
             }
         }
     }
@@ -92,12 +100,14 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         {
             // читаем полный фрейм
             string block = await ReadTextAsync(stream, token).ConfigureAwait(false);
+            // отмечаем время успешного чтения сообщения от анализатора
             host.RecordRead();
+
             logger.Protocol($"RX: {block}");
             // DS21 - текст информации о пробе, не содержит блоков результата.
             if (block.StartsWith("DS21", StringComparison.Ordinal))
             {
-                logger.Protocol("Получен DS21 с информацией о пробе; результат не создаётся.");
+                logger.Protocol("Info: Получен DS21 с информацией о пробе; результат не создаётся.");
                 continue;
             }
             // собираем полное сообщение
@@ -109,15 +119,28 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
             if (completeMsg[0] == 'R')
             {
                 HostOnlineInquiry inquiry = codec.ParseInquiry(completeMsg);
+                // получение задания в ЛИС
                 LisOrder? order = dbProvider.GetOrder(inquiry.Header.SampleId);
-                string emptyCode = order is null ? "999" : "000";
+
+                string emptyCode = order is null ? "999" : "000"; // если null - 999, стр. 37
+
+                // отправляем сформированное сообщение с заданием
+                // inquiry — входящий запрос от прибора (нужен для заголовка ответа)
+                // order — заказ из ЛИС 
+                // emptyCode — код-заглушка, если параметров нет
                 foreach (string response in codec.BuildOrder(inquiry, order, emptyCode))
                     await WriteTextAsync(stream, response, token).ConfigureAwait(false);
             }
+            // Если сообщение с результатами
             else if (completeMsg[0] == 'D' && settings.ResultHandlerStatus)
             {
                 HostOnlineResult result = codec.ParseResult(completeMsg);
-                if (result.Header.SampleType == 'C') qualityControlHandler.Handle(result);
+
+                // Если это результат Контроля Качества, обрабатываем его и складываем в отдельную папку
+                if (result.Header.SampleType == 'C')
+                {
+                    qualityControlHandler.Handle(result); 
+                }
                 else resultHandler.Handle(result);
             }
             else
@@ -205,15 +228,18 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
 
     #endregion
 
-    /// <summary>Асинхронно отправляет STX, тело и ETX без ACK/NAK согласно TCP-разделу PDF.</summary>
+    /// <summary>
+    /// Отправляет STX, тело и ETX без ACK/NAK согласно TCP-разделу PDF
+    /// </summary>
     private async Task WriteTextAsync(NetworkStream stream, string body, CancellationToken token)
     {
         byte[] bytes = [STX, .. Encoding.ASCII.GetBytes(body), ETX];
-        if (bytes.Length > 255) throw new HostOnlineProtocolException("Text Length Error", "Исходящий текст превышает 255 символов.");
+        if (bytes.Length > 255) 
+            throw new HostOnlineProtocolException("Text Length Error", "Исходящий текст превышает 255 символов.");
         await stream.WriteAsync(bytes, token).ConfigureAwait(false);
         await stream.FlushAsync(token).ConfigureAwait(false);
         host.RecordWrite();
-        logger.Protocol($"Host Online TX: {body}");
+        logger.Protocol($"TX: {body}");
     }
 
     /// <summary>Синхронно инициирует остановку, закрывая активный TCP.</summary><param name="token">Параметр контракта.</param><returns>Завершённая задача.</returns>

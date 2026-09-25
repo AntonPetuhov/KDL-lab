@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SysmexCS2000.HostOnline.Driver</name>
+    </assembly>
+    <members>
+        <member name="T:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline">
+            <summary>Координирует работу реализации драйвера анализатора</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
+            <summary>
+            Создаёт анализатор и зависимости.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Ожидает подключения и данные TCP без блокировки потока службы.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleClientAsync(System.Net.Sockets.TcpClient,System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно принимает ограниченные STX/ETX-фреймы одного соединения.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.AddBlock(System.String)">
+            <summary>
+            Собирает разделённые фреймы по номерам блоков и возвращает полное тело, полное сообщение.
+            Нужно, если прибор будет посылать большое сообщение, которое будет разделено на блоки
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(System.Net.Sockets.NetworkStream,System.Threading.CancellationToken)">
+            <summary>
+            Читает один текст между STX и ETX
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.WriteTextAsync(System.Net.Sockets.NetworkStream,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Отправляет STX, тело и ETX без ACK/NAK согласно TCP-разделу PDF
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.StopAsync(System.Threading.CancellationToken)">
+            <summary>Синхронно инициирует остановку, закрывая активный TCP.</summary><param name="token">Параметр контракта.</param><returns>Завершённая задача.</returns>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Dispose">
+            <summary>Освобождает ресурсы.</summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler">
+            <summary>
+            Сохраняет результаты контроля качества Host Online отдельно от результатов пациентов.
+            Использует исходные коды прибора, поскольку контроль не является заказом пациента в БД ЛИС.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>
+            Сохраняет результаты контроля качества Host Online отдельно от результатов пациентов.
+            Использует исходные коды прибора, поскольку контроль не является заказом пациента в БД ЛИС.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler.Handle(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult)">
+            <summary>
+            Синхронно записывает небольшие .res/.ok файлы в ResultsFolder/QualityControl.
+            Маркер .ok создаётся последним, только после успешной записи результата.
+            </summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler">
+            <summary>
+            Преобразует D121/D221 в .res/.ok файлы для ЛИС.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.LisDatabase.LisDBProvider)">
+            <summary>
+            Преобразует D121/D221 в .res/.ok файлы для ЛИС.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult)">
+            <summary>
+            Сохраняет результат
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Write(System.String,System.String)">
+            <summary>Pаписывает файл через временное имя.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Sanitize(System.String)">
+            <summary>Заменяет недопустимые символы имени файла.</summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec">
+            <summary>
+            Кодирует и разбирает фиксированные поля согласно протоколу Sysmex Host Online.
+            STX/ETX обрабатываются транспортом; тело ограничено 253 символами.
+            </summary>
+        </member>
+        <member name="F:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.HeaderLength">
+            <summary>Длина общей части текста до первого 9-символьного блока.</summary>
+        </member>
+        <member name="F:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.MaximumParametersPerBlock">
+            <summary>Максимальное число параметров в одном тексте по спецификации.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.ParseInquiry(System.String)">
+            <summary>
+            Разбирает сообщение с запросом задания
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.ParseResult(System.String)">
+            <summary>
+            Синхронно разбирает результат D121 или D221.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineInquiry,AnalyzerService.LisDatabase.LisOrder,System.String)">
+            <summary>
+            Формирует один или несколько ответов (Задания для анализатора из ЛИС) S221, максимум по 22 параметра.
+            Возвращает список строк - блоки ответа хоста
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.ParseHeader(System.String)">
+            <summary>
+            Разбирает фиксированный заголовок.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.EnsureDataBlocks(System.String)">
+            <summary>
+            Проверяет кратность хвоста 9-символьным блокам. 
+            Согласно документации параметры имеют по 9 символов
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.ParseParameterCodes(System.String)">
+            <summary>
+            Извлекает трёхсимвольные коды параметров.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineHeader,AnalyzerService.LisDatabase.LisOrder,System.Int32,System.Int32)">
+            <summary>Создаёт заголовок S221 с полями запроса и данными пациента.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.ValidateEmptyCode(System.String)">
+            <summary>Проверяет документированный специальный код.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.Fit(System.String,System.Int32,System.Boolean)">
+            <summary>Обрезает и дополняет поле до точной длины.</summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineHeader">
+            <summary>
+            Представляет общий 58-символьный заголовок Sysmex Host Online.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineHeader.#ctor(System.Char,System.Char,System.String,System.Int32,System.Int32,System.Char,System.String,System.String,System.String,System.String,System.String,System.Char,System.String)">
+            <summary>
+            Представляет общий 58-символьный заголовок Sysmex Host Online.
+            </summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineInquiry">
+            <summary>
+            Представляет запрос заказа R221 от IPU.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineInquiry.#ctor(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineHeader,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>
+            Представляет запрос заказа R221 от IPU.
+            </summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResultItem">
+            <summary>
+            Представляет один результат: код 3, данные 5, флаг 1.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResultItem.#ctor(System.String,System.String,System.Char)">
+            <summary>
+            Представляет один результат: код 3, данные 5, флаг 1.
+            </summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult">
+            <summary>
+            Представляет блок результатов D121/D221.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult.#ctor(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineHeader,System.Collections.Generic.IReadOnlyList{SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResultItem})">
+            <summary>
+            Представляет блок результатов D121/D221.
+            </summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineProtocolException">
+            <summary>Представляет ошибку собственного протокола с именем из спецификации.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineProtocolException.#ctor(System.String,System.String)">
+            <summary>Создаёт ошибку.</summary><param name="code">Имя ошибки.</param><param name="message">Контекст.</param>
+        </member>
+        <member name="P:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineProtocolException.Code">
+            <summary>Получает имя ошибки протокола.</summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver">
+            <summary>
+            Точка входа DLL собственного протокола Sysmex Host Online.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.Initialize(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
+            <summary>
+            Метод будет вызван из Analyzer после загрузки DLL. Инициализирует драйвер анализатора.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.Dispose">
+            <summary>Освобождает обработчик и TCP-ресурсы.</summary>
+        </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost">
+            <summary>Реализует TCP-сервер ЛИС и тексты STX/ETX собственного протокола.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>Реализует TCP-сервер ЛИС и тексты STX/ETX собственного протокола.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.Start(System.Net.IPAddress,System.Int32)">
+            <summary>Синхронно запускает listener.</summary><param name="address">Локальный адрес.</param><param name="port">Порт.</param>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.AcceptAsync(System.Threading.CancellationToken)">
+            <summary>Асинхронно ожидает подключение IPU.</summary><param name="token">Сигнал остановки.</param><returns>Клиент.</returns>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.Stop">
+            <summary>Синхронно прекращает listener и соединение.</summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Transport.HostOnlineTcpHost.Dispose">
+            <summary>Освобождает TCP-ресурсы.</summary>
+        </member>
+    </members>
+</doc>

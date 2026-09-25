@@ -5,7 +5,9 @@ using AnalyzerService.Contracts;
 
 namespace AnalyzerService.Transport;
 
-/// <summary>Общий TCP-сервер для DLL-драйверов; прикладной протокол остаётся в драйвере.</summary>
+/// <summary>
+/// Общий TCP-сервер для DLL-драйверов
+/// </summary>
 public sealed class TcpHost : ITcpHost
 {
     private static readonly TimeSpan StatusInterval = TimeSpan.FromSeconds(30);
@@ -90,8 +92,14 @@ public sealed class TcpHost : ITcpHost
         finally { lock (gate) accepting = false; }
     }
 
-    /// <summary>Синхронно отмечает успешное чтение сообщения для диагностики.</summary>
-    public void RecordRead() { lock (gate) lastRead = DateTimeOffset.Now; }
+    /// <summary>Отмечает успешное чтение сообщения для диагностики.</summary>
+    public void RecordRead() 
+    {
+        lock (gate)
+        {
+            lastRead = DateTimeOffset.Now;
+        } 
+    }
 
     /// <summary>Синхронно отмечает успешную отправку сообщения для диагностики.</summary>
     public void RecordWrite() { lock (gate) lastWrite = DateTimeOffset.Now; }
@@ -105,7 +113,6 @@ public sealed class TcpHost : ITcpHost
     }
 
     /// <summary>Синхронно закрывает завершённый сеанс, сохраняя работающий listener.</summary>
-    /// <param name="connected">Клиент, полученный от AcceptAsync.</param>
     public void ReleaseClient(TcpClient connected)
     {
         ArgumentNullException.ThrowIfNull(connected);
