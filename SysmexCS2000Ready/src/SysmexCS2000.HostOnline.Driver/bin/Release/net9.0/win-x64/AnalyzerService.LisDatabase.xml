@@ -16,11 +16,13 @@
         </member>
         <member name="M:AnalyzerService.LisDatabase.LisDBProvider.GetOrder(System.String)">
             <summary>
-            Получаем пациента и незавершённые тесты по RID.
+            Запрос задания. Получаем пациента и незавершённые тесты по RID.
             </summary>
         </member>
         <member name="M:AnalyzerService.LisDatabase.LisDBProvider.TranslateResultCode(System.String)">
-            <summary>Синхронно переводит код прибора в код PSMV2.</summary><param name="analyzerCode">Код прибора.</param><returns>Код PSMV2 либо null.</returns>
+            <summary>
+            Преобразует код прибора в код PSMV2.
+            </summary>
         </member>
         <member name="T:AnalyzerService.LisDatabase.LisOrder">
             <summary>

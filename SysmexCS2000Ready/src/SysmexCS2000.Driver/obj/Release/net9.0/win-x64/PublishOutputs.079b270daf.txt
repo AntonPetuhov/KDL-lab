@@ -39,9 +39,12 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\Analyzer
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\zh-Hant\Microsoft.Data.SqlClient.resources.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\Microsoft.Data.SqlClient.SNI.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.LisDatabase.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.ResultFiles.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.Transport.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.LisDatabase.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.LisDatabase.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.ResultFiles.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\AnalyzerService.ResultFiles.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\drivers\SysmexCS2000\SysmexCS2000.Driver.xml

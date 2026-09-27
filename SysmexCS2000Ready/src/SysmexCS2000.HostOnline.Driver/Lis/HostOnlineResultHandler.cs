@@ -15,7 +15,7 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
     /// <summary>
     /// Сохраняет результат
     /// </summary>
-    public void Handle(HostOnlineResult result)
+    public void Handle(HostOnlineResult result, string sourceId)
     {
         if (result.Items.Count == 0) 
             throw new InvalidDataException("D-текст не содержит результатов.");
@@ -23,7 +23,9 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
         string output = Path.GetFullPath(settings.OutputFolder!);
         Directory.CreateDirectory(output);
         string sampleId = result.Header.SampleId;
-        string fullFName = $"SYS2000_{Sanitize(sampleId)}_{DateTime.Now:yyyyMMddHHmmssfff}";
+        // Имя сырого файла постоянно при повторной попытке после сбоя переноса в archive.
+        string fullFName = sourceId;
+        if (File.Exists(Path.Combine(output, fullFName + ".ok"))) return;
         StringBuilder content = new($"O|1|{sampleId}||ALL|R|{DateTime.Now:yyyyMMddHHmmss}|||||X||||ALL||||||||||F\r\n");
         int sequence = 0;
         foreach (HostOnlineResultItem item in result.Items)
@@ -51,6 +53,4 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
         File.Move(temporary, path, true);
     }
 
-    /// <summary>Заменяет недопустимые символы имени файла.</summary>
-    private static string Sanitize(string value) => string.Concat(value.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
 }

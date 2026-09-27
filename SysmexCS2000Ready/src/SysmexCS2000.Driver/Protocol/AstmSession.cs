@@ -17,11 +17,12 @@ public sealed class AstmSession(IAnalyzerLogger logger)
     /// <summary>
     /// Асинхронно принимает одно полное сообщение; сеть требует неблокирующего ожидания.
     /// </summary>
-    /// <param name="stream">TCP-поток.</param><param name="token">Сигнал остановки.</param><returns>Текст записей.</returns>
-    public async Task<string> ReceiveMessageAsync(NetworkStream stream, CancellationToken token)
+    /// <param name="stream">TCP-поток.</param><param name="token">Сигнал остановки.</param><returns>Текст записей и исходные байты транзакции.</returns>
+    public async Task<AstmReceivedMessage> ReceiveMessageAsync(NetworkStream stream, CancellationToken token)
     {
         byte first = await ReadByteAsync(stream, ReceiverTimeout, token).ConfigureAwait(false);
         if (first != AstmControl.Enq) throw new SysmexProtocolException("Establishment Error", $"Ожидался ENQ, получен 0x{first:X2}.");
+        List<byte> wire = [first];
         await WriteControlAsync(stream, AstmControl.Ack, token).ConfigureAwait(false);
         StringBuilder text = new();
         int expectedNumber = 1;
@@ -29,7 +30,8 @@ public sealed class AstmSession(IAnalyzerLogger logger)
         while (true)
         {
             byte marker = await ReadByteAsync(stream, ReceiverTimeout, token).ConfigureAwait(false);
-            if (marker == AstmControl.Eot) return text.ToString();
+            wire.Add(marker);
+            if (marker == AstmControl.Eot) return new AstmReceivedMessage(text.ToString(), wire.ToArray());
             if (marker != AstmControl.Stx)
             {
                 await WriteControlAsync(stream, AstmControl.Nak, token).ConfigureAwait(false);
@@ -37,6 +39,7 @@ public sealed class AstmSession(IAnalyzerLogger logger)
             }
 
             byte[] raw = await ReadFrameRemainderAsync(stream, token).ConfigureAwait(false);
+            wire.AddRange(raw);
             try
             {
                 AstmFrame frame = codec.Decode([AstmControl.Stx, .. raw]);

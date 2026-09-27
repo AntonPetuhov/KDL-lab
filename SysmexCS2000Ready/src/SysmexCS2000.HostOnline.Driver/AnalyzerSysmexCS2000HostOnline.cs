@@ -4,6 +4,7 @@ using System.Text;
 using AnalyzerService.Contracts;
 using AnalyzerService.LisDatabase;
 using AnalyzerService.Transport;
+using AnalyzerService.ResultFiles;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using SysmexCS2000.HostOnline.Driver.Protocol;
 
@@ -23,9 +24,9 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
     private readonly HostOnlineCodec codec = new();
     private readonly LisDBProvider dbProvider;
     private readonly HostOnlineResultHandler resultHandler;
-    private readonly HostOnlineQualityControlHandler qualityControlHandler;
+    private readonly RawResultQueue resultQueue;
     private readonly CancellationTokenSource localStop = new();
-    private readonly Dictionary<string, SortedDictionary<int, string>> blocks = new(StringComparer.Ordinal); // для складывания фреймов
+    private readonly Dictionary<string, SortedDictionary<int, (string Body, byte[] Raw)>> blocks = new(StringComparer.Ordinal); // для складывания фреймов
     private TcpClient? client;
 
     /// <summary>
@@ -38,7 +39,7 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         host = new TcpHost(logger, "Sysmex CS-2000i Host Online");
         dbProvider = new LisDBProvider(settings, logger);
         resultHandler = new HostOnlineResultHandler(settings, logger, dbProvider);
-        qualityControlHandler = new HostOnlineQualityControlHandler(settings, logger);
+        resultQueue = new RawResultQueue(settings, logger, ProcessStoredResult);
     }
 
     /// <summary>
@@ -56,6 +57,9 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         if (settings == null)
             throw new InvalidOperationException("Настройки не инициализированы.");
 
+        try
+        {
+        if (settings.ResultHandlerStatus) resultQueue.Start();
         host.Start(IPAddress.Parse(settings.IPaddress!), settings.Port);
         logger.Service("Sysmex CS-2000i Host Online запущен.");
 
@@ -88,6 +92,8 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
                 }
             }
         }
+        }
+        finally { if (settings.ResultHandlerStatus) resultQueue.Stop(); }
     }
 
     /// <summary>
@@ -99,7 +105,7 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         while (connectedClient.Connected && !token.IsCancellationRequested)
         {
             // читаем полный фрейм
-            string block = await ReadTextAsync(stream, token).ConfigureAwait(false);
+            (string block, byte[] rawFrame) = await ReadTextAsync(stream, token).ConfigureAwait(false);
             // отмечаем время успешного чтения сообщения от анализатора
             host.RecordRead();
 
@@ -111,10 +117,11 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
                 continue;
             }
             // собираем полное сообщение
-            string? completeMsg = AddBlock(block);
+            (string Body, byte[] Raw)? complete = AddBlock(block, rawFrame);
 
-            if (completeMsg is null) 
+            if (complete is null)
                 continue;
+            string completeMsg = complete.Value.Body;
             // Если запрос задания, сообщение начинается с R
             if (completeMsg[0] == 'R')
             {
@@ -132,16 +139,13 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
                     await WriteTextAsync(stream, response, token).ConfigureAwait(false);
             }
             // Если сообщение с результатами
-            else if (completeMsg[0] == 'D' && settings.ResultHandlerStatus)
+            else if (completeMsg[0] == 'D')
             {
-                HostOnlineResult result = codec.ParseResult(completeMsg);
-
-                // Если это результат Контроля Качества, обрабатываем его и складываем в отдельную папку
-                if (result.Header.SampleType == 'C')
-                {
-                    qualityControlHandler.Handle(result); 
-                }
-                else resultHandler.Handle(result);
+                string sampleId = completeMsg.Substring(27, 15).Trim();
+                if (completeMsg[8] == 'C')
+                    resultQueue.SaveQualityControl(sampleId, complete.Value.Raw);
+                else
+                    resultQueue.SaveResult(sampleId, complete.Value.Raw);
             }
             else
             {
@@ -155,7 +159,7 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// Собирает разделённые фреймы по номерам блоков и возвращает полное тело, полное сообщение.
     /// Нужно, если прибор будет посылать большое сообщение, которое будет разделено на блоки
     /// </summary>
-    private string? AddBlock(string body)
+    private (string Body, byte[] Raw)? AddBlock(string body, byte[] rawFrame)
     {
         // Проверка минимальной длины
         if (body.Length < HostOnlineCodec.HeaderLength) 
@@ -167,14 +171,14 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         string key = body[0] + body.Substring(27, 15);
         // Если для данного ключа еще нет записи в словаре
         // Через out-параметр parts возвращает само значение, если ключ найден.
-        if (!blocks.TryGetValue(key, out SortedDictionary<int, string>? parts))
+        if (!blocks.TryGetValue(key, out SortedDictionary<int, (string Body, byte[] Raw)>? parts))
         {
             // создаём пустой словарь, куда будут складываться блок сообщения
-            parts = new SortedDictionary<int, string>();
+            parts = new SortedDictionary<int, (string Body, byte[] Raw)>();
             blocks[key] = parts;
         }
         // помещаем текущий фрейм в этот словарь
-        parts[number] = body;
+        parts[number] = (body, rawFrame);
         // Если количество блоков, которые мы сложили, меньше заявленного кол-ва блоков total - выходим, полное сообщение еще не готово
         if (parts.Count < total) 
             return null;
@@ -183,20 +187,48 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
             throw new HostOnlineProtocolException("Block Number Error", "Последовательность блоков неполна.");
         // собираем целое сообщение
         // берем первый блок, с заголовком, берем остальные части (skip проспускает 1 элемент словаря), и удаляем у них заголовок, после склеиваем в одну строку concat
-        string completeMessage = parts[1] + string.Concat(parts.Skip(1).Select(item => item.Value[HostOnlineCodec.HeaderLength..]));
+        string completeMessage = parts[1].Body + string.Concat(parts.Skip(1).Select(item => item.Value.Body[HostOnlineCodec.HeaderLength..]));
         // очистка буфера
         blocks.Remove(key);
 
         // нормализация строки, но поидее избыточно, можно просто возвращать completeMessage
-        return completeMessage[..4] + "01" + total.ToString("00") + completeMessage[8..];
+        byte[] raw = parts.Values.SelectMany(part => part.Raw).ToArray();
+        return (completeMessage[..4] + "01" + total.ToString("00") + completeMessage[8..], raw);
     }
     #endregion
+
+    /// <summary>
+    /// Синхронно разбирает сохранённые STX/ETX-кадры и преобразует результат в ЛИС
+    /// на отдельном потоке очереди. Исключения передаются очереди для папки errors.
+    /// </summary>
+    /// <param name="raw">Точные байты полного сообщения.</param>
+    /// <param name="sourceId">Устойчивое имя для выходных .res/.ok.</param>
+    private void ProcessStoredResult(byte[] raw, string sourceId)
+    {
+        List<string> parts = [];
+        for (int offset = 0; offset < raw.Length;)
+        {
+            if (raw[offset++] != STX) throw new InvalidDataException("Ожидался STX сырого Host Online кадра.");
+            int end = Array.IndexOf(raw, ETX, offset);
+            if (end < 0) throw new InvalidDataException("Нет ETX сырого Host Online кадра.");
+            parts.Add(Encoding.ASCII.GetString(raw, offset, end - offset));
+            offset = end + 1;
+        }
+        if (parts.Count == 0 || !int.TryParse(parts[0].Substring(6, 2), out int total) || parts.Count != total)
+            throw new InvalidDataException("Неполное сырое сообщение Host Online.");
+        for (int index = 0; index < parts.Count; index++)
+            if (!int.TryParse(parts[index].Substring(4, 2), out int number) || number != index + 1)
+                throw new InvalidDataException("Неверный номер блока сырого Host Online сообщения.");
+        string body = parts[0] + string.Concat(parts.Skip(1).Select(part => part[HostOnlineCodec.HeaderLength..]));
+        body = body[..4] + "01" + total.ToString("00") + body[8..];
+        resultHandler.Handle(codec.ParseResult(body), sourceId);
+    }
 
     #region чтение данных из потока
     /// <summary>
     /// Читает один текст между STX и ETX
     /// </summary>
-    private static async Task<string> ReadTextAsync(NetworkStream stream, CancellationToken token)
+    private static async Task<(string Body, byte[] Raw)> ReadTextAsync(NetworkStream stream, CancellationToken token)
     {
         List<byte> body = []; // накопитель байт тела фрейма
         bool started = false; // флаг, когда начали читать тело фрейма
@@ -217,7 +249,7 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
             }
             // Если ETX - возвращаем накопленное тело сообщения
             if (one[0] == ETX) 
-                return Encoding.ASCII.GetString(body.ToArray());
+                return (Encoding.ASCII.GetString(body.ToArray()), [STX, .. body, ETX]);
             // Иначе добавляем байт в тело
             body.Add(one[0]);
             // Контроль длины фрейма: STX + тело + ETX ≤ 255
@@ -245,5 +277,5 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// <summary>Синхронно инициирует остановку, закрывая активный TCP.</summary><param name="token">Параметр контракта.</param><returns>Завершённая задача.</returns>
     public Task StopAsync(CancellationToken token) { localStop.Cancel(); client?.Dispose(); host.Stop(); return Task.CompletedTask; }
     /// <summary>Освобождает ресурсы.</summary>
-    public void Dispose() { host.Dispose(); localStop.Dispose(); }
+    public void Dispose() { resultQueue.Dispose(); host.Dispose(); localStop.Dispose(); }
 }

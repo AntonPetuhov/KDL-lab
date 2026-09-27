@@ -15,8 +15,9 @@ public sealed class SysmexResultHandler(AnalyzerSettings settings, IAnalyzerLogg
     /// Файлы малы, а последовательная запись гарантирует порядок .res/.ok.
     /// </summary>
     /// <param name="message">ASTM-сообщение результата.</param>
+    /// <param name="sourceId">Постоянное имя входного сырого файла.</param>
     /// <exception cref="InvalidDataException">Нет Sample ID или результатов.</exception>
-    public void Handle(AstmMessage message)
+    public void Handle(AstmMessage message, string sourceId)
     {
         AstmRecord order = message.Records.FirstOrDefault(r => r.Type == 'O')
             ?? throw new InvalidDataException("В сообщении результата отсутствует O-запись.");
@@ -36,7 +37,9 @@ public sealed class SysmexResultHandler(AnalyzerSettings settings, IAnalyzerLogg
 
         string output = Path.GetFullPath(settings.OutputFolder!);
         Directory.CreateDirectory(output);
-        string stem = $"SYS2000_{Sanitize(sampleId)}_{DateTime.Now:yyyyMMddHHmmssfff}";
+        // Повторная обработка того же сырого файла использует те же имена выхода.
+        string stem = sourceId;
+        if (File.Exists(Path.Combine(output, stem + ".ok"))) return;
         StringBuilder content = new($"O|1|{sampleId}||ALL|R|{DateTime.Now:yyyyMMddHHmmss}|||||X||||ALL||||||||||F\r\n");
         int sequence = 0;
         foreach (LisResult result in results)
@@ -63,6 +66,4 @@ public sealed class SysmexResultHandler(AnalyzerSettings settings, IAnalyzerLogg
         File.Move(temporary, path, true);
     }
 
-    /// <summary>Удаляет недопустимые символы из части имени файла.</summary>
-    private static string Sanitize(string value) => string.Concat(value.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
 }

@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using AnalyzerService.Contracts;
 using AnalyzerService.LisDatabase;
 using AnalyzerService.Transport;
+using AnalyzerService.ResultFiles;
 using SysmexCS2000.Driver.Lis;
 using SysmexCS2000.Driver.Protocol;
 
@@ -22,6 +23,7 @@ public class AnalyzerSysmexCS2000 : IDisposable
     private readonly AstmMessageBuilder builder = new();
     private readonly LisDBProvider repository;
     private readonly SysmexResultHandler resultHandler;
+    private readonly RawResultQueue resultQueue;
     private readonly CancellationTokenSource localStop = new();
     private TcpClient? client;
 
@@ -34,6 +36,7 @@ public class AnalyzerSysmexCS2000 : IDisposable
         session = new AstmSession(logger);
         repository = new LisDBProvider(settings, logger);
         resultHandler = new SysmexResultHandler(settings, logger, repository);
+        resultQueue = new RawResultQueue(settings, logger, ProcessStoredResult);
     }
 
     /// <summary>Асинхронно принимает подключения и сообщения, поскольку TCP-ожидания нельзя выполнять синхронно без блокировки.</summary><param name="token">Сигнал остановки.</param><returns>Задача рабочего цикла.</returns>
@@ -41,6 +44,9 @@ public class AnalyzerSysmexCS2000 : IDisposable
     {
         using CancellationTokenSource linked = CancellationTokenSource.CreateLinkedTokenSource(token, localStop.Token);
         IPAddress address = IPAddress.Parse(settings.IPaddress!);
+        try
+        {
+        if (settings.ResultHandlerStatus) resultQueue.Start();
         tcpHost.Start(address, settings.Port);
         logger.Service($"Sysmex CS-2000i запущен, протокол {settings.Protocol}.");
         while (!linked.IsCancellationRequested)
@@ -67,6 +73,8 @@ public class AnalyzerSysmexCS2000 : IDisposable
             }
         }
         logger.Service("Рабочий цикл Sysmex CS-2000i остановлен.");
+        }
+        finally { if (settings.ResultHandlerStatus) resultQueue.Stop(); }
     }
 
     /// <summary>Асинхронно обслуживает последовательные ASTM-транзакции одного IPU.</summary>
@@ -75,11 +83,11 @@ public class AnalyzerSysmexCS2000 : IDisposable
         NetworkStream stream = connectedClient.GetStream();
         while (connectedClient.Connected && !token.IsCancellationRequested)
         {
-            string raw = await session.ReceiveMessageAsync(stream, token).ConfigureAwait(false);
+            AstmReceivedMessage received = await session.ReceiveMessageAsync(stream, token).ConfigureAwait(false);
             tcpHost.RecordRead();
-            logger.Protocol($"Получено ASTM-сообщение длиной {raw.Length}.");
+            logger.Protocol($"Получено ASTM-сообщение длиной {received.Raw.Length} байт.");
             AstmMessage message;
-            try { message = parser.Parse(raw); }
+            try { message = parser.Parse(received.Text); }
             catch (SysmexProtocolException ex) { logger.Error($"Ошибка сообщения {ex.Code}.", ex); continue; }
 
             if (message.Records.Any(r => r.Type == 'Q'))
@@ -92,11 +100,28 @@ public class AnalyzerSysmexCS2000 : IDisposable
                 await session.SendMessageAsync(stream, response, token).ConfigureAwait(false);
                 tcpHost.RecordWrite();
             }
-            else if (message.Records.Any(r => r.Type == 'R') && settings.ResultHandlerStatus)
+            else if (message.Records.Any(r => r.Type is 'O' or 'R'))
             {
-                resultHandler.Handle(message);
+                AstmRecord? order = message.Records.FirstOrDefault(r => r.Type == 'O');
+                string sampleId = order?.Fields.ElementAtOrDefault(2) ?? string.Empty;
+                bool isQualityControl = sampleId.StartsWith("QC", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(order?.Fields.ElementAtOrDefault(11), "Q", StringComparison.OrdinalIgnoreCase);
+                if (isQualityControl) resultQueue.SaveQualityControl(sampleId, received.Raw);
+                else resultQueue.SaveResult(sampleId, received.Raw);
             }
         }
+    }
+
+    /// <summary>
+    /// Синхронно разбирает сырой файл и формирует выход ЛИС на отдельном потоке;
+    /// исключение направляет файл в errors без остановки TCP-приёма.
+    /// </summary>
+    /// <param name="raw">Исходные байты ASTM-транзакции.</param>
+    /// <param name="sourceId">Постоянное имя выходных файлов ЛИС.</param>
+    private void ProcessStoredResult(byte[] raw, string sourceId)
+    {
+        AstmMessage message = parser.Parse(AstmRawMessageReader.Read(raw));
+        resultHandler.Handle(message, sourceId);
     }
 
     /// <summary>Синхронно закрывает сокеты; задача завершена сразу после инициирования отмены.</summary><param name="token">Не используется, сохранён для контракта.</param><returns>Завершённая задача.</returns>
@@ -109,5 +134,5 @@ public class AnalyzerSysmexCS2000 : IDisposable
     }
 
     /// <summary>Освобождает transport и token source.</summary>
-    public void Dispose() { tcpHost.Dispose(); localStop.Dispose(); }
+    public void Dispose() { resultQueue.Dispose(); tcpHost.Dispose(); localStop.Dispose(); }
 }

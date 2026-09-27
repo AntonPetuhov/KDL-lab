@@ -40,7 +40,9 @@
             </summary>
         </member>
         <member name="T:AnalyzerService.Transport.TcpHost">
-            <summary>Общий TCP-сервер для DLL-драйверов; прикладной протокол остаётся в драйвере.</summary>
+            <summary>
+            Общий TCP-сервер для DLL-драйверов
+            </summary>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,System.String,System.Nullable{System.TimeSpan})">
             <summary>Синхронно сохраняет журнал и имя подключения; сокет пока не открывается.</summary>
@@ -56,7 +58,7 @@
             <param name="cancellationToken">Сигнал остановки.</param><returns>Принятый клиент.</returns>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.RecordRead">
-            <summary>Синхронно отмечает успешное чтение сообщения для диагностики.</summary>
+            <summary>Отмечает успешное чтение сообщения для диагностики.</summary>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.RecordWrite">
             <summary>Синхронно отмечает успешную отправку сообщения для диагностики.</summary>
@@ -67,7 +69,6 @@
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.ReleaseClient(System.Net.Sockets.TcpClient)">
             <summary>Синхронно закрывает завершённый сеанс, сохраняя работающий listener.</summary>
-            <param name="connected">Клиент, полученный от AcceptAsync.</param>
         </member>
         <member name="M:AnalyzerService.Transport.TcpHost.Stop">
             <summary>Синхронно закрывает сокеты и таймер; повторный вызов безопасен.</summary>

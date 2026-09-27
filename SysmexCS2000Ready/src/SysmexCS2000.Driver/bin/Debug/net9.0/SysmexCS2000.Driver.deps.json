@@ -9,7 +9,9 @@
       "SysmexCS2000.Driver/1.0.0": {
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
-          "Microsoft.Data.SqlClient": "7.0.0"
+          "AnalyzerService.LisDatabase": "1.0.0",
+          "AnalyzerService.ResultFiles": "1.0.0",
+          "AnalyzerService.Transport": "1.0.0"
         },
         "runtime": {
           "SysmexCS2000.Driver.dll": {}
@@ -343,6 +345,40 @@
             "fileVersion": "9.0.1326.6317"
           }
         }
+      },
+      "AnalyzerService.LisDatabase/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0",
+          "Microsoft.Data.SqlClient": "7.0.0"
+        },
+        "runtime": {
+          "AnalyzerService.LisDatabase.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "AnalyzerService.ResultFiles/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "AnalyzerService.ResultFiles.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "AnalyzerService.Transport/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "AnalyzerService.Transport.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -512,6 +548,21 @@
       "sha512": "sha512-t8S9IDpjJKsLpLkeBdW8cWtcPyYqrGu93Dej1RO6WwuL/lkFSqWlan3rMJfortqz1mRIh+sys2AFsSA6jWJ3Jg==",
       "path": "system.security.cryptography.protecteddata/9.0.13",
       "hashPath": "system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
+    },
+    "AnalyzerService.LisDatabase/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AnalyzerService.ResultFiles/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AnalyzerService.Transport/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

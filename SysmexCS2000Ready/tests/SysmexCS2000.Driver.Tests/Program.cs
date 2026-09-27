@@ -12,6 +12,7 @@ internal static class Program
             ChecksumMatchesKnownFrame();
             FrameRoundTrip();
             ParserReadsQuery();
+            StoredTransactionCanBeRead();
             Console.WriteLine("All protocol tests passed.");
             return 0;
         }
@@ -44,6 +45,17 @@ internal static class Program
         AstmMessageParser parser = new();
         AstmMessage message = parser.Parse("H|\\^&|||CS-2000i\rQ|1|^123456||ALL||||||||O\rL|1|N\r");
         Equal("123456", parser.GetQuerySampleId(message), "query sample id");
+    }
+
+    /// <summary>Проверяет повторное чтение точных байтов ASTM после сохранения в файл.</summary>
+    private static void StoredTransactionCanBeRead()
+    {
+        string text = "H|\\^&|||CS-2000i\rO|1|123456\rR|1|^^^010|12.3\rL|1|N\r";
+        byte[] frame = new AstmFrameCodec().Encode(new AstmFrame(1, text, true));
+        byte[] wire = [AstmControl.Enq, .. frame, AstmControl.Eot];
+        Equal(text, AstmRawMessageReader.Read(wire), "stored ASTM transaction");
+        byte[] duplicate = [AstmControl.Enq, .. frame, .. frame, AstmControl.Eot];
+        Equal(text, AstmRawMessageReader.Read(duplicate), "duplicate ASTM frame");
     }
 
     /// <summary>Сравнивает значения и выбрасывает диагностическую ошибку.</summary>

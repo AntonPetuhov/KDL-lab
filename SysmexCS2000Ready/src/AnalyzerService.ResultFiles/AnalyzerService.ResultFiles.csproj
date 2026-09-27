@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" />
+  </ItemGroup>
+</Project>

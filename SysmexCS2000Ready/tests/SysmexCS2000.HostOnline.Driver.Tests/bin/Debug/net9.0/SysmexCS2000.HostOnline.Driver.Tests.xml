@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SysmexCS2000.HostOnline.Driver.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Program">
+            <summary>Выполняет автономные проверки фиксированного формата Sysmex Host Online.</summary>
+        </member>
+        <member name="M:Program.Main">
+            <summary>Запускает проверки и возвращает код процесса.</summary>
+        </member>
+        <member name="M:Program.ParseInquiry">
+            <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>
+        </member>
+        <member name="M:Program.ParseResult">
+            <summary>Проверяет разбор D121: код, данные и флаг.</summary>
+        </member>
+        <member name="M:Program.BuildOrder">
+            <summary>Проверяет S221, фиксированную длину и специальный код 000.</summary>
+        </member>
+        <member name="M:Program.Header(System.Char,System.Char,System.String,System.String,System.Char)">
+            <summary>Формирует 58-символьный тестовый заголовок.</summary>
+        </member>
+        <member name="M:Program.RawQueueRoutesFiles">
+            <summary>Проверяет архив, ошибки и неизменность исходных QC-байтов.</summary>
+        </member>
+        <member name="M:Program.QualityControlRoutesFromSocket">
+            <summary>Проверяет путь от TCP-текста с признаком C до отдельного QC-файла.</summary>
+        </member>
+        <member name="M:Program.EmptyResultGoesToErrors">
+            <summary>Проверяет, что D-текст без тестов сохраняется и перемещается в errors.</summary>
+        </member>
+        <member name="M:Program.TcpHostReportsStatus">
+            <summary>Проверяет реальное loopback-подключение и периодические записи состояния.</summary>
+        </member>
+        <member name="T:Program.TestLogger">
+            <summary>Собирает сообщения общего транспорта без файловых побочных эффектов.</summary>
+        </member>
+        <member name="M:Program.Equal``1(``0,``0,System.String)">
+            <summary>Сравнивает ожидаемое и фактическое значение.</summary>
+        </member>
+    </members>
+</doc>

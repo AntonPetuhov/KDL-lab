@@ -1,6 +1,7 @@
 using AnalyzerService.LisDatabase;
 using AnalyzerService.Contracts;
 using AnalyzerService.Transport;
+using AnalyzerService.ResultFiles;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using System.Net;
 using System.Net.Sockets;
@@ -19,8 +20,9 @@ internal static class Program
             ParseInquiry();
             ParseResult();
             BuildOrder();
-            QualityControlCreatesSeparateFiles();
+            RawQueueRoutesFiles();
             QualityControlRoutesFromSocket().GetAwaiter().GetResult();
+            EmptyResultGoesToErrors().GetAwaiter().GetResult();
             TcpHostReportsStatus().GetAwaiter().GetResult();
             Console.WriteLine("All Host Online protocol tests passed.");
             return 0;
@@ -63,8 +65,8 @@ internal static class Program
     private static string Header(char kind, char subtype, string sample, string patient, char sampleType = 'U') =>
         $"{kind}{subtype}210101{sampleType}2609201234RACK01" + "01" + sample.PadLeft(15) + "B" + patient.PadRight(15)[..15];
 
-    /// <summary>Проверяет сохранение контроля в отдельную папку без обращения к БД ЛИС.</summary>
-    private static void QualityControlCreatesSeparateFiles()
+    /// <summary>Проверяет архив, ошибки и неизменность исходных QC-байтов.</summary>
+    private static void RawQueueRoutesFiles()
     {
         string root = Path.Combine(Path.GetTempPath(), "SysmexQC-" + Guid.NewGuid().ToString("N"));
         try
@@ -74,23 +76,38 @@ internal static class Program
                 AnalyzerName = "QC test", ConnectionType = "TCPIP", ResultsFolder = root,
                 OutputFolder = Path.Combine(root, "Patient"), ConnectionString = "unused", AnalyzerCode = "915"
             };
-            HostOnlineResult result = new HostOnlineCodec().ParseResult(Header('D', '1', "CONTROL1", "QC", 'C') + "010 1234+");
-            Equal('C', result.Header.SampleType, "QC marker");
-            new HostOnlineQualityControlHandler(settings, new TestLogger()).Handle(result);
+            using RawResultQueue queue = new(settings, new TestLogger(), (bytes, _) =>
+            {
+                if (bytes[0] == 0) throw new InvalidDataException("No LIS tests");
+            });
+            byte[] good = [0x02, 0x41, 0x03];
+            byte[] bad = [0x00];
+            byte[] control = [0x02, 0x51, 0x43, 0x03];
+            // Файл, накопленный до запуска рабочего потока, должен быть поднят при старте.
+            queue.SaveResult("PATIENT1", good);
+            queue.Start();
+            queue.SaveResult("PATIENT2", bad);
+            queue.SaveQualityControl("CONTROL1", control);
+            for (int attempt = 0; attempt < 100 &&
+                 (Directory.GetFiles(Path.Combine(root, "archive"), "*.raw").Length != 1 ||
+                  Directory.GetFiles(Path.Combine(root, "errors"), "*.raw").Length != 1); attempt++)
+                Thread.Sleep(20);
+            queue.Stop();
             string qc = Path.Combine(root, "QualityControl");
-            Equal(1, Directory.GetFiles(qc, "*.res").Length, "QC result files");
-            Equal(1, Directory.GetFiles(qc, "*.ok").Length, "QC marker files");
-            if (!File.ReadAllText(Directory.GetFiles(qc, "*.res")[0]).Contains("^^^010"))
-                throw new InvalidOperationException("QC result code was not saved.");
+            Equal(1, Directory.GetFiles(Path.Combine(root, "archive"), "*.raw").Length, "archived results");
+            Equal(1, Directory.GetFiles(Path.Combine(root, "errors"), "*.raw").Length, "failed results");
+            Equal(1, Directory.GetFiles(qc, "*.raw").Length, "raw QC files");
+            Equal(true, File.ReadAllBytes(Directory.GetFiles(qc, "*.raw")[0]).SequenceEqual(control), "QC bytes unchanged");
             Equal(false, Directory.Exists(settings.OutputFolder), "patient output untouched");
         }
         finally
         {
-            string qc = Path.Combine(root, "QualityControl");
-            if (Directory.Exists(qc))
+            foreach (string folder in new[] { "QualityControl", "archive", "errors" })
             {
-                foreach (string file in Directory.GetFiles(qc)) File.Delete(file);
-                Directory.Delete(qc);
+                string path = Path.Combine(root, folder);
+                if (!Directory.Exists(path)) continue;
+                foreach (string file in Directory.GetFiles(path)) File.Delete(file);
+                Directory.Delete(path);
             }
             if (Directory.Exists(root)) Directory.Delete(root);
         }
@@ -120,11 +137,12 @@ internal static class Program
             byte[] frame = [0x02, .. Encoding.ASCII.GetBytes(body), 0x03];
             await sender.GetStream().WriteAsync(frame);
             string qc = Path.Combine(root, "QualityControl");
-            for (int attempt = 0; attempt < 100 && (!Directory.Exists(qc) || Directory.GetFiles(qc, "*.ok").Length == 0); attempt++)
+            for (int attempt = 0; attempt < 100 && (!Directory.Exists(qc) || Directory.GetFiles(qc, "*.raw").Length == 0); attempt++)
                 await Task.Delay(20);
             if (!Directory.Exists(qc))
                 throw new InvalidOperationException("QC каталог не создан: " + string.Join(" | ", logger.TransportMessages) + " | " + string.Join(" | ", logger.ProtocolMessages) + " | " + string.Join(" | ", logger.ErrorMessages));
-            Equal(1, Directory.GetFiles(qc, "*.res").Length, "routed QC result");
+            Equal(1, Directory.GetFiles(qc, "*.raw").Length, "routed QC result");
+            Equal(true, File.ReadAllBytes(Directory.GetFiles(qc, "*.raw")[0]).SequenceEqual(frame), "routed QC raw bytes");
             Equal(false, Directory.Exists(settings.OutputFolder), "routed patient output untouched");
         }
         finally
@@ -136,6 +154,56 @@ internal static class Program
             {
                 foreach (string file in Directory.GetFiles(qc)) File.Delete(file);
                 Directory.Delete(qc);
+            }
+            foreach (string folder in new[] { "archive", "errors", "Patient" })
+            {
+                string path = Path.Combine(root, folder);
+                if (!Directory.Exists(path)) continue;
+                foreach (string file in Directory.GetFiles(path)) File.Delete(file);
+                Directory.Delete(path);
+            }
+            if (Directory.Exists(root)) Directory.Delete(root);
+        }
+    }
+
+    /// <summary>Проверяет, что D-текст без тестов сохраняется и перемещается в errors.</summary>
+    private static async Task EmptyResultGoesToErrors()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "SysmexEmpty-" + Guid.NewGuid().ToString("N"));
+        TestLogger logger = new();
+        AnalyzerSettings settings = new()
+        {
+            AnalyzerName = "Empty result", ConnectionType = "TCPIP", IPaddress = "127.0.0.1", Port = 0,
+            ResultsFolder = root, OutputFolder = Path.Combine(root, "Patient"),
+            ConnectionString = "unused", AnalyzerCode = "915", ResultHandlerStatus = true
+        };
+        using AnalyzerSysmexCS2000HostOnline analyzer = new(logger, settings);
+        using CancellationTokenSource stop = new(TimeSpan.FromSeconds(5));
+        Task run = analyzer.RunAsync(stop.Token);
+        try
+        {
+            string status = logger.TransportMessages.First(m => m.Contains("endpoint=127.0.0.1:"));
+            int port = int.Parse(status.Split("endpoint=127.0.0.1:")[1].Split(',')[0]);
+            using TcpClient sender = new();
+            await sender.ConnectAsync(IPAddress.Loopback, port);
+            byte[] frame = [0x02, .. Encoding.ASCII.GetBytes(Header('D', '1', "EMPTY1", "PATIENT")), 0x03];
+            await sender.GetStream().WriteAsync(frame);
+            string errors = Path.Combine(root, "errors");
+            for (int attempt = 0; attempt < 100 && Directory.GetFiles(errors, "*.raw").Length == 0; attempt++)
+                await Task.Delay(20);
+            Equal(1, Directory.GetFiles(errors, "*.raw").Length, "empty result in errors");
+            Equal(true, File.ReadAllBytes(Directory.GetFiles(errors, "*.raw")[0]).SequenceEqual(frame), "empty result raw bytes");
+        }
+        finally
+        {
+            await analyzer.StopAsync(CancellationToken.None);
+            await run.WaitAsync(TimeSpan.FromSeconds(5));
+            foreach (string folder in new[] { "QualityControl", "archive", "errors", "Patient" })
+            {
+                string path = Path.Combine(root, folder);
+                if (!Directory.Exists(path)) continue;
+                foreach (string file in Directory.GetFiles(path)) File.Delete(file);
+                Directory.Delete(path);
             }
             if (Directory.Exists(root)) Directory.Delete(root);
         }

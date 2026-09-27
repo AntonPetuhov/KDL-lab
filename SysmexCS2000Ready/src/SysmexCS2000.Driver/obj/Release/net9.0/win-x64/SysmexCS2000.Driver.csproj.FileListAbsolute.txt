@@ -19,3 +19,6 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.Driver\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.xml

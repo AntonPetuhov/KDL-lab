@@ -14,3 +14,17 @@ C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerServic
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.pdb
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\ref\AnalyzerService.Transport.dll
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\Analyzer.4DF8B4BC.Up2Date
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.deps.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\bin\Debug\net9.0\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.csproj.AssemblyReference.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.GeneratedMSBuildEditorConfig.editorconfig
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.AssemblyInfoInputs.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.AssemblyInfo.cs
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.csproj.CoreCompileInputs.cache
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\refint\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\AnalyzerService.Transport.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Transport\obj\Debug\net9.0\ref\AnalyzerService.Transport.dll

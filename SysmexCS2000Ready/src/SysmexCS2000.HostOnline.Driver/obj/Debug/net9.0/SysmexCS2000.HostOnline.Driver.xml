@@ -22,11 +22,19 @@
             Асинхронно принимает ограниченные STX/ETX-фреймы одного соединения.
             </summary>
         </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.AddBlock(System.String)">
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.AddBlock(System.String,System.Byte[])">
             <summary>
             Собирает разделённые фреймы по номерам блоков и возвращает полное тело, полное сообщение.
             Нужно, если прибор будет посылать большое сообщение, которое будет разделено на блоки
             </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(System.Byte[],System.String)">
+            <summary>
+            Синхронно разбирает сохранённые STX/ETX-кадры и преобразует результат в ЛИС
+            на отдельном потоке очереди. Исключения передаются очереди для папки errors.
+            </summary>
+            <param name="raw">Точные байты полного сообщения.</param>
+            <param name="sourceId">Устойчивое имя для выходных .res/.ok.</param>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(System.Net.Sockets.NetworkStream,System.Threading.CancellationToken)">
             <summary>
@@ -44,24 +52,6 @@
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Dispose">
             <summary>Освобождает ресурсы.</summary>
         </member>
-        <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler">
-            <summary>
-            Сохраняет результаты контроля качества Host Online отдельно от результатов пациентов.
-            Использует исходные коды прибора, поскольку контроль не является заказом пациента в БД ЛИС.
-            </summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger)">
-            <summary>
-            Сохраняет результаты контроля качества Host Online отдельно от результатов пациентов.
-            Использует исходные коды прибора, поскольку контроль не является заказом пациента в БД ЛИС.
-            </summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler.Handle(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult)">
-            <summary>
-            Синхронно записывает небольшие .res/.ok файлы в ResultsFolder/QualityControl.
-            Маркер .ok создаётся последним, только после успешной записи результата.
-            </summary>
-        </member>
         <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler">
             <summary>
             Преобразует D121/D221 в .res/.ok файлы для ЛИС.
@@ -72,16 +62,13 @@
             Преобразует D121/D221 в .res/.ok файлы для ЛИС.
             </summary>
         </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult)">
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult,System.String)">
             <summary>
             Сохраняет результат
             </summary>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Write(System.String,System.String)">
             <summary>Pаписывает файл через временное имя.</summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Sanitize(System.String)">
-            <summary>Заменяет недопустимые символы имени файла.</summary>
         </member>
         <member name="T:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec">
             <summary>

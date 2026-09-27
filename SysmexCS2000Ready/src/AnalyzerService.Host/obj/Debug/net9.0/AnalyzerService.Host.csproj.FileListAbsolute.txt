@@ -110,3 +110,4 @@ C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerServic
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Debug\net9.0\AnalyzerService.Host.pdb
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Debug\net9.0\AnalyzerService.Host.genruntimeconfig.cache
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Debug\net9.0\ref\AnalyzerService.Host.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\configs\examples\SysmexCS2000i.HostOnline.json

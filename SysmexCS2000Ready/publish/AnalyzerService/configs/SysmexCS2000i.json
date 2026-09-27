@@ -1,0 +1,17 @@
+{
+  "AnalyzerName": "Sysmex cs-2000i",
+  "ConnectionType": "TCPIP",
+  "IPaddress": "10.129.1.40",
+  "Port": 8027,
+  "Isdll": true,
+  "DllPath": "drivers\\SysmexCS2000\\SysmexCS2000.Driver.dll",
+  "ResultsFolder": "Results",
+  "ActiveStatus": true,
+  "WorkStatus": true,
+  "ResultHandlerStatus": true,
+  "OutputFolder": "E:\\Services\\FileGetterService\\Exchange",
+  "ConnectionString": "Server=CGM-APP11\\SQLCGMAPP11;Database=KDLPROD;MultipleActiveResultSets=true;TrustServerCertificate=True;",
+  "AnalyzerCode": "915",
+  "AnalyzerConfigurationCode": "SYS2000",
+  "Protocol": "ASTM_E1381_02_E1394_97"
+}
