@@ -35,7 +35,7 @@ public class AnalyzerLogger : IAnalyzerLogger
             }
                 
             string logfileName = Path.Combine(directory, $"{category}_{DateTime.Now:yyyy-MM-dd}.log");
-            File.AppendAllText(logfileName, $"{DateTimeOffset.Now:O} {message}{Environment.NewLine}", Encoding.UTF8);
+            File.AppendAllText(logfileName, $"{DateTime.Now}: {message}{Environment.NewLine}", Encoding.UTF8);
         }
     }
 }

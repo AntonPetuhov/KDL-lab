@@ -1,0 +1,96 @@
+﻿2026-09-29T14:13:46.6206870+03:00 Обработка сырого файла не удалась: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\Sysmex cs-2000i Host Online\Results\SYS2000_2247552800_202609291113454104040_e4d2dea532cd430ab1ed3208387aa0f4.raw; файл будет помещён в results/errors.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed for user ''.
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.CompleteLogin(Boolean enlistOK)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, DbConnectionPoolGroupProviderInfo providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback, SspiContextProvider sspiContextProvider)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreatePooledConnection(DbConnection owningConnection, IDbConnectionPool pool, DbConnectionPoolKey poolKey, DbConnectionOptions options, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, SqlConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at AnalyzerService.LisDatabase.LisDBProvider.TranslateResultCode(String analyzerCode) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.LisDatabase\LisDBProvider.cs:line 95
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 31
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 208
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 152
+ClientConnectionId:691b30ec-0ab0-4718-8d06-641b621e1ae2
+Error Number: 18456, State: 1, Class: 14
+2026-09-29T14:14:03.3230654+03:00 Обработка сырого файла не удалась: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\Sysmex cs-2000i Host Online\Results\SYS2000_Shurmin_k_202609291114032977647_5d5072dfccd74602bf82fe591581b4c7.raw; файл будет помещён в results/errors.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed for user ''.
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.CompleteLogin(Boolean enlistOK)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, DbConnectionPoolGroupProviderInfo providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback, SspiContextProvider sspiContextProvider)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreatePooledConnection(DbConnection owningConnection, IDbConnectionPool pool, DbConnectionPoolKey poolKey, DbConnectionOptions options, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, SqlConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at AnalyzerService.LisDatabase.LisDBProvider.TranslateResultCode(String analyzerCode) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.LisDatabase\LisDBProvider.cs:line 95
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 31
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 208
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 152
+ClientConnectionId:60cab16a-ae5d-4d50-bc36-b356b6b728b8
+Error Number: 18456, State: 1, Class: 14
+2026-09-29T14:14:13.1656983+03:00 Обработка сырого файла не удалась: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\Sysmex cs-2000i Host Online\Results\SYS2000_2247555100_202609291114131495460_1bb1eebb55ca493a9854b6619f6d8894.raw; файл будет помещён в results/errors.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed for user ''.
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, SqlConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at AnalyzerService.LisDatabase.LisDBProvider.TranslateResultCode(String analyzerCode) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.LisDatabase\LisDBProvider.cs:line 95
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 31
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 208
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 152
+ClientConnectionId:60cab16a-ae5d-4d50-bc36-b356b6b728b8
+Error Number: 18456, State: 1, Class: 14
+2026-09-29T14:36:25.2061015+03:00 Обработка сырого файла не удалась: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\Sysmex cs-2000i Host Online\Results\SYS2000_2247552800_202609291113454104040_e4d2dea532cd430ab1ed3208387aa0f4.raw; файл будет помещён в results/errors.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed for user ''.
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.CompleteLogin(Boolean enlistOK)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.Connection.SqlConnectionInternal..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, DbConnectionPoolGroupProviderInfo providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback, SspiContextProvider sspiContextProvider)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreatePooledConnection(DbConnection owningConnection, IDbConnectionPool pool, DbConnectionPoolKey poolKey, DbConnectionOptions options, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, SqlConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+   at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+   at AnalyzerService.LisDatabase.LisDBProvider.TranslateResultCode(String analyzerCode) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.LisDatabase\LisDBProvider.cs:line 95
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 31
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 208
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 152
+ClientConnectionId:c29eed28-7b09-4d27-bd7a-f10fe7c5c973
+Error Number: 18456, State: 1, Class: 14

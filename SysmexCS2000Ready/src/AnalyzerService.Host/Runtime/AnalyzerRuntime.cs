@@ -26,7 +26,8 @@ public class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader loader, Ana
     /// </summary>
     public Task StartAsync(CancellationToken serviceToken)
     {
-        if (runTask is not null) throw new InvalidOperationException($"{Name} уже запущен.");
+        if (runTask is not null) 
+            throw new InvalidOperationException($"{Name} уже запущен.");
 
         linkedStop = CancellationTokenSource.CreateLinkedTokenSource(stop.Token, serviceToken);
 

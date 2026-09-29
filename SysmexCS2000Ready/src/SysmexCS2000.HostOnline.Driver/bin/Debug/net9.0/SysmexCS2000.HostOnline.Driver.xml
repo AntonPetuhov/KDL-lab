@@ -52,6 +52,24 @@
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Dispose">
             <summary>Освобождает ресурсы.</summary>
         </member>
+        <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler">
+            <summary>
+            Сохраняет результаты контроля качества Host Online отдельно от результатов пациентов.
+            Использует исходные коды прибора, поскольку контроль не является заказом пациента в БД ЛИС.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>
+            Сохраняет результаты контроля качества Host Online отдельно от результатов пациентов.
+            Использует исходные коды прибора, поскольку контроль не является заказом пациента в БД ЛИС.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineQualityControlHandler.Handle(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResult)">
+            <summary>
+            Синхронно записывает небольшие .res/.ok файлы в ResultsFolder/QualityControl.
+            Маркер .ok создаётся последним, только после успешной записи результата.
+            </summary>
+        </member>
         <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler">
             <summary>
             Преобразует D121/D221 в .res/.ok файлы для ЛИС.

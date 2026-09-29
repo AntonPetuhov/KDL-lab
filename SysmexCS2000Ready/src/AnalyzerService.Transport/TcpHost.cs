@@ -151,9 +151,12 @@ public sealed class TcpHost : ITcpHost
     {
         string status;
         lock (gate)
+        {
             status = $"{name}: listener={(listener is null ? "остановлен" : "работает")}, endpoint={endpoint ?? "нет"}, " +
-                $"ожидание Accept={accepting}, клиент={remote ?? "нет"}, последний клиент={Format(lastAccept)}, " +
-                $"RX={Format(lastRead)}, TX={Format(lastWrite)}, ошибка={error ?? "нет"}.";
+                            $"ожидание Accept={accepting}, клиент={remote ?? "нет"}, последний клиент={Format(lastAccept)}, " +
+                            $"RX={Format(lastRead)}, TX={Format(lastWrite)}, ошибка={error ?? "нет"}.";
+        }
+            
         try { logger.Transport(status); }
         catch (Exception ex) { Trace.TraceError($"Не удалось записать состояние TCP host: {ex}"); }
     }

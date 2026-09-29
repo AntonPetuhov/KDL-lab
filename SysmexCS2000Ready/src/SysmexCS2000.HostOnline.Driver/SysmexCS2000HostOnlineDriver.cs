@@ -18,11 +18,11 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
         ArgumentNullException.ThrowIfNull(settings);
 
         if (!string.Equals(settings.Protocol, "SYSMEX_HOST_ONLINE", StringComparison.OrdinalIgnoreCase))
-            throw new ArgumentException("Драйвер требует Protocol=SYSMEX_HOST_ONLINE.", nameof(settings));
+            throw new ArgumentException("Драйвер требует Protocol = SYSMEX_HOST_ONLINE.", nameof(settings));
 
         analyzer = new AnalyzerSysmexCS2000HostOnline(logger, settings);
 
-        logger.Service("Инициализация драйвера выполнена");
+        logger.Service($"Инициализация драйвера анализатора {settings.AnalyzerName} выполнена.");
     }
 
     public Task RunAsync(CancellationToken cancellationToken) => (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).RunAsync(cancellationToken);

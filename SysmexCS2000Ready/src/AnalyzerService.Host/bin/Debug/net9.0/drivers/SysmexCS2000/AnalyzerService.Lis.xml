@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnalyzerService.Lis</name>
+    </assembly>
+    <members>
+        <member name="T:AnalyzerService.Lis.LisOrder">
+            <summary>Содержит заказ ЛИС для ответа анализатору.</summary>
+        </member>
+        <member name="M:AnalyzerService.Lis.LisOrder.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>Содержит заказ ЛИС для ответа анализатору.</summary>
+        </member>
+        <member name="T:AnalyzerService.Lis.LisResult">
+            <summary>Содержит один результат, принятый от анализатора.</summary>
+        </member>
+        <member name="M:AnalyzerService.Lis.LisResult.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>Содержит один результат, принятый от анализатора.</summary>
+        </member>
+        <member name="T:AnalyzerService.Lis.LisRepository">
+            <summary>Выполняет параметризованные запросы к схеме ЛИС из эталонного проекта.</summary>
+        </member>
+        <member name="M:AnalyzerService.Lis.LisRepository.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>Выполняет параметризованные запросы к схеме ЛИС из эталонного проекта.</summary>
+        </member>
+        <member name="M:AnalyzerService.Lis.LisRepository.GetOrder(System.String)">
+            <summary>Синхронно получает пациента и незавершённые тесты по RID.</summary><param name="sampleId">RID.</param><returns>Заказ либо null.</returns>
+        </member>
+        <member name="M:AnalyzerService.Lis.LisRepository.TranslateResultCode(System.String)">
+            <summary>Синхронно переводит код прибора в код PSMV2.</summary><param name="analyzerCode">Код прибора.</param><returns>Код PSMV2 либо null.</returns>
+        </member>
+    </members>
+</doc>

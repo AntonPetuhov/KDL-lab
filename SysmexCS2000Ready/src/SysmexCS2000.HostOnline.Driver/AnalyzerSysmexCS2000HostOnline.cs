@@ -61,7 +61,7 @@ public class AnalyzerSysmexCS2000HostOnline : IDisposable
         {
         if (settings.ResultHandlerStatus) resultQueue.Start();
         host.Start(IPAddress.Parse(settings.IPaddress!), settings.Port);
-        logger.Service("Sysmex CS-2000i Host Online запущен.");
+        logger.Service("Сервис анализатора Sysmex CS-2000i запущен.");
 
         while (!linked.IsCancellationRequested)
         {
