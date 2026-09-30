@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kXOvNNQO2zk=",
+  "dgSpecHash": "y3vAqovBSDk=",
   "success": true,
   "projectFilePath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj",
   "expectedPackageFiles": [
@@ -28,15 +28,5 @@
     "C:\\Users\\petuk\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.13\\system.security.cryptography.pkcs.9.0.13.nupkg.sha512",
     "C:\\Users\\petuk\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.13\\system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "message": "Произошла ошибка при получении данных уязвимости пакета: Не удалось загрузить индекс службы для источника https://api.nuget.org/v3/index.json.",
-      "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

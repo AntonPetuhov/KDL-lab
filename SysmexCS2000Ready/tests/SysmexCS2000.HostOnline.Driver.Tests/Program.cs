@@ -21,6 +21,7 @@ internal static class Program
         try
         {
             ParseInquiry();
+            DriverUsesHostLibraries();
             ParseResult();
             BuildOrder();
             RawQueueRoutesFiles();
@@ -34,6 +35,46 @@ internal static class Program
             return 0;
         }
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
+    }
+
+    /// <summary>Драйвер без локальных зависимостей использует общие сборки службы.</summary>
+    private static void DriverUsesHostLibraries()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "SharedDriver-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(root);
+        try
+        {
+            string source = typeof(HostOnlineCodec).Assembly.Location;
+            string driverPath = Path.Combine(root, Path.GetFileName(source));
+            File.Copy(source, driverPath);
+            CheckSharedDriver(driverPath, root);
+        }
+        finally
+        {
+            // Выгрузка collectible-контекста завершается только после сборки мусора.
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static void CheckSharedDriver(string driverPath, string root)
+    {
+            using (var driver = new DriverLoader().Load(driverPath))
+            {
+                var context = System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(driver.Instance.GetType().Assembly)!;
+                Equal(false, ReferenceEquals(context, System.Runtime.Loader.AssemblyLoadContext.Default), "isolated driver");
+                foreach (string name in new[] { "AnalyzerService.Contracts", "AnalyzerService.Transport", "AnalyzerService.LisDatabase", "AnalyzerService.ResultFiles" })
+                {
+                    var identity = new System.Reflection.AssemblyName(name);
+                    var shared = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyName(identity);
+                    // Даже оставшаяся локальная копия не должна создавать вторую идентичность типов.
+                    File.Copy(shared.Location, Path.Combine(root, Path.GetFileName(shared.Location)));
+                    Equal(true, ReferenceEquals(shared, context.LoadFromAssemblyName(identity)), name + " shared identity");
+                }
+            }
     }
 
     /// <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>

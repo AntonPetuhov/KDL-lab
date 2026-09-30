@@ -24,6 +24,14 @@
 
 Откройте `AnalyzerService.sln` в Visual Studio 2022 с установленным SDK .NET 9 и выполните **Build Solution**. Для готового каталога запустите в PowerShell из корня проекта `./package.ps1`. Скрипт публикует один исполняемый файл `publish/AnalyzerService/AnalyzerService.Host.exe` (для запуска требуется установленный .NET 9 Runtime) и отдельную папку DLL-драйвера `publish/AnalyzerService/drivers/SysmexCS2000HostOnline`. Рядом с DLL должны остаться её `.deps.json` и зависимые сборки. `configs/SysmexCS2000.json` должен лежать в `publish/AnalyzerService/configs`.
 
+### Общие зависимости драйверов
+
+`AnalyzerService.Contracts`, `AnalyzerService.Transport`, `AnalyzerService.LisDatabase` и `AnalyzerService.ResultFiles` поставляются службой и загружаются через `AssemblyLoadContext.Default`. Загрузчик использует эти экземпляры даже при наличии старых копий рядом с драйвером. Служба публикует также зависимости этих библиотек, включая SQL Client и его нативные компоненты. При публикации в один файл управляемые общие сборки входят в EXE; внешние файлы из каталога публикации тоже необходимо переносить.
+
+В проекте драйвера для ссылок на общие проекты задавайте `Private="false" ExcludeAssets="runtime;native"`. Это исключает общие сборки и их runtime/native-зависимости из публикации драйвера, в том числе при публикации через Visual Studio. В папке анализатора остаются DLL драйвера, `.deps.json` и специфические зависимости. При обновлении используйте свежую папку публикации, чтобы не сохранить старые лишние DLL.
+
+Для новой общей библиотеки добавьте ссылку в `AnalyzerService.Host` и её имя в список общих сборок `DriverLoadContext`. Все драйверы должны быть совместимы с поставляемой службой версией общих библиотек. Библиотеки, для которых драйверам нужны разные версии, оставляйте частными зависимостями драйверов. Произвольная папка `drivers/common` автоматически не просматривается.
+
 Проверки: `dotnet build AnalyzerService.sln --maxcpucount:1` и `dotnet run --project tests/SysmexCS2000.HostOnline.Driver.Tests`. После установки службы её учётной записи нужны доступ к БД ЛИС и права записи в `ResultsFolder`, `OutputFolder` и каталоги журналов.
 
 DLL в папке `drivers` - управляемый плагин проекта, а не документированная фирменная DLL производителя. В текущем коде вызова внешней native DLL Sysmex нет. Для будущего прибора создайте DLL с реализацией `IAnalyzerDriver`, поместите её с `.deps.json` и зависимостями в отдельную подпапку `drivers`, укажите путь в `DllPath`; TCP listener будет предоставлен сервисом.

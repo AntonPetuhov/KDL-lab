@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Runtime.Loader;
-using AnalyzerService.Contracts;
 
 namespace AnalyzerService.Host.Drivers;
 
@@ -14,7 +13,10 @@ public class DriverLoadContext(string mainAssemblyPath) : AssemblyLoadContext(is
     // Переопределяем метод Load, чтобы разрешать зависимости сборок
     protected override Assembly? Load(AssemblyName assemblyName)
     {
-        if (assemblyName.Name == typeof(IAnalyzerDriver).Assembly.GetName().Name) return null;
+        // Общие библиотеки принадлежат службе, даже если рядом с плагином осталась старая копия.
+        if (assemblyName.Name is "AnalyzerService.Contracts" or "AnalyzerService.Transport"
+            or "AnalyzerService.LisDatabase" or "AnalyzerService.ResultFiles")
+            return Default.LoadFromAssemblyName(assemblyName);
 
         // Пытаемся разрешить сборку через Resolver
         // принимает объект сборки AssemblyName

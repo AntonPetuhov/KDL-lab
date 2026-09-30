@@ -1,0 +1,5 @@
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\artifacts\shared-check\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\artifacts\shared-check\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.deps.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\artifacts\shared-check\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\artifacts\shared-check\drivers\SysmexCS2000HostOnline\Microsoft.Data.SqlClient.SNI.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\artifacts\shared-check\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.xml

@@ -10,6 +10,9 @@
         <member name="M:Program.Main">
             <summary>Запускает проверки и возвращает код процесса.</summary>
         </member>
+        <member name="M:Program.DriverUsesHostLibraries">
+            <summary>Драйвер без локальных зависимостей использует общие сборки службы.</summary>
+        </member>
         <member name="M:Program.ParseInquiry">
             <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>
         </member>
@@ -19,17 +22,41 @@
         <member name="M:Program.BuildOrder">
             <summary>Проверяет S221, фиксированную длину и специальный код 000.</summary>
         </member>
+        <member name="M:Program.OrderCodesAndPatientName">
+            <summary>Регрессия стенда: два кода задания и транслитерация ФИО в ASCII.</summary>
+        </member>
         <member name="M:Program.Header(System.Char,System.Char,System.String,System.String,System.Char)">
             <summary>Формирует 58-символьный тестовый заголовок.</summary>
         </member>
-        <member name="M:Program.QualityControlCreatesSeparateFiles">
-            <summary>Проверяет сохранение контроля в отдельную папку без обращения к БД ЛИС.</summary>
+        <member name="M:Program.RawQueueRoutesFiles">
+            <summary>Проверяет архив, ошибки и неизменность исходных QC-байтов.</summary>
         </member>
-        <member name="M:Program.QualityControlRoutesFromSocket">
-            <summary>Проверяет путь от TCP-текста с признаком C до отдельного QC-файла.</summary>
+        <member name="M:Program.QualityControlRoutesFromConnection">
+            <summary>Проверяет, что DLL работает с переданным потоком без собственного TCP host.</summary>
+        </member>
+        <member name="M:Program.EmptyResultGoesToErrors">
+            <summary>Проверяет, что D-текст без тестов сохраняется и перемещается в errors.</summary>
+        </member>
+        <member name="M:Program.FeedAsync(SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline,System.Byte[])">
+            <summary>Подаёт один кадр в DLL и ожидает штатного EOF тестового потока.</summary>
+        </member>
+        <member name="T:Program.TestConnection">
+            <summary>Тестовый адаптер потока без TcpListener и TcpClient.</summary>
+        </member>
+        <member name="M:Program.TestConnection.#ctor(System.IO.Stream)">
+            <summary>Тестовый адаптер потока без TcpListener и TcpClient.</summary>
         </member>
         <member name="M:Program.TcpHostReportsStatus">
             <summary>Проверяет реальное loopback-подключение и периодические записи состояния.</summary>
+        </member>
+        <member name="M:Program.LoaderExceptionIsWrittenToFile">
+            <summary>Проверяет файловое логирование исключения, которое затем пробрасывается.</summary>
+        </member>
+        <member name="M:Program.ServiceOwnsTcpHost">
+            <summary>Проверяет сквозной путь через Host-owned TcpHost и динамически загруженный DLL.</summary>
+        </member>
+        <member name="M:Program.DeleteTestDirectory(System.String,System.String)">
+            <summary>Удаляет только проверенный тестовый каталог внутри явного родителя.</summary>
         </member>
         <member name="T:Program.TestLogger">
             <summary>Собирает сообщения общего транспорта без файловых побочных эффектов.</summary>

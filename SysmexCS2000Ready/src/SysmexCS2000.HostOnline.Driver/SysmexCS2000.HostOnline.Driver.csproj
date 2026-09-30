@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><AssemblyName>SysmexCS2000.HostOnline.Driver</AssemblyName></PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" />
-    <ProjectReference Include="..\AnalyzerService.LisDatabase\AnalyzerService.LisDatabase.csproj" />
-    <ProjectReference Include="..\AnalyzerService.ResultFiles\AnalyzerService.ResultFiles.csproj" />
+    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" ExcludeAssets="runtime;native" />
+    <ProjectReference Include="..\AnalyzerService.LisDatabase\AnalyzerService.LisDatabase.csproj" Private="false" ExcludeAssets="runtime;native" />
+    <ProjectReference Include="..\AnalyzerService.ResultFiles\AnalyzerService.ResultFiles.csproj" Private="false" ExcludeAssets="runtime;native" />
   </ItemGroup>
 </Project>
+

@@ -1,8 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {},
-    "net9.0/win-x64": {}
+    "net9.0": {}
   },
   "libraries": {},
   "projectFileDependencyGroups": {
@@ -74,11 +73,6 @@
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }

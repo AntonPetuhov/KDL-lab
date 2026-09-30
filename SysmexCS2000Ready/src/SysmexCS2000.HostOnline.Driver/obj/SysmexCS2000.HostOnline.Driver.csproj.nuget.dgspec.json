@@ -67,11 +67,6 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
         }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
-        }
       }
     },
     "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj": {
@@ -147,11 +142,6 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
         }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
-        }
       }
     },
     "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj": {
@@ -221,11 +211,6 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
         }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
-        }
       }
     },
     "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj": {
@@ -257,13 +242,16 @@
             "targetAlias": "net9.0",
             "projectReferences": {
               "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
-                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
+                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj",
+                "excludeAssets": "runtime, native"
               },
               "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj": {
-                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj"
+                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj",
+                "excludeAssets": "runtime, native"
               },
               "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj": {
-                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj"
+                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj",
+                "excludeAssets": "runtime, native"
               }
             }
           }
@@ -300,11 +288,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     }

@@ -1,9 +1,14 @@
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Host.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\configs\examples\SysmexCS2000i.json
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\configs\SysmexCS2000.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\Microsoft.Data.SqlClient.SNI.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Contracts.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Contracts.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.LisDatabase.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.ResultFiles.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.ResultFiles.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Host.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\publish\AnalyzerService\AnalyzerService.Host.exe
