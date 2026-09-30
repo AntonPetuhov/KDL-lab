@@ -40,11 +40,13 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
     }
 
     /// <summary>
-    /// Последовательно останавливает все драйвера и аггрегирует ошибки.
+    /// Последовательно останавливает все драйверы и агрегирует ошибки.
+    /// Каждое перехваченное исключение сохраняется в файл до повторного выбрасывания.
     /// </summary>
     public async Task StopAllAsync(CancellationToken token)
     {
         List<Exception> errors = [];
+        IAnalyzerLogger serviceLog = loggerFactory.CreateServiceLogger();
         foreach (AnalyzerRuntime analyzer in analyzers.Values)
         {
             try 
@@ -53,24 +55,38 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
             } 
             catch (Exception ex) 
             { 
+                serviceLog.Error($"{analyzer.Name}: исключение остановки; будет включено в AggregateException.", ex);
                 errors.Add(ex); 
             }
             finally
             {
-                // поидее не нужно так как есть Dispose ниже
-                analyzer.Dispose(); // переиспользовать объект анализатора будет нельзя, только создать новый, тк освобождаем ресурсы
+                try { analyzer.Dispose(); }
+                catch (Exception ex)
+                {
+                    serviceLog.Error($"{analyzer.Name}: исключение освобождения ресурсов; будет включено в AggregateException.", ex);
+                    errors.Add(ex);
+                }
             }
         }
             
         if (errors.Count != 0) throw new AggregateException("Ошибки остановки анализаторов.", errors);
     }
 
-    // освобождаем ресурсы
+    /// <summary>Освобождает ресурсы всех анализаторов синхронно; ошибки пишет в файл и агрегирует.</summary>
+    /// <exception cref="AggregateException">Один или несколько анализаторов не удалось освободить.</exception>
     public void Dispose() 
     {
+        List<Exception> errors = [];
+        IAnalyzerLogger serviceLog = loggerFactory.CreateServiceLogger();
         foreach (AnalyzerRuntime analyzer in analyzers.Values) 
         {
-            analyzer.Dispose();
+            try { analyzer.Dispose(); }
+            catch (Exception ex)
+            {
+                serviceLog.Error($"{analyzer.Name}: исключение освобождения ресурсов при Dispose.", ex);
+                errors.Add(ex);
+            }
         }
+        if (errors.Count != 0) throw new AggregateException("Ошибки освобождения анализаторов.", errors);
     }
 }

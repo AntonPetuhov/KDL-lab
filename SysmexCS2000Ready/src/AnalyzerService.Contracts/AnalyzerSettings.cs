@@ -7,7 +7,7 @@ namespace AnalyzerService.Contracts;
 public sealed class AnalyzerSettings
 {
     /// <summary>Уникальный ID прибора</summary>
-    public string AnalyzerId { get; set; }
+    public string AnalyzerId { get; set; } = string.Empty;
     /// <summary>Уникальное имя анализатора.</summary>
     public required string AnalyzerName { get; set; }
     /// <summary>Тип подключения ("TCPIP", "Serial", "File")</summary>
@@ -39,5 +39,5 @@ public sealed class AnalyzerSettings
     /// <summary>Код прибора в Analyzer Configuration.</summary>
     public string? AnalyzerConfigurationCode { get; set; }
     /// <summary> Формат протокола.</summary>
-    public string Protocol { get; set; } = "ASTM_E1381_02_E1394_97";
+    public string Protocol { get; set; } = "SYSMEX_HOST_ONLINE";
 }

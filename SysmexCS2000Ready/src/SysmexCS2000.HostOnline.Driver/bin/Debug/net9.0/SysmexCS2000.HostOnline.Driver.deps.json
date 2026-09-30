@@ -8,9 +8,9 @@
     ".NETCoreApp,Version=v9.0": {
       "SysmexCS2000.HostOnline.Driver/1.0.0": {
         "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0",
           "AnalyzerService.LisDatabase": "1.0.0",
-          "AnalyzerService.ResultFiles": "1.0.0",
-          "AnalyzerService.Transport": "1.0.0"
+          "AnalyzerService.ResultFiles": "1.0.0"
         },
         "runtime": {
           "SysmexCS2000.HostOnline.Driver.dll": {}
@@ -347,6 +347,7 @@
       },
       "AnalyzerService.LisDatabase/1.0.0": {
         "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0",
           "Microsoft.Data.SqlClient": "7.0.0"
         },
         "runtime": {
@@ -357,16 +358,11 @@
         }
       },
       "AnalyzerService.ResultFiles/1.0.0": {
+        "dependencies": {
+          "AnalyzerService.Contracts": "1.0.0"
+        },
         "runtime": {
           "AnalyzerService.ResultFiles.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "AnalyzerService.Transport/1.0.0": {
-        "runtime": {
-          "AnalyzerService.Transport.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -547,11 +543,6 @@
       "sha512": ""
     },
     "AnalyzerService.ResultFiles/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "AnalyzerService.Transport/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

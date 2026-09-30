@@ -12,12 +12,19 @@ public interface IAnalyzerDriver : IDisposable
     void Initialize(IAnalyzerLogger logger, AnalyzerSettings settings);
 
     /// <summary>
-    /// Запуск работы анализатора
+    /// Синхронно запускает внутренние ресурсы драйвера после инициализации.
     /// </summary>
-    Task RunAsync(CancellationToken cancellationToken);
+    void Start();
 
     /// <summary>
-    /// Остановка работы анализатора
+    /// Асинхронно обрабатывает один поток соединения; TCP listener и принятие клиента
+    /// принадлежат сервис-хосту, а здесь остаётся только прикладной протокол прибора.
     /// </summary>
-    Task StopAsync(CancellationToken cancellationToken);
+    /// <param name="connection">Поток прибора и счётчики обмена.</param>
+    /// <param name="cancellationToken">Сигнал остановки.</param>
+    /// <returns>Задача сеанса.</returns>
+    Task HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken cancellationToken);
+
+    /// <summary>Синхронно останавливает фоновые ресурсы драйвера после закрытия TCP-хоста.</summary>
+    void Stop();
 }

@@ -1,5 +1,6 @@
 using AnalyzerService.Host.Configuration;
 using AnalyzerService.Host.Runtime;
+using AnalyzerService.Host.Logging;
 
 namespace AnalyzerService.Host;
 
@@ -8,7 +9,7 @@ namespace AnalyzerService.Host;
 /// Загружает конфигурации JSON, запускает и останавливает AnalyzerManager
 /// и завершает их при сигнале Service Control Manager.
 /// </summary>
-public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSettingsValidator validator, AnalyzerManager analyzerManager, ILogger<Worker> logger) : BackgroundService
+public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSettingsValidator validator, AnalyzerManager analyzerManager, AnalyzerLoggerFactory loggerFactory, ILogger<Worker> logger) : BackgroundService
 {
     /// <summary>
     /// Запуск службы и начало работы
@@ -16,6 +17,7 @@ public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSetti
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         string directory = Path.Combine(AppContext.BaseDirectory, "configs");
+        var serviceLog = loggerFactory.CreateServiceLogger();
         try
         {
             foreach (var configFile in settingsProvider.LoadAll(directory))
@@ -37,6 +39,7 @@ public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSetti
         }
         catch (Exception ex)
         {
+            serviceLog.Error($"Служба: исключение запуска или рабочего цикла; пробрасывается Generic Host. Каталог настроек: {directory}.", ex);
             logger.LogCritical(ex, "Служба анализаторов аварийно завершена.");
             throw;
         }
@@ -47,9 +50,13 @@ public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSetti
     /// </summary>
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        //await analyzerManager.StopAllAsync(cancellationToken).ConfigureAwait(false);
-        //await base.StopAsync(cancellationToken).ConfigureAwait(false);
-        await analyzerManager.StopAllAsync(cancellationToken);
-        await base.StopAsync(cancellationToken);
+        try { await analyzerManager.StopAllAsync(cancellationToken).ConfigureAwait(false); }
+        catch (Exception ex)
+        {
+            loggerFactory.CreateServiceLogger().Error("Служба: исключение остановки анализаторов; пробрасывается Windows Service.", ex);
+            logger.LogError(ex, "Ошибка остановки анализаторов.");
+            throw;
+        }
+        finally { await base.StopAsync(cancellationToken).ConfigureAwait(false); }
     }
 }

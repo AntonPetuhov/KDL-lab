@@ -25,9 +25,19 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
         logger.Service($"Инициализация драйвера анализатора {settings.AnalyzerName} выполнена.");
     }
 
-    public Task RunAsync(CancellationToken cancellationToken) => (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).RunAsync(cancellationToken);
-    public Task StopAsync(CancellationToken cancellationToken) => analyzer?.StopAsync(cancellationToken) ?? Task.CompletedTask;
+    /// <summary>Синхронно запускает файловую очередь после загрузки DLL сервис-хостом.</summary>
+    public void Start() => (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).Start();
 
-    /// <summary>Освобождает обработчик и TCP-ресурсы.</summary>
+    /// <summary>Асинхронно обрабатывает поток прибора; ожидание требуется только для чтения/записи.</summary>
+    /// <param name="connection">Открытое сервис-хостом соединение.</param>
+    /// <param name="cancellationToken">Сигнал остановки.</param>
+    /// <returns>Задача протокольного сеанса.</returns>
+    public Task HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken cancellationToken) =>
+        (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).HandleConnectionAsync(connection, cancellationToken);
+
+    /// <summary>Синхронно останавливает фоновую очередь после закрытия сокета сервисом.</summary>
+    public void Stop() => analyzer?.Stop();
+
+    /// <summary>Синхронно освобождает обработчик и файловую очередь.</summary>
     public void Dispose() => analyzer?.Dispose();
 }

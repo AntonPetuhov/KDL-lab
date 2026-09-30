@@ -21,9 +21,8 @@ public sealed class AnalyzerSettingsValidator
         if (settings.Port is < 1 or > 65535) errors.Add("Port должен быть от 1 до 65535");
         if (!settings.Isdll) errors.Add("Isdll должен быть true");
         if (string.IsNullOrWhiteSpace(settings.DllPath)) errors.Add("DllPath обязателен");
-        if (settings.Protocol is null || !(settings.Protocol.Equals("ASTM_E1381_02_E1394_97", StringComparison.OrdinalIgnoreCase)
-            || settings.Protocol.Equals("SYSMEX_HOST_ONLINE", StringComparison.OrdinalIgnoreCase)))
-            errors.Add("Protocol должен быть ASTM_E1381_02_E1394_97 или SYSMEX_HOST_ONLINE");
+        if (!string.Equals(settings.Protocol, "SYSMEX_HOST_ONLINE", StringComparison.OrdinalIgnoreCase))
+            errors.Add("Protocol должен быть SYSMEX_HOST_ONLINE");
         if (string.IsNullOrWhiteSpace(settings.OutputFolder)) errors.Add("OutputFolder обязателен");
         if (string.IsNullOrWhiteSpace(settings.ResultsFolder)) errors.Add("ResultsFolder обязателен");
         if (errors.Count != 0) throw new InvalidDataException($"Ошибки {sourcePath}: {string.Join("; ", errors)}");

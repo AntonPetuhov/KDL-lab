@@ -1,4 +1,3 @@
-using System.Text;
 using AnalyzerService.LisDatabase;
 
 namespace SysmexCS2000.HostOnline.Driver.Protocol;
@@ -57,7 +56,7 @@ public class HostOnlineCodec
         // иначе - список параметров
         IReadOnlyList<string> codes = order is null || order.Parameters.Count == 0
             ? [ValidateEmptyCode(emptyCode)]
-            : order.Parameters;
+            : order.Parameters.Select(NormalizeOrderCode).Distinct(StringComparer.Ordinal).ToArray();
 
         // максимум в одном сообщении согласно документации 22 параметра, отсюда считаем, сколько будет блоков сообщений
         int total = (codes.Count + MaximumParametersPerBlock - 1) / MaximumParametersPerBlock;
@@ -71,6 +70,30 @@ public class HostOnlineCodec
             blocks.Add(header + parameters);
         }
         return blocks;
+    }
+
+    /// <summary>
+    /// Синхронно преобразует трёхзначный код результата в код заказа: два знака
+    /// группы анализа и ноль согласно разделам 5.4 и 6 Host Online PDF.
+    /// </summary>
+    /// <param name="source">Код из сопоставления ЛИС.</param>
+    /// <returns>Трёхзначный код группы для S221.</returns>
+    /// <exception cref="InvalidDataException">Код ЛИС не состоит из трёх ASCII-цифр.</exception>
+    public static string NormalizeOrderCode(string source)
+    {
+        string code = source.Trim();
+        if (code.Length != 3 || code.Any(c => c is < '0' or > '9'))
+            throw new InvalidDataException($"Недопустимый код задания ЛИС: '{source}'.");
+        return code is "000" or "999" ? code : code[..2] + "0";
+    }
+
+    /// <summary>Синхронно извлекает коды из сформированного S221 для диагностического журнала.</summary>
+    /// <param name="body">Тело одного блока S221.</param>
+    /// <returns>Коды всех параметров этого блока.</returns>
+    public static IEnumerable<string> ReadOrderCodes(string body)
+    {
+        for (int offset = HeaderLength; offset + 9 <= body.Length; offset += 9)
+            yield return body.Substring(offset, 3);
     }
 
     /// <summary>
@@ -118,10 +141,43 @@ public class HostOnlineCodec
     {
         string date = DateTime.Now.ToString("yyMMdd");
         string time = DateTime.Now.ToString("HHmm");
-        string patient = order is null ? string.Empty : $"{order.LastName} {order.FirstName}".Trim();
-        return "S221" + block.ToString("00") + total.ToString("00") + "U" + date + time
+        string patient = order is null ? string.Empty : FormatPatientName(order.LastName, order.FirstName);
+        char sampleType = source.SampleType is 'U' or 'E' or 'C' ? source.SampleType : 'U';
+        char idInformation = source.IdInformation is 'M' or 'A' or 'B' or 'C'
+            ? source.IdInformation
+            : throw new InvalidDataException("Неизвестный способ регистрации Sample ID в R221.");
+        return "S221" + block.ToString("00") + total.ToString("00") + sampleType + date + time
             + Fit(source.RackNumber, 6, false) + Fit(source.TubePosition, 2, false)
-            + Fit(source.SampleId, 15, true) + "C" + Fit(patient, 15, false);
+            + Fit(source.SampleId, 15, true) + idInformation + Fit(patient, 15, false);
+    }
+
+    /// <summary>
+    /// Синхронно транслитерирует ФИО в ASCII и ограничивает его полем 15 символов.
+    /// Документ допускает в S221 только имя пациента; даты рождения и пола в нём нет.
+    /// </summary>
+    /// <param name="lastName">Фамилия из БД.</param>
+    /// <param name="firstName">Имя из БД.</param>
+    /// <returns>ASCII-поле без завершающих пробелов.</returns>
+    /// <exception cref="InvalidDataException">В имени встретился неподдерживаемый символ.</exception>
+    public static string FormatPatientName(string? lastName, string? firstName)
+    {
+        string original = $"{lastName} {firstName}".Trim().ToUpperInvariant();
+        Dictionary<char, string> cyrillic = new()
+        {
+            ['А']="A", ['Б']="B", ['В']="V", ['Г']="G", ['Д']="D", ['Е']="E", ['Ё']="YO",
+            ['Ж']="ZH", ['З']="Z", ['И']="I", ['Й']="Y", ['К']="K", ['Л']="L", ['М']="M",
+            ['Н']="N", ['О']="O", ['П']="P", ['Р']="R", ['С']="S", ['Т']="T", ['У']="U",
+            ['Ф']="F", ['Х']="KH", ['Ц']="TS", ['Ч']="CH", ['Ш']="SH", ['Щ']="SHCH",
+            ['Ъ']="", ['Ы']="Y", ['Ь']="", ['Э']="E", ['Ю']="YU", ['Я']="YA"
+        };
+        System.Text.StringBuilder ascii = new();
+        foreach (char c in original)
+        {
+            if (c is >= 'A' and <= 'Z' or ' ' or '-' or '\'') ascii.Append(c);
+            else if (cyrillic.TryGetValue(c, out string? replacement)) ascii.Append(replacement);
+            else throw new InvalidDataException($"Нельзя передать символ имени U+{(int)c:X4} в ASCII.");
+        }
+        return ascii.ToString()[..Math.Min(15, ascii.Length)].TrimEnd();
     }
 
     /// <summary>Проверяет документированный специальный код.</summary>

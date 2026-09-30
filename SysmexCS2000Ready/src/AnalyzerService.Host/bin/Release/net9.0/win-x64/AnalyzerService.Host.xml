@@ -68,12 +68,6 @@
             Синхронно освобождает драйвер и помечает контекст для выгрузки.
             </summary>
         </member>
-        <member name="T:AnalyzerService.Host.Logging.AnalyzerLogger">
-            <summary>
-            Записывает журналы одного анализатора по категориям и дням.
-            Связан с драйвером только через IAnalyzerLogger.
-            </summary>
-        </member>
         <member name="T:AnalyzerService.Host.Logging.AnalyzerLoggerFactory">
             <summary>
             Создаёт отдельный файловый логгер для каждого анализатора.
@@ -83,6 +77,10 @@
             <summary>
             Создаёт логгер в каталоге анализатора.
             </summary>
+        </member>
+        <member name="M:AnalyzerService.Host.Logging.AnalyzerLoggerFactory.CreateServiceLogger">
+            <summary>Создаёт общий файловый журнал ошибок до загрузки настроек приборов.</summary>
+            <returns>Логгер службы в каталоге Logs рядом с EXE.</returns>
         </member>
         <member name="T:AnalyzerService.Host.Logging.FileAnalyzerLogger">
             <summary>
@@ -136,39 +134,81 @@
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.StopAllAsync(System.Threading.CancellationToken)">
             <summary>
-            Последовательно останавливает все драйвера и аггрегирует ошибки.
+            Последовательно останавливает все драйверы и агрегирует ошибки.
+            Каждое перехваченное исключение сохраняется в файл до повторного выбрасывания.
             </summary>
+        </member>
+        <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.Dispose">
+            <summary>Освобождает ресурсы всех анализаторов синхронно; ошибки пишет в файл и агрегирует.</summary>
+            <exception cref="T:System.AggregateException">Один или несколько анализаторов не удалось освободить.</exception>
         </member>
         <member name="T:AnalyzerService.Host.Runtime.AnalyzerRuntime">
             <summary>
-            Управляет загрузкой, запуском и остановкой одного DLL-драйвера. Здесь не важно как именно реализована работа анализатора.
+            Владеет TCP listener, подключением прибора и жизненным циклом одной DLL.
+            Драйверу передаётся только IAnalyzerConnection; открыть порт из DLL нельзя.
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Host.Drivers.DriverLoader,AnalyzerService.Host.Logging.AnalyzerLoggerFactory)">
             <summary>
-            Управляет загрузкой, запуском и остановкой одного DLL-драйвера. Здесь не важно как именно реализована работа анализатора.
+            Владеет TCP listener, подключением прибора и жизненным циклом одной DLL.
+            Драйверу передаётся только IAnalyzerConnection; открыть порт из DLL нельзя.
             </summary>
         </member>
         <member name="P:AnalyzerService.Host.Runtime.AnalyzerRuntime.Name">
-            <summary>Получает имя анализатора.</summary>
+            <summary>Имя анализатора из JSON для диагностики.</summary>
         </member>
         <member name="P:AnalyzerService.Host.Runtime.AnalyzerRuntime.Completion">
-            <summary>Получает задачу рабочего цикла для наблюдения за аварийным завершением.</summary>
+            <summary>Задача сетевого цикла; менеджер наблюдает за её завершением.</summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(System.Threading.CancellationToken)">
             <summary>
-            Инициализирует DLL синхронно и запускает асинхронный сетевой цикл.
+            Синхронно загружает DLL, запускает её файловые ресурсы и открывает TCP listener.
+            Task возвращается для контракта менеджера; ожидания сети здесь нет.
             </summary>
+            <param name="serviceToken">Отмена Windows Service.</param>
+            <returns>Уже завершённая задача запуска.</returns>
+            <exception cref="T:System.Exception">Ошибка инициализации логируется в файл и пробрасывается с исходным стеком.</exception>
+        </member>
+        <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно ожидает клиента и передаёт открытый поток DLL. Асинхронность нужна
+            только для Accept и протокольного чтения/записи; ошибки сеанса логируются с контекстом.
+            </summary>
+            <param name="token">Отмена службы и конкретного анализатора.</param>
+            <returns>Задача до остановки TCP listener.</returns>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.StopAsync(System.Threading.CancellationToken)">
             <summary>
-            Асинхронно прекращает сеть и ожидает драйвер.
+            Асинхронно ждёт завершения сетевого цикла после синхронного закрытия сокета;
+            затем останавливает фоновую очередь DLL. Каждое пробрасываемое исключение логируется.
             </summary>
+            <param name="cancellationToken">Ограничение времени остановки от Windows Service.</param>
+            <returns>Задача полной остановки.</returns>
+            <exception cref="T:System.AggregateException">Одна или несколько ошибок остановки.</exception>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.Dispose">
+            <summary>Синхронно и повторно безопасно освобождает DLL, listener и токены.</summary>
+        </member>
+        <member name="T:AnalyzerService.Host.Runtime.TcpAnalyzerConnection">
             <summary>
-            Освобождает драйвер и token source.
+            Адаптирует поток принятого TCP-клиента к контракту DLL-драйвера и передаёт
+            отметки RX/TX общему TcpHost. Жизненный цикл сокета остаётся в AnalyzerRuntime.
             </summary>
+        </member>
+        <member name="M:AnalyzerService.Host.Runtime.TcpAnalyzerConnection.#ctor(System.IO.Stream,AnalyzerService.Transport.TcpHost)">
+            <summary>
+            Адаптирует поток принятого TCP-клиента к контракту DLL-драйвера и передаёт
+            отметки RX/TX общему TcpHost. Жизненный цикл сокета остаётся в AnalyzerRuntime.
+            </summary>
+        </member>
+        <member name="P:AnalyzerService.Host.Runtime.TcpAnalyzerConnection.Stream">
+            <summary>Возвращает поток, открытый сервис-хостом.</summary>
+        </member>
+        <member name="M:AnalyzerService.Host.Runtime.TcpAnalyzerConnection.RecordRead">
+            <summary>Синхронно фиксирует принятый текст, без сетевого ожидания.</summary>
+        </member>
+        <member name="M:AnalyzerService.Host.Runtime.TcpAnalyzerConnection.RecordWrite">
+            <summary>Синхронно фиксирует отправленный текст, без сетевого ожидания.</summary>
         </member>
         <member name="T:AnalyzerService.Host.Worker">
             <summary>
@@ -177,7 +217,7 @@
             и завершает их при сигнале Service Control Manager.
             </summary>
         </member>
-        <member name="M:AnalyzerService.Host.Worker.#ctor(AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider,AnalyzerService.Host.Configuration.AnalyzerSettingsValidator,AnalyzerService.Host.Runtime.AnalyzerManager,Microsoft.Extensions.Logging.ILogger{AnalyzerService.Host.Worker})">
+        <member name="M:AnalyzerService.Host.Worker.#ctor(AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider,AnalyzerService.Host.Configuration.AnalyzerSettingsValidator,AnalyzerService.Host.Runtime.AnalyzerManager,AnalyzerService.Host.Logging.AnalyzerLoggerFactory,Microsoft.Extensions.Logging.ILogger{AnalyzerService.Host.Worker})">
             <summary>
             Реализует жизненный цикл Windows Service: 
             Загружает конфигурации JSON, запускает и останавливает AnalyzerManager

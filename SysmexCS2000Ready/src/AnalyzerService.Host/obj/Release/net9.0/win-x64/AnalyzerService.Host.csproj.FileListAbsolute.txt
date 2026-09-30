@@ -1,4 +1,3 @@
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\SysmexCS2000i.json
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Host.exe
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Host.deps.json
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Host.runtimeconfig.json
@@ -51,4 +50,8 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerServ
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Release\net9.0\win-x64\AnalyzerService.Host.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Release\net9.0\win-x64\AnalyzerService.Host.genruntimeconfig.cache
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Release\net9.0\win-x64\ref\AnalyzerService.Host.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\examples\SysmexCS2000i.HostOnline.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\SysmexCS2000.json
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Transport.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\examples\SysmexCS2000i.json

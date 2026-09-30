@@ -20,7 +20,9 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
         if (result.Items.Count == 0) 
             throw new InvalidDataException("D-текст не содержит результатов.");
 
-        string output = Path.GetFullPath(settings.OutputFolder!);
+        // Windows Service часто работает из System32: относительный путь из JSON
+        // должен вычисляться от каталога опубликованной службы, а не от current directory.
+        string output = Path.GetFullPath(settings.OutputFolder!, AppContext.BaseDirectory);
         Directory.CreateDirectory(output);
         string sampleId = result.Header.SampleId;
         // Имя сырого файла постоянно при повторной попытке после сбоя переноса в archive.

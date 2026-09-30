@@ -1,244 +1,295 @@
-"""Generate the Russian service guide from the current implementation."""
+"""Build the Russian Host Online architecture and operations manual as a PDF."""
 
 from pathlib import Path
-from xml.sax.saxutils import escape
-
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import (
-    BaseDocTemplate, Frame, KeepTogether, PageTemplate, Paragraph, Spacer,
-    Table, TableStyle,
-)
+from reportlab.platypus import BaseDocTemplate, Frame, KeepTogether, PageTemplate, Paragraph, Spacer, Table, TableStyle
 
 ROOT = Path(__file__).resolve().parents[1]
-DEST = ROOT / "output" / "pdf" / "SysmexCS2000_service_guide.pdf"
-DEST.parent.mkdir(parents=True, exist_ok=True)
-
+OUT = ROOT / "output" / "pdf" / "SysmexCS2000_service_guide.pdf"
+OUT.parent.mkdir(parents=True, exist_ok=True)
 pdfmetrics.registerFont(TTFont("ArialRU", r"C:\Windows\Fonts\arial.ttf"))
 pdfmetrics.registerFont(TTFont("ArialRUBold", r"C:\Windows\Fonts\arialbd.ttf"))
 pdfmetrics.registerFontFamily("ArialRU", normal="ArialRU", bold="ArialRUBold")
 
-navy = colors.HexColor("#183250")
-teal = colors.HexColor("#167782")
-muted = colors.HexColor("#526478")
-paper = colors.HexColor("#F2F6F8")
-
+NAVY = colors.HexColor("#18324D")
+TEAL = colors.HexColor("#147886")
+MUTED = colors.HexColor("#526579")
+PALE = colors.HexColor("#EFF5F7")
 styles = getSampleStyleSheet()
-styles.add(ParagraphStyle(name="TitleRU", fontName="ArialRUBold", fontSize=20,
-                          leading=25, textColor=navy, spaceAfter=10))
-styles.add(ParagraphStyle(name="SubRU", fontName="ArialRU", fontSize=10.2,
-                          leading=15, textColor=muted, spaceAfter=16))
-styles.add(ParagraphStyle(name="H1RU", fontName="ArialRUBold", fontSize=13.5,
-                          leading=17, textColor=navy, spaceBefore=15, spaceAfter=7))
-styles.add(ParagraphStyle(name="H2RU", fontName="ArialRUBold", fontSize=10.5,
-                          leading=14, textColor=teal, spaceBefore=10, spaceAfter=5))
-styles.add(ParagraphStyle(name="BodyRU", fontName="ArialRU", fontSize=9,
-                          leading=13.4, spaceAfter=6))
-styles.add(ParagraphStyle(name="SmallRU", fontName="ArialRU", fontSize=8,
-                          leading=11.3, spaceAfter=4))
-styles.add(ParagraphStyle(name="CodeRU", fontName="ArialRU", fontSize=8.2,
-                          leading=12, leftIndent=8, rightIndent=5, spaceAfter=2))
-
-
-def para(text, style="BodyRU"):
-    return Paragraph(text, styles[style])
-
+styles.add(ParagraphStyle(name="TitleRU", fontName="ArialRUBold", fontSize=19, leading=24,
+                          textColor=NAVY, spaceAfter=9))
+styles.add(ParagraphStyle(name="IntroRU", fontName="ArialRU", fontSize=9.6, leading=14.5,
+                          textColor=MUTED, spaceAfter=12))
+styles.add(ParagraphStyle(name="HeadingRU", fontName="ArialRUBold", fontSize=12.5, leading=16,
+                          textColor=NAVY, spaceBefore=12, spaceAfter=6, keepWithNext=True))
+styles.add(ParagraphStyle(name="SubheadingRU", fontName="ArialRUBold", fontSize=10, leading=13,
+                          textColor=TEAL, spaceBefore=9, spaceAfter=4, keepWithNext=True))
+styles.add(ParagraphStyle(name="BodyRU", fontName="ArialRU", fontSize=8.7, leading=12.8, spaceAfter=5))
+styles.add(ParagraphStyle(name="SmallRU", fontName="ArialRU", fontSize=7.8, leading=11.3, spaceAfter=3))
+styles.add(ParagraphStyle(name="MonoRU", fontName="ArialRU", fontSize=8, leading=11.6, spaceAfter=2))
+styles.add(ParagraphStyle(name="TableHeadRU", fontName="ArialRUBold", fontSize=7.8,
+                          leading=11.3, textColor=colors.white))
 
 story = []
 
 
+def p(text, style="BodyRU"):
+    return Paragraph(text, styles[style])
+
+
 def title(text, subtitle):
-    story.extend([para(text, "TitleRU"), para(subtitle, "SubRU")])
+    story.extend([p(text, "TitleRU"), p(subtitle, "IntroRU")])
 
 
 def h1(text):
-    story.append(para(text, "H1RU"))
+    story.append(p(text, "HeadingRU"))
 
 
 def h2(text):
-    story.append(para(text, "H2RU"))
+    story.append(p(text, "SubheadingRU"))
 
 
 def body(text):
-    story.append(para(text))
+    story.append(p(text))
 
 
-def step(number, text):
-    story.append(para(f"<b>{number}.</b> {text}"))
+def step(num, text):
+    story.append(p(f"<b>{num}.</b> {text}"))
 
 
-def box(lines):
-    cells = [[para(line, "CodeRU")] for line in lines]
-    table = Table(cells, colWidths=[173 * mm], hAlign="LEFT")
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), paper),
-        ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#DAE5EA")),
+def panel(lines):
+    t = Table([[p(line, "MonoRU")] for line in lines], colWidths=[174 * mm], hAlign="LEFT")
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), PALE),
+        ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#D7E4E9")),
         ("LEFTPADDING", (0, 0), (-1, -1), 8),
         ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-        ("TOPPADDING", (0, 0), (-1, -1), 3),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+        ("TOPPADDING", (0, 0), (-1, -1), 2.5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
     ]))
-    story.extend([table, Spacer(1, 6)])
+    story.extend([t, Spacer(1, 5)])
 
 
-title("Sysmex CS-2000i: руководство по сервису",
-      "Архитектура, последовательность вызовов, хранение сырых результатов и эксплуатация. "
-      "Состояние реализации: 27 сентября 2026 г.; .NET 9.0.")
+def matrix(rows, widths):
+    t = Table([[p(cell, "TableHeadRU" if i == 0 else "SmallRU") for cell in row]
+               for i, row in enumerate(rows)], colWidths=widths,
+              repeatRows=1, hAlign="LEFT")
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), NAVY),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, PALE]),
+        ("GRID", (0, 0), (-1, -1), 0.35, colors.HexColor("#D7E4E9")),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+    ]))
+    story.extend([t, Spacer(1, 6)])
 
-h1("1. Назначение и состав решения")
-body("Windows Service принимает TCP-подключение анализатора Sysmex CS-2000i. В решение входят "
-     "два отдельных протокольных драйвера: ASTM E1381/E1394 и Sysmex Host Online. "
-     "Подключаемые DLL реализуют общий контракт IAnalyzerDriver; параметры берутся только из JSON.")
-box([
-    "AnalyzerService.Host → Windows Service, конфигурация, загрузка DLL, жизненный цикл",
-    "AnalyzerService.Contracts → IAnalyzerDriver, AnalyzerSettings, IAnalyzerLogger",
-    "AnalyzerService.Transport → общий TCP-host, состояние listener и соединений",
-    "AnalyzerService.LisDatabase → LisDBProvider, заказ и сопоставление кодов",
-    "AnalyzerService.ResultFiles → RawResultQueue, файлы и выделенный поток",
-    "SysmexCS2000.Driver → ASTM-кадры, сессия, разбор и формат ЛИС",
-    "SysmexCS2000.HostOnline.Driver → R/S/D-тексты, сборка блоков, формат ЛИС",
+
+title("Sysmex CS-2000i: устройство сервиса и работа драйвера",
+      "Host Online, .NET 9 / Windows Service. Описание фактического кода, разбор случая R221 "
+      "от 30.09.2026, исключения, стек вызовов, сборка и размещение файлов.")
+
+h1("1. Что изменилось и каковы границы протокола")
+body("В активном решении оставлен один протокол - Sysmex Host Online. TCP listener, принятие "
+     "клиента, состояние сокета и его закрытие принадлежат сервису. Управляемая DLL анализатора "
+     "работает с уже открытым потоком IAnalyzerConnection. Проект ASTM и его тесты удалены из решения. "
+     "Существующие поля JSON сохранены; основной активный файл - configs/SysmexCS2000.json.")
+body("Документ Host Online 2_5197664667366890337.pdf: стр. 6 требует ASCII; стр. 34-37 "
+     "задают поля S221, имя пациента длиной 15 символов и код задания из трёх знаков; "
+     "стр. 38 уточняет, что в задании третья цифра кода группы равна 0. В S221 "
+     "не предусмотрены дата рождения, пол или произвольная демографическая запись: "
+     "передать можно только имя пациента в отведённом поле.")
+panel([
+    "Windows Service / AnalyzerService.Host.exe → конфигурация, DLL, TCP listener",
+    "AnalyzerService.Contracts → IAnalyzerDriver, IAnalyzerConnection, AnalyzerSettings",
+    "AnalyzerService.Transport → общий TcpHost, вызываемый только сервисом",
+    "SysmexCS2000.HostOnline.Driver.dll → R221/S221/D121/D221, кодек, обработка файла",
+    "AnalyzerService.LisDatabase.dll → SQL-заказы и сопоставление кодов ЛИС",
+    "AnalyzerService.ResultFiles.dll → сырые .raw, отдельный поток, archive/errors/QC",
 ])
-body("Новая очередь файлов намеренно отделена от TCP-host: транспорт знает только сокеты, "
-     "а очередь знает только каталог, байты и функцию преобразования. Такая граница подходит "
-     "и для будущих приборов с другим прикладным протоколом.")
 
-h1("2. Запуск службы: точный порядок")
-step(1, "Program создаёт Generic Host и регистрирует Worker, поставщик JSON, проверку настроек, "
-     "AnalyzerManager и фабрику логгеров.")
-step(2, "Worker.ExecuteAsync читает все JSON из каталога configs рядом с исполняемым файлом, "
-     "проверяет каждую конфигурацию и добавляет активные приборы в AnalyzerManager.")
-step(3, "AnalyzerManager запускает разрешённые приборы. AnalyzerRuntime.Load загружает "
-     "указанную DllPath сборку через DriverLoadContext, создаёт IAnalyzerDriver и вызывает Initialize.")
-step(4, "RunAsync драйвера создаёт RawResultQueue, при ResultHandlerStatus=true запускает его выделенный поток, затем "
-     "вызывает TcpHost.Start(IPaddress, Port). Поток очереди сразу видит .raw от прошлых запусков.")
-step(5, "TcpHost.AcceptAsync ожидает клиента без блокирования потока службы. После подключения "
-     "драйвер читает сообщения прибора в цикле до отключения или остановки.")
-body("Если параметр WorkStatus или ActiveStatus отключает прибор, его запуск определяется "
-     "существующей логикой менеджера. Новых ключей конфигурации для очереди не введено.")
+h1("2. Запуск: порядок вызовов и владение ресурсами")
+step(1, "Program создаёт Generic Host с поддержкой Windows Service и регистрирует Worker, "
+     "JsonAnalyzerSettingsProvider, AnalyzerSettingsValidator, AnalyzerManager и фабрику журналов.")
+step(2, "Worker.ExecuteAsync читает только *.json из верхнего уровня configs, проверяет настройки. "
+     "При ActiveStatus=true вызывает AnalyzerManager.Add и затем StartAllAsync.")
+step(3, "AnalyzerRuntime.StartAsync создаёт файловый журнал прибора, вызывает DriverLoader.Load. "
+     "DriverLoadContext загружает DLL из DllPath и зависимости через её .deps.json. "
+     "Созданный SysmexCS2000HostOnlineDriver получает Initialize(logger, settings).")
+step(4, "IAnalyzerDriver.Start запускает файловую очередь результатов, если "
+     "ResultHandlerStatus=true. Сервис создаёт TcpHost и вызывает Start(IPaddress, Port) "
+     "из JSON. Ни один драйвер не открывает TcpListener.")
+step(5, "AnalyzerRuntime.RunConnectionsAsync вызывает TcpHost.AcceptAsync. Для принятого клиента "
+     "создаётся TcpAnalyzerConnection с NetworkStream и отметками RX/TX; затем сервис "
+     "вызывает DLL.HandleConnectionAsync(connection, token).")
+body("Ожидания AcceptAsync, ReadAsync и WriteAsync асинхронны, чтобы не занимать поток службы. "
+     "Разбор фиксированных полей, SQL-запросы и короткие файловые операции остаются "
+     "синхронными. Обработка накопленных .raw выполняется на отдельном потоке, поэтому "
+     "не задерживает следующий приём прибора.")
 
-h1("3. Приём и маршрутизация сообщений")
-h2("Sysmex Host Online")
-step(1, "ReadTextAsync принимает кадр между STX и ETX; AddBlock собирает все блоки одного "
-     "сообщения и сохраняет исходные кадры без нормализации в Raw.")
-step(2, "R221: ParseInquiry → LisDBProvider.GetOrder → BuildOrder → отправка S221 по TCP. "
-     "Этот путь остаётся синхронным по отношению к запросу задания.")
-step(3, "D121/D221: по Sample Distinction Code в позиции 8 определяется контроль C. "
-     "Пациентский результат передаётся SaveResult, контроль - SaveQualityControl. "
-     "Приёмник не вызывает TranslateResultCode и не создаёт файлы ЛИС.")
-step(4, "DS21 представляет информацию о пробе и не создаёт файла результата.")
-h2("ASTM")
-step(1, "AstmSession.ReceiveMessageAsync принимает ENQ, проверяет кадры и checksum, "
-     "отправляет предусмотренные ASTM ACK/NAK и завершает транзакцию на EOT. "
-     "Возвращает текст принятых записей и исходные байты транзакции.")
-step(2, "Q-запись: GetQuerySampleId → LisDBProvider.GetOrder → BuildOrder/BuildEmpty → "
-     "AstmSession.SendMessageAsync.")
-step(3, "O/R-записи: по Sample ID QC... или полю Action Code = Q определяется контроль. "
-     "Далее исходные байты идут в SaveQualityControl либо SaveResult.")
-body("У Host Online в текущем режиме дополнительный прикладной ACK на D/S не вводился: "
-     "решение о нём отложено до проверки с реальным анализатором. ASTM ACK/NAK относится "
-     "к уже существующему канальному обмену ASTM и не менялся в этой доработке.")
-
-h1("4. Файловая очередь результатов")
-body("Путь вычисляется из существующего ResultsFolder: абсолютный путь используется как есть; "
-     "относительный разрешается относительно &lt;каталог службы&gt;/&lt;AnalyzerName&gt;. "
-     "Каждая законченная передача результата одного образца создаёт отдельный файл. "
-     "При повторном измерении идентификатор образца совпадает, но timestamp и GUID сохраняют оба измерения.")
-body("При ResultHandlerStatus=false сырые сообщения продолжают сохраняться, но рабочий поток "
-     "не запускается. Они обрабатываются при следующем запуске с включённым обработчиком.")
-box([
-    "ResultsFolder/",
-    "  SYS2000_&lt;SampleId&gt;_&lt;UTC&gt;_&lt;GUID&gt;.raw  ← готовые пациентские сообщения",
-    "  archive/  ← успешно преобразованные исходные .raw",
-    "  errors/   ← ошибка разбора, нет результатов или кодов ЛИС",
-    "  QualityControl/  ← неизменённые QC .raw; будущий обработчик",
-    "OutputFolder/  ← выходные .res и .ok для ЛИС",
+h1("3. Стек вызовов на примере запроса со стенда")
+panel([
+    "30.09.2026 15:12:55 RX: R2210101 300926151200000304     9000003160B ...",
+    "Параметры запроса R221: 400, 650, 660, 870, 880; Sample ID: 9000003160",
+    "Журнал БД: найден 1 уникальный код; прежний ответ S221 содержал 392",
 ])
-step(1, "SaveResult синхронно пишет байты в .raw.tmp и переименовывает в .raw. "
-     "Поток обработки не видит частично записанный файл.")
-step(2, "Выделенный Thread запускает Run; он обходит *.raw верхнего уровня при старте "
-     "и далее после сигнала записи или каждые две секунды. Папки archive/errors/QC не сканируются.")
-step(3, "ProcessFile читает байты; драйвер восстанавливает тело протокола и вызывает "
-     "свой ResultHandler. Тот извлекает тесты, сопоставляет их через LisDBProvider и "
-     "создаёт .res, а затем маркер .ok в OutputFolder.")
-step(4, "После успеха исходный .raw переносится в archive. Любое исключение "
-     "обработки логируется с путём файла и ведёт к переносу в errors. "
-     "Это касается пустого результата и случая, когда ни один тест не настроен для ЛИС.")
-step(5, "Если сам перенос не удался, исходник остаётся на месте и ошибка логируется. "
-     "Имя выходных .res/.ok основано на имени .raw; наличие .ok предотвращает повторный "
-     "вывод того же результата при следующем проходе.")
-body("Важно: перемещение в errors применяется также к временным ошибкам БД ЛИС. "
-     "Такие файлы можно проанализировать и после устранения причины вернуть вручную "
-     "в корень ResultsFolder для повторной обработки. Перемещение выполнять только после "
-     "проверки выходных .ok и журналов.")
+step(1, "TcpHost.AcceptAsync возвращает клиента; RunConnectionsAsync передаёт поток в "
+     "SysmexCS2000HostOnlineDriver.HandleConnectionAsync, затем в "
+     "AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync.")
+step(2, "ReadTextAsync читает STX, тело и ETX; AddBlock собирает блоки по номеру. "
+     "HostOnlineCodec.ParseInquiry извлекает Sample ID, признак регистрации ID и уже "
+     "показанные прибором коды. Пять кодов в R221 - информация прибора, а не пять "
+     "найденных назначений из БД.")
+step(3, "LisDBProvider.GetOrder открывает SQL, получает пациента и рассматривает каждую "
+     "строку bestall. В протокольном журнале теперь видны исходный код ЛИС, код для прибора, "
+     "статус, число попыток, наличие результата и причина исключения/включения. "
+     "Незавершённые коды объединяются по уникальному значению.")
+step(4, "HostOnlineCodec.BuildOrder превращает исходные коды результата в коды задания. "
+     "Например, 392 → 390; 051 → 050. Два разных кода группы дают два 9-символьных "
+     "блока в одном S221. Если два теста отображаются в одну группу, повторный код "
+     "объединяется - это один групповой заказ для анализатора.")
+step(5, "BuildHeader переносит ID Information из R221. В вашем сообщении это B "
+     "(считано по штрихкоду); прежний код всегда писал C (ID назначен хостом). "
+     "ФИО «ТЕСТ МИХАЛ ИВАН» превращается в ASCII «TEST MIKHAL IVA» после ограничения "
+     "полем 15 символов. Раньше журнал показывал кириллицу, но Encoding.ASCII на проводе "
+     "заменял её символами '?'.")
+step(6, "WriteTextAsync проверяет ASCII и длину кадра ≤255 байт, пишет STX/S221/ETX, "
+     "отмечает TX и записывает фактически отправляемый текст в протокольный журнал.")
+body("По одному фрагменту журнала нельзя доказать, почему SQL вернул ровно один код: "
+     "возможны уже существующий результат, неподходящий статус/число попыток, отсутствие "
+     "сопоставления konvana либо два теста с одним кодом группы. Изменять фильтр на "
+     "отправку уже выполненных исследований без данных БД нельзя. Новые построчные "
+     "записи журнала показывают конкретную причину для следующего запроса.")
 
-h1("5. Контроль качества")
-story.append(KeepTogether([story.pop(), para("Контроль сохраняется функцией SaveQualityControl непосредственно при приёме. "
-     "В QualityControl лежат точные входящие байты: для Host Online - один или несколько "
-     "кадров STX...ETX, для ASTM - ENQ, все входящие кадры и EOT. Поля не переводятся "
-     "в формат ЛИС, коды тестов не сопоставляются, .res/.ok не создаются. "
-     "Будущий QC-обработчик может читать эти .raw независимо от текущей очереди пациентов.")]))
+h1("4. Результаты и контроль качества")
+step(1, "D121/D221 определяется по первому символу сообщения. Код Sample Distinction C "
+     "на позиции 8 означает контроль качества; байты целого STX...ETX сообщения "
+     "сохраняются в ResultsFolder/QualityControl без преобразования.")
+step(2, "Пациентский результат сохраняется как уникальный .raw в ResultsFolder. "
+     "Сначала пишется .tmp, затем атомарно переименовывается в .raw. Имя включает "
+     "Sample ID, UTC-время и GUID, чтобы не перезаписывать повторное измерение.")
+step(3, "Выделенный поток RawResultQueue при старте и далее через сигнал/каждые две секунды "
+     "читает только готовые *.raw верхнего уровня. ProcessStoredResult восстанавливает "
+     "тело Host Online, ParseResult извлекает показатели, HostOnlineResultHandler "
+     "переводит коды через LisDBProvider.TranslateResultCode.")
+step(4, "При наличии пригодных показателей создаются .res и затем .ok в OutputFolder, "
+     "после чего исходный .raw переносится в archive. Пустое сообщение, отсутствие "
+     "сопоставленных тестов, ошибка SQL или записи ведут в errors и файловый Error-журнал. "
+     "Необработанные файлы переживают перезапуск службы.")
+body("ResultHandlerStatus=false оставляет приём и сохранение .raw активными, но не запускает "
+     "преобразование. При следующем запуске с true накопленные файлы подбираются. "
+     "Контроли в QualityControl этим потоком не просматриваются: отдельный обработчик "
+     "контроля качества пока не реализован.")
 
-h1("6. Остановка и восстановление")
-step(1, "Service Control Manager вызывает Worker.StopAsync, затем AnalyzerManager.StopAllAsync.")
-step(2, "AnalyzerRuntime отменяет token и вызывает IAnalyzerDriver.StopAsync; драйвер "
-     "закрывает активный TcpClient и TcpHost, прерывая AcceptAsync/ReadAsync.")
-step(3, "RunAsync выходит из сетевого цикла и в finally вызывает RawResultQueue.Stop. "
-     "Выделенный поток завершает текущий файл и прекращает обход каталога.")
-step(4, "После завершения задачи драйвера AnalyzerRuntime освобождает ресурсы и "
-     "контекст DLL. Непереработанные .raw остаются на диске и подбираются при следующем запуске.")
-body("Асинхронность используется в ожидании сети и завершения рабочих задач. "
-     "Краткие файловые операции и обращение к БД внутри выделенного обработчика выполняются "
-     "синхронно; TCP-чтение не ждёт преобразования результата в ЛИС.")
-
-h1("7. Настройка, сборка и проверка")
-body("Используется имеющийся JSON из configs. Для этой доработки ни один ключ не добавлен. "
-     "Проверьте AnalyzerName, ActiveStatus, WorkStatus, ResultHandlerStatus, Protocol, "
-     "DllPath, IPaddress, Port, ResultsFolder, OutputFolder и ConnectionString. "
-     "Два драйвера не могут слушать одну пару IP-адрес/порт одновременно.")
-box([
-    "dotnet build .\\AnalyzerService.sln --maxcpucount:1",
-    "dotnet run --project .\\tests\\SysmexCS2000.Driver.Tests",
-    "dotnet run --project .\\tests\\SysmexCS2000.HostOnline.Driver.Tests",
-    ".\\package.ps1  # Windows: публикует host и DLL с зависимостями",
+h1("5. Исключения, throw и файловые журналы")
+body("Исключение - объект, описывающий ошибку. Конструкция throw new создаёт его и "
+     "немедленно прерывает обычный путь выполнения. CLR ищет подходящий catch выше "
+     "по стеку вызовов; при выходе выполняются finally/Dispose. Если catch нет, "
+     "ошибка поднимается до Generic Host и может остановить службу. В async-методе "
+     "исключение сохраняется в Task и вновь возникает на await вызывающего метода.")
+panel([
+    "if (badCode) throw new InvalidDataException(\"Недопустимый код\");",
+    "catch (Exception ex) { logger.Error(\"Контекст Sample ID\", ex); throw; }",
+    "throw; сохраняет исходный стек; throw ex; создаёт новую точку стека - избегать.",
 ])
-body("После публикации проверьте наличие AnalyzerService.ResultFiles.dll в каталоге "
-     "каждого драйвера. Для диагностики смотрите Service/Transport/Protocol/Result/Error логи: "
-     "создание .raw, перенос в archive/errors и точное исключение каждого сбоя. "
-     "Общий TcpHost периодически пишет состояние listener, endpoint, клиента, RX/TX и "
-     "последнюю ошибку. Отсутствие RX при работающем listener не означает блокировку сокета.")
+matrix([
+    ["Источник", "Как проходит ошибка", "Где появляется запись"],
+    ["JSON/DLL/TCP Start", "StartAsync логирует Exception и делает throw; Worker получает ошибку", "Logs/Error службы и Error анализатора"],
+    ["SQL при R221", "GetOrder → HandleConnectionAsync: log + throw → AnalyzerRuntime закрывает клиента", "Error анализатора с Sample ID/стеком"],
+    ["Неверный S221", "BuildOrder/WriteTextAsync: log + throw; при сетевом сбое серия блоков может оказаться неполной", "Error анализатора и состояние TCP"],
+    ["Ошибка .raw-файла", "RawResultQueue ловит ошибку отдельного файла, логирует, переносит в errors", "Error и Result анализатора; служба продолжает работу"],
+    ["Остановка", "Runtime логирует каждую ошибку, затем AggregateException; Worker логирует aggregate и throw", "Error анализатора и Logs/Error службы"],
+], [37 * mm, 91 * mm, 46 * mm])
+body("FileAnalyzerLogger.Error записывает Exception.ToString(): тип, сообщение, стек вызовов "
+     "и InnerException. Он ведёт отдельные дневные файлы Service, Transport, Protocol, "
+     "Result и Error в каталоге &lt;служба&gt;/&lt;AnalyzerName&gt;/Logs; ошибки, возникшие "
+     "до создания логгера прибора, идут в &lt;служба&gt;/Logs/Error. "
+     "Обычные отмена token и закрытие клиентом потока считаются ожидаемыми событиями, "
+     "их не следует маскировать под аварии.")
 
-h1("8. Границы и источники")
-body("Тексты и канальные правила протоколов берутся из проектных документов "
-     "2_5197664667366890337.pdf (Host Online) и 2_5197664667366890338.pdf (ASTM). "
-     "Это руководство описывает фактическую реализацию кода; оно не заменяет проверку "
-     "обмена и ACK с реальным CS-2000i перед промышленным вводом.")
-body("Проверены сборка .NET 9 и консольные тесты обоих драйверов. "
-     "Интеграционные испытания с реальным прибором и БД ЛИС требуют соответствующего стенда.")
+h1("6. Остановка: обратный стек вызовов")
+step(1, "Service Control Manager инициирует Worker.StopAsync; тот вызывает "
+     "AnalyzerManager.StopAllAsync.")
+step(2, "AnalyzerRuntime.StopAsync отменяет token и закрывает TcpHost. Текущий "
+     "AcceptAsync/ReadAsync завершается, RunConnectionsAsync освобождает TcpClient.")
+step(3, "После завершения сетевой задачи Runtime вызывает IAnalyzerDriver.Stop. "
+     "RawResultQueue заканчивает текущий файл и соединяет свой выделенный поток через Join.")
+step(4, "LoadedDriver.Dispose освобождает DLL и контекст загрузки; непереработанные .raw "
+     "остаются на диске для следующего старта. Ошибки остановки собираются, а не теряются.")
+
+h1("7. Сборка в Visual Studio и раскладка файлов")
+step(1, "Установите Visual Studio 2022 с рабочей нагрузкой .NET desktop и SDK .NET 9. "
+     "Откройте AnalyzerService.sln. Выберите Release и x64/Any CPU, выполните Restore NuGet "
+     "и Build Solution. В списке проектов должен быть только Host Online; ASTM отсутствует.")
+step(2, "Для обычной сборки получатся AnalyzerService.Host.exe и зависимые DLL в "
+     "bin/Release/net9.0. Для развертывания запустите package.ps1 из PowerShell. "
+     "Скрипт вызывает dotnet publish с PublishSingleFile=true и PublishTrimmed=false.")
+step(3, "Однофайловым становится исполняемый хост. Плагин нельзя упаковать внутрь "
+     "этого EXE без отказа от динамической загрузки: его DLL, .deps.json и зависимости "
+     "остаются в drivers/SysmexCS2000HostOnline. Публикация framework-dependent: "
+     "на сервере нужен .NET 9 Runtime. PDB/XML могут лежать рядом как необязательные "
+     "файлы диагностики.")
+panel([
+    "publish/AnalyzerService/AnalyzerService.Host.exe  ← один исполняемый файл хоста",
+    "publish/AnalyzerService/configs/SysmexCS2000.json  ← единственный активный JSON",
+    "publish/AnalyzerService/drivers/SysmexCS2000HostOnline/",
+    "  SysmexCS2000.HostOnline.Driver.dll + .deps.json",
+    "  AnalyzerService.LisDatabase.dll, AnalyzerService.ResultFiles.dll, SqlClient и другие зависимости",
+    "&lt;служба&gt;/&lt;AnalyzerName&gt;/Logs, Results, Results/archive, Results/errors, Results/QualityControl",
+])
+body("DllPath в JSON задаётся относительно каталога EXE. Под «DLL прибора» в этом "
+     "решении понимается управляемый плагин SysmexCS2000.HostOnline.Driver.dll. "
+     "Документы описывают сетевой протокол, но не экспортный API фирменной native DLL; "
+     "такая DLL в текущем проекте не используется. Для нового прибора создаётся отдельный "
+     "плагин IAnalyzerDriver в собственной подпапке drivers с .deps.json и зависимостями.")
+body("У учётной записи службы должны быть права чтения configs/drivers, записи в "
+     "ResultsFolder, OutputFolder и Logs, а также доступ к SQL Server. После изменения DLL "
+     "перезапустите службу, чтобы DriverLoadContext загрузил новую версию. "
+     "Относительный OutputFolder разрешается от каталога EXE службы, а не от System32. "
+     "Две активные конфигурации на одном IP/порту запускать нельзя.")
+
+h1("8. Проверка после сборки")
+panel([
+    "dotnet build AnalyzerService.sln --maxcpucount:1",
+    "dotnet run --project tests/SysmexCS2000.HostOnline.Driver.Tests --no-build",
+    "./package.ps1  # Release/win-x64, единый EXE + внешняя папка DLL",
+])
+body("Автономные тесты проверяют конкретный R221, два 9-символьных кода S221, "
+     "ASCII-транслитерацию и признак ID=B, маршрутизацию QC/пустого результата, "
+     "файловое логирование пробрасываемого исключения, а также сетевой цикл сервиса "
+     "с динамически загруженным драйвером. Стендовая проверка с реальной БД всё ещё "
+     "нужна для определения причины отсутствия второго назначения в запросе 30.09.2026.")
+body("ACK/NAK поверх TCP для Host Online в этой доработке не менялись: этот вопрос "
+     "ранее был отложен до проверки с прибором. Документ-источник протокола: "
+     "2_5197664667366890337.pdf, в особенности стр. 6, 29-38 и 40.")
 
 
-def page_art(canvas, doc):
+def decorate(canvas, doc):
     canvas.saveState()
     width, height = A4
-    canvas.setStrokeColor(colors.HexColor("#D9E4E9"))
+    canvas.setStrokeColor(colors.HexColor("#D7E4E9"))
     canvas.line(18 * mm, height - 19 * mm, width - 18 * mm, height - 19 * mm)
-    canvas.setFont("ArialRU", 7.5)
-    canvas.setFillColor(muted)
-    canvas.drawString(18 * mm, height - 15 * mm, "SYSМEX CS-2000i  /  SERVICE GUIDE")
+    canvas.setFont("ArialRU", 7.3)
+    canvas.setFillColor(MUTED)
+    canvas.drawString(18 * mm, height - 15 * mm, "SYSMEX CS-2000i  /  HOST ONLINE")
     canvas.drawRightString(width - 18 * mm, 13 * mm, f"{doc.page}")
     canvas.restoreState()
 
 
-doc = BaseDocTemplate(str(DEST), pagesize=A4, leftMargin=18 * mm,
-                      rightMargin=18 * mm, topMargin=25 * mm, bottomMargin=20 * mm,
-                      title="Sysmex CS-2000i - руководство по сервису",
+doc = BaseDocTemplate(str(OUT), pagesize=A4, leftMargin=18 * mm, rightMargin=18 * mm,
+                      topMargin=25 * mm, bottomMargin=20 * mm,
+                      title="Sysmex CS-2000i - руководство по сервису Host Online",
                       author="AnalyzerService project")
-frame = Frame(18 * mm, 20 * mm, 174 * mm, 252 * mm, leftPadding=0,
-              rightPadding=0, topPadding=0, bottomPadding=0)
-doc.addPageTemplates(PageTemplate(id="Normal", frames=frame, onPage=page_art))
+frame = Frame(18 * mm, 20 * mm, 174 * mm, 252 * mm, leftPadding=0, rightPadding=0,
+              topPadding=0, bottomPadding=0)
+doc.addPageTemplates(PageTemplate(id="Normal", frames=frame, onPage=decorate))
 doc.build(story)
-print(DEST)
+print(OUT)

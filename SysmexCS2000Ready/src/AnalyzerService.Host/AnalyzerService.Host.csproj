@@ -3,6 +3,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.14" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.14" />
     <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" />
+    <ProjectReference Include="..\AnalyzerService.Transport\AnalyzerService.Transport.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\configs\**\*.json" Link="configs\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />

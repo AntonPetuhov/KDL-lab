@@ -51,15 +51,15 @@ public sealed class LisDBProvider(AnalyzerSettings settings, IAnalyzerLogger log
         // либо тесты с которых снята валидация (Reject) - b.bes_svarstat = 'U, 
         // либо новые тесты (b.bes_svarstat IS NULL AND b.bes_antalomg = 0), зарегистрированные и без результата
         const string testsSql = """
-            SELECT DISTINCT k.amt_analyskod
+            SELECT b.ana_analyskod, b.bes_svarstat, b.bes_antalomg,
+                   k.amt_analyskod,
+                   CASE WHEN o.omg_resultat IS NULL THEN 0 ELSE 1 END AS has_result
             FROM dbo.remiss r WITH (NOLOCK)
             INNER JOIN dbo.bestall b WITH (NOLOCK) ON b.rem_id = r.rem_id
             LEFT JOIN dbo.omgang o WITH (NOLOCK) ON b.rem_id=o.rem_id AND b.pro_id=o.pro_id AND b.ana_analyskod=o.ana_analyskod
-            INNER JOIN dbo.konvana k WITH (NOLOCK) ON k.met_kod=b.ana_analyskod AND k.ins_maskin=@instrument
+            LEFT JOIN dbo.konvana k WITH (NOLOCK) ON k.met_kod=b.ana_analyskod AND k.ins_maskin=@instrument
             WHERE r.rem_deaktiv='O' 
             AND r.rem_rid=@rid 
-            AND o.omg_resultat IS NULL 
-            AND (b.bes_svarstat='U' OR (b.bes_svarstat IS NULL AND b.bes_antalomg=0))
             """;
 
         using SqlCommand testsCommand = new(testsSql, connection) 
@@ -70,20 +70,30 @@ public sealed class LisDBProvider(AnalyzerSettings settings, IAnalyzerLogger log
         testsCommand.Parameters.AddWithValue("@rid", sampleId);
         testsCommand.Parameters.AddWithValue("@instrument", settings.AnalyzerConfigurationCode ?? string.Empty);
 
-        List<string> parameters = [];
+        HashSet<string> parameters = new(StringComparer.Ordinal);
 
         using (SqlDataReader reader = testsCommand.ExecuteReader())
-            while (reader.Read()) 
+            while (reader.Read())
             {
-                if (!reader.IsDBNull(0))
-                {
-                    parameters.Add(reader.GetString(0));
-                }
-            };
+                string lisTest = reader.IsDBNull(0) ? "<null>" : Convert.ToString(reader.GetValue(0)) ?? "<null>";
+                string? status = reader.IsDBNull(1) ? null : Convert.ToString(reader.GetValue(1))?.Trim();
+                int? attempts = reader.IsDBNull(2) ? null : Convert.ToInt32(reader.GetValue(2));
+                string? mappedCode = reader.IsDBNull(3) ? null : Convert.ToString(reader.GetValue(3))?.Trim();
+                bool hasResult = reader.GetInt32(4) != 0;
+                bool pending = status == "U" || (status is null && attempts == 0);
+                string reason = hasResult ? "уже есть результат" :
+                    !pending ? $"статус={status ?? "NULL"}, число попыток={attempts?.ToString() ?? "NULL"}" :
+                    string.IsNullOrWhiteSpace(mappedCode) ? "нет кода для прибора" : "включён";
+                logger.Protocol($"Задание {sampleId}: исследование ЛИС {lisTest}, код прибора={mappedCode ?? "нет"}, " +
+                                $"статус={status ?? "NULL"}, попыток={attempts?.ToString() ?? "NULL"}, " +
+                                $"результат={(hasResult ? "есть" : "нет")}, решение={reason}.");
+                if (!hasResult && pending && !string.IsNullOrWhiteSpace(mappedCode)) parameters.Add(mappedCode);
+            }
         
-        logger.Protocol($"Для {sampleId} найдено тестов: {parameters.Count}.");
+        logger.Protocol($"Для {sampleId} найдено уникальных кодов задания из ЛИС: {parameters.Count} " +
+                        $"[{string.Join(",", parameters)}].");
 
-        return new LisOrder(sampleId, patientId, lastName, firstName, birthDate, sex, parameters);
+        return new LisOrder(sampleId, patientId, lastName, firstName, birthDate, sex, parameters.ToArray());
     }
 
     /// <summary>

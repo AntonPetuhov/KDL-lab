@@ -2,6 +2,9 @@ using AnalyzerService.LisDatabase;
 using AnalyzerService.Contracts;
 using AnalyzerService.Transport;
 using AnalyzerService.ResultFiles;
+using AnalyzerService.Host.Drivers;
+using AnalyzerService.Host.Logging;
+using AnalyzerService.Host.Runtime;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using System.Net;
 using System.Net.Sockets;
@@ -21,9 +24,12 @@ internal static class Program
             ParseResult();
             BuildOrder();
             RawQueueRoutesFiles();
-            QualityControlRoutesFromSocket().GetAwaiter().GetResult();
+            OrderCodesAndPatientName();
+            QualityControlRoutesFromConnection().GetAwaiter().GetResult();
             EmptyResultGoesToErrors().GetAwaiter().GetResult();
             TcpHostReportsStatus().GetAwaiter().GetResult();
+            LoaderExceptionIsWrittenToFile();
+            ServiceOwnsTcpHost().GetAwaiter().GetResult();
             Console.WriteLine("All Host Online protocol tests passed.");
             return 0;
         }
@@ -59,6 +65,23 @@ internal static class Program
         Equal('S', response[0], "response kind");
         Equal("000", response.Substring(58, 3), "empty code");
         Equal(67, response.Length, "response length");
+    }
+
+    /// <summary>Регрессия стенда: два кода задания и транслитерация ФИО в ASCII.</summary>
+    private static void OrderCodesAndPatientName()
+    {
+        HostOnlineCodec codec = new();
+        string loggedR221 = "R2210101 300926151200000304     9000003160B               " +
+                            "400      650      660      870      880      ";
+        HostOnlineInquiry inquiry = codec.ParseInquiry(loggedR221);
+        LisOrder order = new("9000003160", "P1", "ТЕСТ", "МИХАЛ ИВАН", "", "", ["392", "051"]);
+        string response = codec.BuildOrder(inquiry, order, "000").Single();
+        Equal("390", response.Substring(58, 3), "first order group");
+        Equal("050", response.Substring(67, 3), "second order group");
+        Equal("TEST MIKHAL IVA", response.Substring(43, 15), "ASCII patient name");
+        Equal('B', response[42], "barcode ID information preserved");
+        Equal(76, response.Length, "two order blocks length");
+        Equal(true, response.All(c => c <= 0x7F), "ASCII response");
     }
 
     /// <summary>Формирует 58-символьный тестовый заголовок.</summary>
@@ -113,29 +136,24 @@ internal static class Program
         }
     }
 
-    /// <summary>Проверяет путь от TCP-текста с признаком C до отдельного QC-файла.</summary>
-    private static async Task QualityControlRoutesFromSocket()
+    /// <summary>Проверяет, что DLL работает с переданным потоком без собственного TCP host.</summary>
+    private static async Task QualityControlRoutesFromConnection()
     {
         string root = Path.Combine(Path.GetTempPath(), "SysmexQCRoute-" + Guid.NewGuid().ToString("N"));
         TestLogger logger = new();
         AnalyzerSettings settings = new()
         {
-            AnalyzerName = "QC route", ConnectionType = "TCPIP", IPaddress = "127.0.0.1", Port = 0,
+            AnalyzerName = "QC route", ConnectionType = "TCPIP",
             ResultsFolder = root, OutputFolder = Path.Combine(root, "Patient"),
             ConnectionString = "unused", AnalyzerCode = "915", ResultHandlerStatus = true
         };
         using AnalyzerSysmexCS2000HostOnline analyzer = new(logger, settings);
-        using CancellationTokenSource stop = new(TimeSpan.FromSeconds(5));
-        Task run = analyzer.RunAsync(stop.Token);
+        analyzer.Start();
         try
         {
-            string status = logger.TransportMessages.First(m => m.Contains("endpoint=127.0.0.1:"));
-            int port = int.Parse(status.Split("endpoint=127.0.0.1:")[1].Split(',')[0]);
-            using TcpClient sender = new();
-            await sender.ConnectAsync(IPAddress.Loopback, port);
             string body = Header('D', '1', "CONTROL2", "QC", 'C') + "010 5678+";
             byte[] frame = [0x02, .. Encoding.ASCII.GetBytes(body), 0x03];
-            await sender.GetStream().WriteAsync(frame);
+            await FeedAsync(analyzer, frame);
             string qc = Path.Combine(root, "QualityControl");
             for (int attempt = 0; attempt < 100 && (!Directory.Exists(qc) || Directory.GetFiles(qc, "*.raw").Length == 0); attempt++)
                 await Task.Delay(20);
@@ -147,8 +165,7 @@ internal static class Program
         }
         finally
         {
-            await analyzer.StopAsync(CancellationToken.None);
-            await run.WaitAsync(TimeSpan.FromSeconds(5));
+            analyzer.Stop();
             string qc = Path.Combine(root, "QualityControl");
             if (Directory.Exists(qc))
             {
@@ -173,21 +190,16 @@ internal static class Program
         TestLogger logger = new();
         AnalyzerSettings settings = new()
         {
-            AnalyzerName = "Empty result", ConnectionType = "TCPIP", IPaddress = "127.0.0.1", Port = 0,
+            AnalyzerName = "Empty result", ConnectionType = "TCPIP",
             ResultsFolder = root, OutputFolder = Path.Combine(root, "Patient"),
             ConnectionString = "unused", AnalyzerCode = "915", ResultHandlerStatus = true
         };
         using AnalyzerSysmexCS2000HostOnline analyzer = new(logger, settings);
-        using CancellationTokenSource stop = new(TimeSpan.FromSeconds(5));
-        Task run = analyzer.RunAsync(stop.Token);
+        analyzer.Start();
         try
         {
-            string status = logger.TransportMessages.First(m => m.Contains("endpoint=127.0.0.1:"));
-            int port = int.Parse(status.Split("endpoint=127.0.0.1:")[1].Split(',')[0]);
-            using TcpClient sender = new();
-            await sender.ConnectAsync(IPAddress.Loopback, port);
             byte[] frame = [0x02, .. Encoding.ASCII.GetBytes(Header('D', '1', "EMPTY1", "PATIENT")), 0x03];
-            await sender.GetStream().WriteAsync(frame);
+            await FeedAsync(analyzer, frame);
             string errors = Path.Combine(root, "errors");
             for (int attempt = 0; attempt < 100 && Directory.GetFiles(errors, "*.raw").Length == 0; attempt++)
                 await Task.Delay(20);
@@ -196,8 +208,7 @@ internal static class Program
         }
         finally
         {
-            await analyzer.StopAsync(CancellationToken.None);
-            await run.WaitAsync(TimeSpan.FromSeconds(5));
+            analyzer.Stop();
             foreach (string folder in new[] { "QualityControl", "archive", "errors", "Patient" })
             {
                 string path = Path.Combine(root, folder);
@@ -207,6 +218,22 @@ internal static class Program
             }
             if (Directory.Exists(root)) Directory.Delete(root);
         }
+    }
+
+    /// <summary>Подаёт один кадр в DLL и ожидает штатного EOF тестового потока.</summary>
+    private static async Task FeedAsync(AnalyzerSysmexCS2000HostOnline analyzer, byte[] frame)
+    {
+        using MemoryStream input = new(frame);
+        try { await analyzer.HandleConnectionAsync(new TestConnection(input), CancellationToken.None); }
+        catch (EndOfStreamException) { }
+    }
+
+    /// <summary>Тестовый адаптер потока без TcpListener и TcpClient.</summary>
+    private sealed class TestConnection(Stream stream) : IAnalyzerConnection
+    {
+        public Stream Stream => stream;
+        public void RecordRead() { }
+        public void RecordWrite() { }
     }
 
     /// <summary>Проверяет реальное loopback-подключение и периодические записи состояния.</summary>
@@ -227,6 +254,77 @@ internal static class Program
             throw new InvalidOperationException("Periodic TCP status was not logged.");
         host.ReleaseClient(accepted);
         host.Stop();
+    }
+
+    /// <summary>Проверяет файловое логирование исключения, которое затем пробрасывается.</summary>
+    private static void LoaderExceptionIsWrittenToFile()
+    {
+        string name = "MissingDriver_" + Guid.NewGuid().ToString("N");
+        string logRoot = Path.Combine(AppContext.BaseDirectory, name);
+        AnalyzerSettings settings = new()
+        {
+            AnalyzerName = name, ConnectionType = "TCPIP", IPaddress = "127.0.0.1", Port = 12345,
+            DllPath = "missing-driver.dll", ResultsFolder = "Results", ConnectionString = "unused",
+            Protocol = "SYSMEX_HOST_ONLINE"
+        };
+        try
+        {
+            using AnalyzerRuntime runtime = new(settings, new DriverLoader(), new AnalyzerLoggerFactory());
+            try { runtime.StartAsync(CancellationToken.None).GetAwaiter().GetResult(); }
+            catch (FileNotFoundException) { }
+            string errorDir = Path.Combine(logRoot, "Logs", "Error");
+            Equal(1, Directory.GetFiles(errorDir, "*.log").Length, "file error log");
+            if (!File.ReadAllText(Directory.GetFiles(errorDir, "*.log")[0]).Contains("FileNotFoundException"))
+                throw new InvalidOperationException("Thrown loader exception was not logged.");
+        }
+        finally { DeleteTestDirectory(logRoot, AppContext.BaseDirectory); }
+    }
+
+    /// <summary>Проверяет сквозной путь через Host-owned TcpHost и динамически загруженный DLL.</summary>
+    private static async Task ServiceOwnsTcpHost()
+    {
+        string name = "HostTcp_" + Guid.NewGuid().ToString("N");
+        string logRoot = Path.Combine(AppContext.BaseDirectory, name);
+        string results = Path.Combine(Path.GetTempPath(), name);
+        using TcpListener probe = new(IPAddress.Loopback, 0);
+        probe.Start();
+        int port = ((IPEndPoint)probe.LocalEndpoint).Port;
+        probe.Stop();
+        AnalyzerSettings settings = new()
+        {
+            AnalyzerName = name, ConnectionType = "TCPIP", IPaddress = "127.0.0.1", Port = port,
+            DllPath = Path.Combine(AppContext.BaseDirectory, "SysmexCS2000.HostOnline.Driver.dll"),
+            ResultsFolder = results, OutputFolder = Path.Combine(results, "Patient"),
+            ConnectionString = "unused", Protocol = "SYSMEX_HOST_ONLINE", ResultHandlerStatus = true
+        };
+        try
+        {
+            using AnalyzerRuntime runtime = new(settings, new DriverLoader(), new AnalyzerLoggerFactory());
+            await runtime.StartAsync(CancellationToken.None);
+            using TcpClient client = new();
+            await client.ConnectAsync(IPAddress.Loopback, port);
+            byte[] frame = [0x02, .. Encoding.ASCII.GetBytes(Header('D', '1', "CONTROL3", "QC", 'C') + "010 9999+"), 0x03];
+            await client.GetStream().WriteAsync(frame);
+            string qc = Path.Combine(results, "QualityControl");
+            for (int i = 0; i < 100 && Directory.GetFiles(qc, "*.raw").Length == 0; i++) await Task.Delay(20);
+            Equal(1, Directory.GetFiles(qc, "*.raw").Length, "hosted QC raw file");
+            await runtime.StopAsync(CancellationToken.None);
+        }
+        finally
+        {
+            DeleteTestDirectory(logRoot, AppContext.BaseDirectory);
+            DeleteTestDirectory(results, Path.GetTempPath());
+        }
+    }
+
+    /// <summary>Удаляет только проверенный тестовый каталог внутри явного родителя.</summary>
+    private static void DeleteTestDirectory(string directory, string parent)
+    {
+        string full = Path.GetFullPath(directory);
+        string root = Path.GetFullPath(parent).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        if (!full.StartsWith(root, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("Небезопасный путь удаления теста: " + full);
+        if (Directory.Exists(full)) Directory.Delete(full, true);
     }
 
     /// <summary>Собирает сообщения общего транспорта без файловых побочных эффектов.</summary>
