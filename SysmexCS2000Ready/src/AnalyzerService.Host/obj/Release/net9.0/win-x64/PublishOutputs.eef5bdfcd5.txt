@@ -1,0 +1,14 @@
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Host.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\configs\examples\SysmexCS2000i.json
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\configs\SysmexCS2000.json
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\Microsoft.Data.SqlClient.SNI.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Contracts.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Contracts.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Transport.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Transport.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.LisDatabase.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.LisDatabase.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.ResultFiles.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.ResultFiles.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Host.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\publish\win-x64\AnalyzerService.Host.exe

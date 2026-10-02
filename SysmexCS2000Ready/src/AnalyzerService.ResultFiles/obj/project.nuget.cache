@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "nRvPvXdwo3M=",
+  "dgSpecHash": "VjGmju6OPw0=",
   "success": true,
-  "projectFilePath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.20\\microsoft.net.illink.tasks.9.0.20.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\9.0.20\\microsoft.netcore.app.runtime.win-x64.9.0.20.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\9.0.20\\microsoft.windowsdesktop.app.runtime.win-x64.9.0.20.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\9.0.20\\microsoft.aspnetcore.app.runtime.win-x64.9.0.20.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -115,6 +115,11 @@
             Синхронно разбирает результат D121 или D221.
             </summary>
         </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatResultValue(System.String,System.String)">
+            <summary>
+            Вставляет десятичный разделитель в соответствии с настройками параметра.
+            </summary>
+        </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineInquiry,AnalyzerService.LisDatabase.LisOrder,System.String)">
             <summary>
             Формирует один или несколько ответов (Задания для анализатора из ЛИС) S221, максимум по 22 параметра.

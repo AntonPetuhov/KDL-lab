@@ -74,6 +74,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                 (string Body, byte[] Raw)? complete = AddBlock(body, rawFrame);
                 if (complete is null) continue;
 
+                // Если сообщение с запросом задания
                 if (complete.Value.Body[0] == 'R')
                 {
                     HostOnlineInquiry inquiry = codec.ParseInquiry(complete.Value.Body);
@@ -87,9 +88,12 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                     foreach (string response in responses)
                         await WriteTextAsync(connection, response, token).ConfigureAwait(false);
                 }
+
+                // Если сообщение с результатом
                 else if (complete.Value.Body[0] == 'D')
                 {
                     string sampleId = complete.Value.Body.Substring(27, 15).Trim();
+                    // Если Контроль качества
                     if (complete.Value.Body[8] == 'C')
                         resultQueue.SaveQualityControl(sampleId, complete.Value.Raw);
                     else

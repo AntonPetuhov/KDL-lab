@@ -41,10 +41,70 @@ public class HostOnlineCodec
         for (int offset = HeaderLength; offset < message.Length; offset += 9)
         {
             string block = message.Substring(offset, 9);
-            items.Add(new HostOnlineResultItem(block[..3], block.Substring(3, 5).Trim(), block[8]));
+
+            string code = block[..3];
+            string rawData = block.Substring(3, 5);
+            char flag = block[8];
+
+            string value = FormatResultValue(code, rawData);
+            items.Add(new HostOnlineResultItem(code, value, flag));
+            //items.Add(new HostOnlineResultItem(block[..3], block.Substring(3, 5).Trim(), block[8]));
         }
         return new HostOnlineResult(header, items);
     }
+
+    /// <summary>
+    /// Вставляет десятичный разделитель в соответствии с настройками параметра.
+    /// </summary>
+    private static string FormatResultValue(string code, string rawData)
+    {
+        // Убираем пробелы, которые протокол добавляет для выравнивания
+        string trimmed = rawData.Trim();
+
+        // Если данных нет или это не число (*****, /////, +++++, -----, XXXXX и т.п.) —
+        // возвращаем как есть, без вставки запятой.
+        if (trimmed.Length == 0 || !trimmed.All(char.IsDigit))
+            return trimmed;
+
+        // Число знаков после запятой для данного кода параметра.
+        // Здесь должен быть ваш справочник, полученный из настроек прибора.
+        if (!DecimalPlaces.TryGetValue(code, out int decimals) || decimals <= 0)
+            return trimmed;
+
+        string digits = trimmed;
+
+        if (digits.Length <= decimals)
+        {
+            // Например: "286" при decimals = 2 → "2.86"
+            digits = "0." + new string('0', decimals - digits.Length) + digits;
+        }
+        else
+        {
+            int pointPos = digits.Length - decimals;
+            digits = digits.Insert(pointPos, ".");
+            // Убираем ведущие нули, но оставляем один ноль перед точкой
+            digits = digits.TrimStart('0');
+            if (digits.StartsWith("."))
+                digits = "0" + digits;
+        }
+
+        // Если хост-система ожидает запятую, а не точку:
+        return digits.Replace('.', ',');
+    }
+
+    // Справочник: код параметра → количество знаков после запятой.
+    // Заполните его согласно настройкам Assay Group Settings на приборе.
+
+    private static readonly Dictionary<string, int> DecimalPlaces = new()
+    {
+        ["391"] = 2,   // например, 00781 -> 7.81
+        ["392"] = 2,   // например,   286 -> 2.86
+                       // добавьте все нужные коды
+        ["652"] = 2,
+        ["882"] = 2,
+        ["392"] = 2,
+        ["402"] = 2,
+    };
 
     /// <summary>
     /// Формирует один или несколько ответов (Задания для анализатора из ЛИС) S221, максимум по 22 параметра.

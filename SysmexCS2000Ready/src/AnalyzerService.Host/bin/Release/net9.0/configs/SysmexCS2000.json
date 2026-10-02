@@ -1,5 +1,5 @@
 {
-  "AnalyzerName": "Sysmex cs-2000i Host Online",
+  "AnalyzerName": "Sysmex cs-2000i",
   "ConnectionType": "TCPIP",
   "IPaddress": "10.129.1.40",
   "Port": 8027,
@@ -10,7 +10,7 @@
   "WorkStatus": true,
   "ResultHandlerStatus": true,
   "OutputFolder": "CGM\\Exchange",
-  "ConnectionString": "Server=CGM-APP11\\SQLCGMAPP11;Database=KDLPROD;MultipleActiveResultSets=true;TrustServerCertificate=True;",
+  "ConnectionString": "Server=CGM-APP11\\SQLCGMAPP11;Database=KDLPROD;MultipleActiveResultSets=true;TrustServerCertificate=True;User Id=PSMExchangeUser;Password=PSM_123456;",
   "AnalyzerCode": "915",
   "AnalyzerConfigurationCode": "SYS2000",
   "Protocol": "SYSMEX_HOST_ONLINE"

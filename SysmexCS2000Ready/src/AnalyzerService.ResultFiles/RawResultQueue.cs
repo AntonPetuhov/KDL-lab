@@ -40,7 +40,6 @@ public sealed class RawResultQueue : IDisposable
     /// <summary>
     /// Синхронно запускает выделенный поток; он обрабатывает также файлы от предыдущего запуска.
     /// </summary>
-    /// <exception cref="IOException">Невозможно создать каталог.</exception>
     public void Start()
     {
         lock (gate)
@@ -113,7 +112,7 @@ public sealed class RawResultQueue : IDisposable
         string safeId = string.Concat(sampleId.Trim().Take(60).Select(c =>
             char.IsLetterOrDigit(c) || c is '-' or '_' ? c : '_'));
         if (safeId.Length == 0) safeId = "UNKNOWN";
-        string name = $"{prefix}_{safeId}_{DateTime.UtcNow:yyyyMMddHHmmssfffffff}_{Guid.NewGuid():N}.raw";
+        string name = $"{prefix}_{safeId}_{DateTime.UtcNow:yyyyMMddHHmmssfffffff}.raw";
         string path = Path.Combine(directory, name);
         string temporary = path + ".tmp";
         try
