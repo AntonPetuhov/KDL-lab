@@ -10,17 +10,29 @@
         <member name="M:Program.Main">
             <summary>Запускает проверки и возвращает код процесса.</summary>
         </member>
+        <member name="M:Program.DriverUsesHostLibraries">
+            <summary>Драйвер без локальных зависимостей использует общие сборки службы.</summary>
+        </member>
         <member name="M:Program.ParseInquiry">
             <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>
         </member>
         <member name="M:Program.ParseResult">
             <summary>Проверяет разбор D121: код, данные и флаг.</summary>
         </member>
+        <member name="M:Program.NumericResultsFromStand">
+            <summary>Проверяет масштабы кодов из двух PDF и один знак с запятой в выходе ЛИС.</summary>
+        </member>
         <member name="M:Program.BuildOrder">
             <summary>Проверяет S221, фиксированную длину и специальный код 000.</summary>
         </member>
         <member name="M:Program.OrderCodesAndPatientName">
             <summary>Регрессия стенда: два кода задания и транслитерация ФИО в ASCII.</summary>
+        </member>
+        <member name="M:Program.PatientResultIsLogged">
+            <summary>Проверяет информативный журнал D121 при сохранении сырого результата.</summary>
+        </member>
+        <member name="M:Program.ProtocolInfoIsIndented">
+            <summary>Проверяет отступ и Info для пояснений без изменения точных строк RX/TX.</summary>
         </member>
         <member name="M:Program.Header(System.Char,System.Char,System.String,System.String,System.Char)">
             <summary>Формирует 58-символьный тестовый заголовок.</summary>

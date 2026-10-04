@@ -1,3 +1,4 @@
+using System.Globalization;
 using AnalyzerService.LisDatabase;
 
 namespace SysmexCS2000.HostOnline.Driver.Protocol;
@@ -48,13 +49,13 @@ public class HostOnlineCodec
 
             string value = FormatResultValue(code, rawData);
             items.Add(new HostOnlineResultItem(code, value, flag));
-            //items.Add(new HostOnlineResultItem(block[..3], block.Substring(3, 5).Trim(), block[8]));
         }
         return new HostOnlineResult(header, items);
     }
 
     /// <summary>
-    /// Вставляет десятичный разделитель в соответствии с настройками параметра.
+    /// Восстанавливает десятичный разделитель по таблице кодов Host Online.
+    /// Для неизвестного кода сохраняет сырые цифры: передавать их в ЛИС без масштаба нельзя.
     /// </summary>
     private static string FormatResultValue(string code, string rawData)
     {
@@ -66,44 +67,29 @@ public class HostOnlineCodec
         if (trimmed.Length == 0 || !trimmed.All(char.IsDigit))
             return trimmed;
 
-        // Число знаков после запятой для данного кода параметра.
-        // Здесь должен быть ваш справочник, полученный из настроек прибора.
-        if (!DecimalPlaces.TryGetValue(code, out int decimals) || decimals <= 0)
+        if (!DecimalPlaces.TryGetValue(code, out int decimals))
             return trimmed;
-
-        string digits = trimmed;
-
-        if (digits.Length <= decimals)
-        {
-            // Например: "286" при decimals = 2 → "2.86"
-            digits = "0." + new string('0', decimals - digits.Length) + digits;
-        }
-        else
-        {
-            int pointPos = digits.Length - decimals;
-            digits = digits.Insert(pointPos, ".");
-            // Убираем ведущие нули, но оставляем один ноль перед точкой
-            digits = digits.TrimStart('0');
-            if (digits.StartsWith("."))
-                digits = "0" + digits;
-        }
-
-        // Если хост-система ожидает запятую, а не точку:
-        return digits.Replace('.', ',');
+        if (!decimal.TryParse(trimmed, NumberStyles.None, CultureInfo.InvariantCulture, out decimal raw))
+            throw new InvalidDataException($"Неверные числовые данные для кода {code}: '{rawData}'.");
+        decimal scale = 1;
+        for (int i = 0; i < decimals; i++) scale *= 10;
+        return (raw / scale).ToString($"F{decimals}", CultureInfo.InvariantCulture);
     }
 
-    // Справочник: код параметра → количество знаков после запятой.
-    // Заполните его согласно настройкам Assay Group Settings на приборе.
+    /// <summary>Проверяет, задан ли документированный масштаб для числового кода.</summary>
+    public static bool HasDecimalPlaces(string code) => DecimalPlaces.ContainsKey(code);
+
+    // Формат из таблицы кодов второго PDF, стр. 47/53; здесь коды сырья стенда.
+    // Assay Group Settings реального прибора должны соответствовать этой таблице.
 
     private static readonly Dictionary<string, int> DecimalPlaces = new()
     {
-        ["391"] = 2,   // например, 00781 -> 7.81
-        ["392"] = 2,   // например,   286 -> 2.86
-                       // добавьте все нужные коды
-        ["652"] = 2,
-        ["882"] = 2,
-        ["392"] = 2,
-        ["402"] = 2,
+        ["391"] = 3, ["392"] = 1,
+        ["401"] = 3, ["402"] = 1,
+        ["651"] = 4, ["652"] = 1,
+        ["661"] = 4, ["662"] = 1,
+        ["871"] = 4, ["872"] = 1,
+        ["881"] = 4, ["882"] = 1,
     };
 
     /// <summary>
@@ -233,7 +219,9 @@ public class HostOnlineCodec
         System.Text.StringBuilder ascii = new();
         foreach (char c in original)
         {
-            if (c is >= 'A' and <= 'Z' or ' ' or '-' or '\'') ascii.Append(c);
+            // В S221 допустимы печатные коды символов, включая цифры и пунктуацию;
+            // управляющие коды исключены (Host Online PDF, поле Patient Name).
+            if (c is >= ' ' and <= '~') ascii.Append(c);
             else if (cyrillic.TryGetValue(c, out string? replacement)) ascii.Append(replacement);
             else throw new InvalidDataException($"Нельзя передать символ имени U+{(int)c:X4} в ASCII.");
         }

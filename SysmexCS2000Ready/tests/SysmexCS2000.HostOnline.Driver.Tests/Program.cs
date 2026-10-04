@@ -23,9 +23,12 @@ internal static class Program
             ParseInquiry();
             DriverUsesHostLibraries();
             ParseResult();
+            NumericResultsFromStand();
             BuildOrder();
             RawQueueRoutesFiles();
             OrderCodesAndPatientName();
+            PatientResultIsLogged().GetAwaiter().GetResult();
+            ProtocolInfoIsIndented();
             QualityControlRoutesFromConnection().GetAwaiter().GetResult();
             EmptyResultGoesToErrors().GetAwaiter().GetResult();
             TcpHostReportsStatus().GetAwaiter().GetResult();
@@ -89,11 +92,25 @@ internal static class Program
     /// <summary>Проверяет разбор D121: код, данные и флаг.</summary>
     private static void ParseResult()
     {
-        string body = Header('D', '1', "123456", "IVANOV") + "010 1234+";
+        string body = Header('D', '1', "123456", "IVANOV") + "392  286+";
         HostOnlineResult result = new HostOnlineCodec().ParseResult(body);
-        Equal("010", result.Items.Single().ParameterCode, "result code");
-        Equal("1234", result.Items.Single().Data, "result value");
+        Equal("392", result.Items.Single().ParameterCode, "result code");
+        Equal("28.6", result.Items.Single().Data, "result value");
         Equal('+', result.Items.Single().Flag, "result flag");
+    }
+
+    /// <summary>Проверяет масштабы кодов из двух PDF и один знак с запятой в выходе ЛИС.</summary>
+    private static void NumericResultsFromStand()
+    {
+        HostOnlineResult parsed = new HostOnlineCodec().ParseResult(
+            Header('D', '1', "2248480500", "PATIENT") + "39100781 " + "392  286 " + "402  769 " + "652  618 " + "882  239 ");
+        Equal("0.781", parsed.Items[0].Data, "391 dOD scale");
+        Equal("28.6", parsed.Items[1].Data, "392 percent scale");
+        Equal("76.9", parsed.Items[2].Data, "402 percent scale");
+        Equal("61.8", parsed.Items[3].Data, "652 percent scale");
+        Equal("23.9", parsed.Items[4].Data, "882 percent scale");
+        Equal("28,6", HostOnlineResultHandler.FormatLisValue(parsed.Items[1]), "LIS one decimal and comma");
+        Equal("0,8", HostOnlineResultHandler.FormatLisValue(parsed.Items[0]), "LIS rounding");
     }
 
     /// <summary>Проверяет S221, фиксированную длину и специальный код 000.</summary>
@@ -123,6 +140,47 @@ internal static class Program
         Equal('B', response[42], "barcode ID information preserved");
         Equal(76, response.Length, "two order blocks length");
         Equal(true, response.All(c => c <= 0x7F), "ASCII response");
+        Equal("IVANOV8 PETR", HostOnlineCodec.FormatPatientName("ИВАНОВ8", "ПЕТР"), "numeric patient name on rack");
+        Equal("IVANOV8-A PETR", HostOnlineCodec.FormatPatientName("ИВАНОВ8-А", "ПЕТР"), "printable punctuation in patient name");
+    }
+
+    /// <summary>Проверяет информативный журнал D121 при сохранении сырого результата.</summary>
+    private static async Task PatientResultIsLogged()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "SysmexPatientLog-" + Guid.NewGuid().ToString("N"));
+        TestLogger logger = new();
+        AnalyzerSettings settings = new()
+        {
+            AnalyzerName = "Patient log", ConnectionType = "TCPIP", ResultsFolder = root,
+            OutputFolder = Path.Combine(root, "Patient"), ConnectionString = "unused",
+            AnalyzerCode = "915", ResultHandlerStatus = false
+        };
+        using AnalyzerSysmexCS2000HostOnline analyzer = new(logger, settings);
+        try
+        {
+            byte[] frame = [0x02, .. Encoding.ASCII.GetBytes(Header('D', '1', "2248480500", "IVANOV") + "392  286 "), 0x03];
+            await FeedAsync(analyzer, frame);
+            Equal(true, logger.ProtocolMessages.Any(m => m.Contains("Получено сообщение D121") && m.Contains("2248480500")), "D121 metadata logged");
+            Equal(true, logger.ProtocolMessages.Any(m => m.Contains("код=392, значение='28.6'")), "D121 interpreted value logged");
+            Equal(1, Directory.GetFiles(root, "*.raw").Length, "raw patient result kept");
+        }
+        finally { DeleteTestDirectory(root, Path.GetTempPath()); }
+    }
+
+    /// <summary>Проверяет отступ и Info для пояснений без изменения точных строк RX/TX.</summary>
+    private static void ProtocolInfoIsIndented()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "SysmexProtocolLog-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            FileAnalyzerLogger logger = new(root);
+            logger.Protocol("RX: R221");
+            logger.Protocol("Получено сообщение D121");
+            string[] lines = File.ReadAllLines(Directory.GetFiles(Path.Combine(root, "Protocol"), "*.log").Single());
+            Equal(true, lines[0].Contains(" RX: R221"), "RX unchanged");
+            Equal(true, lines[1].Contains("     Info: Получено сообщение D121"), "indented Info");
+        }
+        finally { DeleteTestDirectory(root, Path.GetTempPath()); }
     }
 
     /// <summary>Формирует 58-символьный тестовый заголовок.</summary>

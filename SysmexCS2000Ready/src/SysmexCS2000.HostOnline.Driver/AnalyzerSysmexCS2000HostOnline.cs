@@ -78,6 +78,9 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                 if (complete.Value.Body[0] == 'R')
                 {
                     HostOnlineInquiry inquiry = codec.ParseInquiry(complete.Value.Body);
+                    logger.Protocol($"Запрос R221: штатив='{inquiry.Header.RackNumber.Trim()}', " +
+                                    $"позиция='{inquiry.Header.TubePosition}', образец='{inquiry.Header.SampleId}', " +
+                                    $"группы прибора=[{string.Join(",", inquiry.ExistingParameters)}].");
                     LisOrder? order = dbProvider.GetOrder(inquiry.Header.SampleId);
                     string emptyCode = order is null ? "999" : "000";
                     IReadOnlyList<string> responses = codec.BuildOrder(inquiry, order, emptyCode);
@@ -93,11 +96,25 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                 else if (complete.Value.Body[0] == 'D')
                 {
                     string sampleId = complete.Value.Body.Substring(27, 15).Trim();
+                    string messageType = complete.Value.Body[..4];
+                    bool qualityControl = complete.Value.Body[8] == 'C';
+                    logger.Protocol($"Получено сообщение {messageType}: образец='{sampleId}', " +
+                                    $"штатив='{complete.Value.Body.Substring(19, 6).Trim()}', " +
+                                    $"позиция='{complete.Value.Body.Substring(25, 2)}', " +
+                                    $"тип={(qualityControl ? "контроль качества" : "пациентский результат")}, " +
+                                    $"байт={complete.Value.Raw.Length}.");
                     // Если Контроль качества
-                    if (complete.Value.Body[8] == 'C')
+                    if (qualityControl)
                         resultQueue.SaveQualityControl(sampleId, complete.Value.Raw);
                     else
+                    {
                         resultQueue.SaveResult(sampleId, complete.Value.Raw);
+                        HostOnlineResult received = codec.ParseResult(complete.Value.Body);
+                        logger.Protocol($"Результат {sampleId}: " +
+                                        (received.Items.Count == 0 ? "показателей нет" :
+                                         string.Join("; ", received.Items.Select(item =>
+                                             $"код={item.ParameterCode}, значение='{item.Data}', флаг='{item.Flag}'"))));
+                    }
                 }
                 else logger.Protocol($"Текст типа {complete.Value.Body[0]} принят без прикладной обработки.");
             }

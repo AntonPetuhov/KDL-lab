@@ -1,8 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "Ht//Tdxuu6I=",
+  "dgSpecHash": "NCzEa8C95Aw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "projectFilePath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\petuk\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.14\\microsoft.net.illink.tasks.9.0.14.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Произошла ошибка при получении данных уязвимости пакета: Не удалось загрузить индекс службы для источника https://api.nuget.org/v3/index.json.",
+      "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

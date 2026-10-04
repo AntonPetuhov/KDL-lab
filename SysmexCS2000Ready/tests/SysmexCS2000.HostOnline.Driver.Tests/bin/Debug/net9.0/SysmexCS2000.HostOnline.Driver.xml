@@ -90,6 +90,15 @@
             Сохраняет результат
             </summary>
         </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.FormatLisValue(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResultItem)">
+            <summary>
+            Синхронно округляет уже расшифрованное число до одного десятичного знака
+            и записывает запятую для файлов ЛИС. Неизвестный масштаб блокирует передачу.
+            </summary>
+            <param name="item">Результат, разобранный кодеком по настройке кода Host Online.</param>
+            <returns>Число в виде «28,6».</returns>
+            <exception cref="T:System.IO.InvalidDataException">Нет масштаба кода или данные не являются числом.</exception>
+        </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Write(System.String,System.String)">
             <summary>Pаписывает файл через временное имя.</summary>
         </member>
@@ -114,6 +123,15 @@
             <summary>
             Синхронно разбирает результат D121 или D221.
             </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatResultValue(System.String,System.String)">
+            <summary>
+            Восстанавливает десятичный разделитель по таблице кодов Host Online.
+            Для неизвестного кода сохраняет сырые цифры: передавать их в ЛИС без масштаба нельзя.
+            </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.HasDecimalPlaces(System.String)">
+            <summary>Проверяет, задан ли документированный масштаб для числового кода.</summary>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineInquiry,AnalyzerService.LisDatabase.LisOrder,System.String)">
             <summary>

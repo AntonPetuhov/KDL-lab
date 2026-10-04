@@ -20,15 +20,17 @@ public sealed class FileAnalyzerLogger : IAnalyzerLogger
     }
 
     /// <inheritdoc />
-    public void Service(string message) => Write("Service", message);
+    public void Service(string message) => Write("Service", $"    Info: {message}");
     /// <inheritdoc />
-    public void Transport(string message) => Write("Transport", message);
+    public void Transport(string message) => Write("Transport", $"    Info: {message}");
     /// <inheritdoc />
-    public void Protocol(string message) => Write("Protocol", message);
+    public void Protocol(string message) => Write("Protocol",
+        message.StartsWith("RX: ", StringComparison.Ordinal) || message.StartsWith("TX: ", StringComparison.Ordinal)
+            ? message : $"    Info: {message}");
     /// <inheritdoc />
-    public void Result(string message) => Write("Result", message);
+    public void Result(string message) => Write("Result", $"    Info: {message}");
     /// <inheritdoc />
-    public void Error(string message, Exception exception) => Write("Error", $"{message}{Environment.NewLine}{exception}");
+    public void Error(string message, Exception exception) => Write("Error", $"Error: {message}{Environment.NewLine}{exception}");
 
     /// <summary>Добавляет одну запись в лог, сохраняя порядок сообщений.</summary>
     private void Write(string category, string message)

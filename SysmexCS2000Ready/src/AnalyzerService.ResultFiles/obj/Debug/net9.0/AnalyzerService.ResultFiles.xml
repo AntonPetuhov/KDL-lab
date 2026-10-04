@@ -26,7 +26,6 @@
             <summary>
             Синхронно запускает выделенный поток; он обрабатывает также файлы от предыдущего запуска.
             </summary>
-            <exception cref="T:System.IO.IOException">Невозможно создать каталог.</exception>
         </member>
         <member name="M:AnalyzerService.ResultFiles.RawResultQueue.SaveResult(System.String,System.Byte[])">
             <summary>

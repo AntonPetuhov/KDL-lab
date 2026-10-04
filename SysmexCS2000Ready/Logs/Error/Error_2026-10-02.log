@@ -1,0 +1,240 @@
+﻿2026-10-02T10:30:17.1234863+03:00 Sysmex cs-2000i: исключение при запуске DLL или TCP listener; исключение передаётся менеджеру.
+System.Net.Sockets.SocketException (10049): The requested address is not valid in its context.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at System.Net.Sockets.TcpListener.Start(Int32 backlog)
+   at AnalyzerService.Transport.TcpHost.Start(IPAddress address, Int32 port) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\TcpHost.cs:line 48
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(CancellationToken serviceToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 53
+2026-10-02T11:48:01.5797319+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_9000003160_202610020847559275579_8bca2cb8b2944b7fbf339cb109f98657.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: Ни один код результата не сопоставлен с PSMV2.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 44
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 149
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T12:38:46.4012978+03:00 Sysmex cs-2000i: исключение при запуске DLL или TCP listener; исключение передаётся менеджеру.
+System.Net.Sockets.SocketException (10049): The requested address is not valid in its context.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at System.Net.Sockets.TcpListener.Start(Int32 backlog)
+   at AnalyzerService.Transport.TcpHost.Start(IPAddress address, Int32 port) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\TcpHost.cs:line 48
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(CancellationToken serviceToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 53
+2026-10-02T12:39:00.3923030+03:00 Sysmex cs-2000i: исключение при запуске DLL или TCP listener; исключение передаётся менеджеру.
+System.Net.Sockets.SocketException (10049): The requested address is not valid in its context.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at System.Net.Sockets.TcpListener.Start(Int32 backlog)
+   at AnalyzerService.Transport.TcpHost.Start(IPAddress address, Int32 port) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Transport\TcpHost.cs:line 48
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(CancellationToken serviceToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 53
+2026-10-02T13:03:26.1485378+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_2248480500_202610021003213453910_704fcfaf79e542acb53b56d94f675a8b.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: Ни один код результата не сопоставлен с PSMV2.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 44
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 149
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T13:48:02.7499642+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_2248724700_202610021048026554123_56fc53aeedf44b57b884ce1378713df0.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: D-текст не содержит результатов.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 21
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 149
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T14:54:24.2865841+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_2248767400_202610021154241434513_c91ad2e3672140cdb548faf4e4ed86e4.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: Ни один код результата не сопоставлен с PSMV2.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 44
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 149
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T14:55:44.0703758+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_2248767400_202610021155439482238_c726f289b1ac433fbe464835677b812c.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: Ни один код результата не сопоставлен с PSMV2.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 44
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 149
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T16:32:17.9877681+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T16:32:18.0130663+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T16:32:34.0364559+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T16:32:34.0560683+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T16:32:50.1000286+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T16:32:50.1172833+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:11:04.6445077+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(Stream stream, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 188
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 66
+2026-10-02T17:11:04.6670518+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(Stream stream, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 188
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 66
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:19:22.3837778+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:19:22.4030452+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:19:37.3637136+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:19:37.3819916+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:19:53.3198274+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:19:53.3402847+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:25:17.9519216+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:25:17.9692596+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:25:33.9058165+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:25:33.9290613+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:25:49.8968853+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:25:49.9159586+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T17:26:05.9462236+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+2026-10-02T17:26:05.9674291+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.InvalidDataException: Нельзя передать символ имени U+0038 в ASCII.
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.FormatPatientName(String lastName, String firstName) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 238
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildHeader(HostOnlineHeader source, LisOrder order, Int32 block, Int32 total) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 204
+   at SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineCodec.BuildOrder(HostOnlineInquiry inquiry, LisOrder order, String emptyCode) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Protocol\HostOnlineCodec.cs:line 127
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 83
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T18:35:25.4807202+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_2248264400_202610021535253346600_3cfc020651b14908903140984088b340.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: Ни один код результата не сопоставлен с PSMV2.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 44
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 153
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T18:36:45.4762602+03:00 Обработка сырого файла не удалась: E:\Services\Sysmex cs2000i\Sysmex cs-2000i\Results\SYS2000_2248573900_202610021536453713738_42bd7fe9a3dd45aaa084b72891555c00.raw; файл будет помещён в results/errors.
+System.IO.InvalidDataException: Ни один код результата не сопоставлен с PSMV2.
+   at SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.Handle(HostOnlineResult result, String sourceId) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\Lis\HostOnlineResultHandler.cs:line 44
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ProcessStoredResult(Byte[] raw, String sourceId) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 153
+   at AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(String file) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.ResultFiles\RawResultQueue.cs:line 153
+2026-10-02T22:22:39.7529070+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(Stream stream, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 188
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 66
+2026-10-02T22:22:39.7759625+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(Stream stream, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 188
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 66
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
+2026-10-02T22:29:43.3825146+03:00 Host Online: исключение при обработке сеанса Sysmex cs-2000i; пробрасывается в TCP-host.
+System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(Stream stream, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 188
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 66
+2026-10-02T22:29:43.4012125+03:00 Sysmex cs-2000i: исключение обработки TCP-сеанса; клиент будет отключён.
+System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.ReadTextAsync(Stream stream, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 188
+   at SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\AnalyzerSysmexCS2000HostOnline.cs:line 66
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.RunConnectionsAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 91
