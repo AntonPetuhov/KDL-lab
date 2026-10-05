@@ -31,9 +31,6 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
     /// Синхронно загружает DLL, запускает её файловые ресурсы и открывает TCP listener.
     /// Task возвращается для контракта менеджера; ожидания сети здесь нет.
     /// </summary>
-    /// <param name="serviceToken">Отмена Windows Service.</param>
-    /// <returns>Уже завершённая задача запуска.</returns>
-    /// <exception cref="Exception">Ошибка инициализации логируется в файл и пробрасывается с исходным стеком.</exception>
     public Task StartAsync(CancellationToken serviceToken)
     {
         if (runTask is not null)
@@ -76,8 +73,6 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
     /// Асинхронно ожидает клиента и передаёт открытый поток DLL. Асинхронность нужна
     /// только для Accept и протокольного чтения/записи; ошибки сеанса логируются с контекстом.
     /// </summary>
-    /// <param name="token">Отмена службы и конкретного анализатора.</param>
-    /// <returns>Задача до остановки TCP listener.</returns>
     private async Task RunConnectionsAsync(CancellationToken token)
     {
         TcpHost host = tcpHost ?? throw new InvalidOperationException("TCP host не создан.");
@@ -120,9 +115,6 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
     /// Асинхронно ждёт завершения сетевого цикла после синхронного закрытия сокета;
     /// затем останавливает фоновую очередь DLL. Каждое пробрасываемое исключение логируется.
     /// </summary>
-    /// <param name="cancellationToken">Ограничение времени остановки от Windows Service.</param>
-    /// <returns>Задача полной остановки.</returns>
-    /// <exception cref="AggregateException">Одна или несколько ошибок остановки.</exception>
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (loaded is null) return;

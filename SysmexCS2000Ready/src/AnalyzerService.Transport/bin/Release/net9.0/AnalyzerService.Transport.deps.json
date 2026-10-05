@@ -7,15 +7,10 @@
   "targets": {
     ".NETCoreApp,Version=v9.0": {
       "AnalyzerService.Transport/1.0.0": {
-        "dependencies": {
-          "AnalyzerService.Contracts": "1.0.0",
-          "Microsoft.NET.ILLink.Tasks": "9.0.14"
-        },
         "runtime": {
           "AnalyzerService.Transport.dll": {}
         }
-      },
-      "Microsoft.NET.ILLink.Tasks/9.0.14": {}
+      }
     }
   },
   "libraries": {
@@ -23,13 +18,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "Microsoft.NET.ILLink.Tasks/9.0.14": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-+MeWjj5sGq6Oj/l0E9RPMgXDyCIPxczzCbGuvuVTZFEGiy2S/atsfoAoKUnkEin/GeGpN+HenCzRmiQKSc99eQ==",
-      "path": "microsoft.net.illink.tasks/9.0.14",
-      "hashPath": "microsoft.net.illink.tasks.9.0.14.nupkg.sha512"
     }
   }
 }

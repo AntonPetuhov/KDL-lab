@@ -46,7 +46,8 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
             }
             string lisValue = FormatLisValue(item);
             logger.Result($"Образец {sampleId}: код {item.ParameterCode}, значение прибора={item.Data}, значение ЛИС={lisValue}, флаг='{item.Flag}', код PSMV2={psm}.");
-            content.AppendLine($"R|{++sequence}|^^^{psm}^^^^{settings.AnalyzerCode}|{lisValue}|||{item.Flag}|F||SYSMEX^||{DateTime.Now:yyyyMMddHHmmss}|{settings.AnalyzerCode}");
+            //content.AppendLine($"R|{++sequence}|^^^{psm}^^^^{settings.AnalyzerCode}|{lisValue}|||{item.Flag}|F||SYSMEX^||{DateTime.Now:yyyyMMddHHmmss}|{settings.AnalyzerCode}");
+            content.AppendLine($"R|{++sequence}|^^^{psm}^^^^{settings.AnalyzerCode}|{lisValue}|||N||F||SYS2000^||{DateTime.Now:yyyyMMddHHmmss}|{settings.AnalyzerCode}");
         }
         if (sequence == 0)
             throw new InvalidDataException("Ни один код результата не сопоставлен с PSMV2.");

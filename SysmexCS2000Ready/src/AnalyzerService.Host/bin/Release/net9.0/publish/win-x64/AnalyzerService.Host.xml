@@ -89,7 +89,7 @@
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.#ctor(System.String)">
-            <summary>Создаёт логгер и каталог журналов.</summary><param name="root">Каталог журналов.</param>
+            <summary>Создаёт логгер и каталог журналов.</summary>
         </member>
         <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Service(System.String)">
             <inheritdoc />
@@ -107,7 +107,7 @@
             <inheritdoc />
         </member>
         <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Write(System.String,System.String)">
-            <summary>Синхронно добавляет одну запись, сохраняя порядок сообщений.</summary>
+            <summary>Добавляет одну запись в лог, сохраняя порядок сообщений.</summary>
         </member>
         <member name="T:AnalyzerService.Host.Runtime.AnalyzerManager">
             <summary>

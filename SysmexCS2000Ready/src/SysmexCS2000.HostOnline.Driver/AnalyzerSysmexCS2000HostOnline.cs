@@ -28,12 +28,11 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// Синхронно создаёт обработчики без открытия сети; исключения инициализации
     /// поднимаются в AnalyzerRuntime, который пишет их в файловый журнал.
     /// </summary>
-    /// <param name="logger">Журнал данного анализатора.</param>
-    /// <param name="settings">Проверенный JSON.</param>
     public AnalyzerSysmexCS2000HostOnline(IAnalyzerLogger logger, AnalyzerSettings settings)
     {
         this.logger = logger;
         this.settings = settings;
+        // Создаём зависимости
         dbProvider = new LisDBProvider(settings, logger);
         resultHandler = new HostOnlineResultHandler(settings, logger, dbProvider);
         resultQueue = new RawResultQueue(settings, logger, ProcessStoredResult);

@@ -9,6 +9,7 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
 {
     private AnalyzerSysmexCS2000HostOnline? analyzer;
 
+    #region Инициализация
     /// <summary>
     /// Метод будет вызван из Analyzer после загрузки DLL. Инициализирует драйвер анализатора.
     /// </summary>
@@ -24,6 +25,7 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
 
         logger.Service($"Инициализация драйвера анализатора {settings.AnalyzerName} выполнена.");
     }
+    #endregion
 
     /// <summary>Синхронно запускает файловую очередь после загрузки DLL сервис-хостом.</summary>
     public void Start() => (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).Start();

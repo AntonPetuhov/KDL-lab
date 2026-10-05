@@ -79,7 +79,7 @@ public sealed class TcpHost : ITcpHost
                 client?.Dispose();
                 client = accepted;
                 remote = accepted.Client.RemoteEndPoint?.ToString();
-                lastAccept = DateTimeOffset.Now;
+                lastAccept = DateTime.Now;
             }
             logger.Transport($"{name}: подключён клиент {remote}.");
             return accepted;
