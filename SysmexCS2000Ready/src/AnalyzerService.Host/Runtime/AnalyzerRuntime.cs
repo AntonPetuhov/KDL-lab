@@ -1,22 +1,19 @@
-using System.Net;
-using System.Net.Sockets;
 using AnalyzerService.Contracts;
 using AnalyzerService.Host.Drivers;
 using AnalyzerService.Host.Logging;
-using AnalyzerService.Transport;
 
 namespace AnalyzerService.Host.Runtime;
 
 /// <summary>
-/// Владеет TCP listener, подключением прибора и жизненным циклом одной DLL.
-/// Драйверу передаётся только IAnalyzerConnection; открыть порт из DLL нельзя.
+/// Управляет жизненным циклом одной DLL, не зная её транспорта или протокола.
+/// Передаёт настройки и логгер в IAnalyzerDriver, наблюдает RunAsync и подаёт
+/// Stop при остановке службы. TCP, COM и файловый обмен принадлежат драйверам.
 /// </summary>
 public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader loader, AnalyzerLoggerFactory loggerFactory) : IDisposable
 {
     private readonly CancellationTokenSource stop = new();
     private CancellationTokenSource? linkedStop;
     private LoadedDriver? loaded;
-    private TcpHost? tcpHost;
     private IAnalyzerLogger? logger;
     private Task? runTask;
     private bool disposed;
@@ -24,15 +21,19 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
     /// <summary>Имя анализатора из JSON для диагностики.</summary>
     public string Name => settings.AnalyzerName;
 
-    /// <summary>Задача сетевого цикла; менеджер наблюдает за её завершением.</summary>
+    /// <summary>Задача полного рабочего цикла DLL; менеджер наблюдает её ошибки.</summary>
     public Task Completion => runTask ?? Task.CompletedTask;
 
     /// <summary>
-    /// Синхронно загружает DLL, запускает её файловые ресурсы и открывает TCP listener.
-    /// Task возвращается для контракта менеджера; ожидания сети здесь нет.
+    /// Синхронно загружает и инициализирует DLL, затем отдаёт ей команду RunAsync.
+    /// Task возвращается для контракта менеджера; ожидание I/O остаётся внутри DLL.
     /// </summary>
+    /// <param name="serviceToken">Отмена Windows Service.</param>
+    /// <returns>Уже завершённая задача запуска; работа драйвера доступна через Completion.</returns>
+    /// <exception cref="Exception">Ошибка загрузки или запуска логируется и пробрасывается.</exception>
     public Task StartAsync(CancellationToken serviceToken)
     {
+        if (disposed) throw new ObjectDisposedException(nameof(AnalyzerRuntime));
         if (runTask is not null)
         {
             InvalidOperationException ex = new($"{Name} уже запущен.");
@@ -45,99 +46,64 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
         {
             loaded = loader.Load(settings.DllPath!);
             loaded.Instance.Initialize(logger, settings);
-            loaded.Instance.Start();
-            tcpHost = new TcpHost(logger, Name);
-            tcpHost.Start(IPAddress.Parse(settings.IPaddress!), settings.Port);
-            runTask = RunConnectionsAsync(linkedStop.Token);
-            logger.Service($"{Name}: драйвер и TCP listener запущены.");
+            runTask = loaded.Instance.RunAsync(linkedStop.Token)
+                ?? throw new InvalidOperationException($"{Name}: драйвер вернул null вместо задачи RunAsync.");
+            if (runTask.IsFaulted) runTask.GetAwaiter().GetResult();
+            logger.Service($"{Name}: рабочий цикл DLL запущен.");
+            return Task.CompletedTask;
         }
         catch (Exception ex)
         {
-            logger.Error($"{Name}: исключение при запуске DLL или TCP listener; исключение передаётся менеджеру.", ex);
+            logger.Error($"{Name}: исключение загрузки или запуска DLL; передаётся менеджеру.", ex);
             try { loaded?.Instance.Stop(); }
             catch (Exception stopError) { logger.Error($"{Name}: ошибка отката запуска драйвера.", stopError); }
-            try { tcpHost?.Dispose(); }
-            catch (Exception cleanupError) { logger.Error($"{Name}: ошибка освобождения TCP после сбоя запуска.", cleanupError); }
             try { loaded?.Dispose(); }
             catch (Exception cleanupError) { logger.Error($"{Name}: ошибка освобождения DLL после сбоя запуска.", cleanupError); }
-            tcpHost = null;
             loaded = null;
+            runTask = null;
             linkedStop.Dispose();
             linkedStop = null;
             throw;
         }
-        return Task.CompletedTask;
     }
 
     /// <summary>
-    /// Асинхронно ожидает клиента и передаёт открытый поток DLL. Асинхронность нужна
-    /// только для Accept и протокольного чтения/записи; ошибки сеанса логируются с контекстом.
+    /// Сначала отменяет рабочий цикл и вызывает синхронный Stop драйвера, чтобы
+    /// разблокировать его I/O, затем асинхронно ожидает RunAsync. Тип I/O неизвестен хосту.
     /// </summary>
-    private async Task RunConnectionsAsync(CancellationToken token)
-    {
-        TcpHost host = tcpHost ?? throw new InvalidOperationException("TCP host не создан.");
-        IAnalyzerDriver driver = loaded?.Instance ?? throw new InvalidOperationException("DLL-драйвер не загружен.");
-        while (!token.IsCancellationRequested)
-        {
-            TcpClient? client = null;
-            try
-            {
-                client = await host.AcceptAsync(token).ConfigureAwait(false);
-                await driver.HandleConnectionAsync(new TcpAnalyzerConnection(client.GetStream(), host), token)
-                    .ConfigureAwait(false);
-            }
-            catch (OperationCanceledException) when (token.IsCancellationRequested) { break; }
-            catch (Exception) when (token.IsCancellationRequested) { break; }
-            catch (EndOfStreamException)
-            {
-                logger?.Transport($"{Name}: прибор закрыл соединение; ожидается новое подключение.");
-            }
-            catch (Exception ex)
-            {
-                host.RecordError(ex);
-                logger?.Error($"{Name}: исключение обработки TCP-сеанса; клиент будет отключён.", ex);
-            }
-            finally
-            {
-                if (client is not null)
-                    try { host.ReleaseClient(client); }
-                    catch (Exception ex)
-                    {
-                        logger?.Error($"{Name}: исключение освобождения TCP-клиента; пробрасывается менеджеру.", ex);
-                        throw;
-                    }
-            }
-        }
-        logger?.Service($"{Name}: TCP-цикл завершён.");
-    }
-
-    /// <summary>
-    /// Асинхронно ждёт завершения сетевого цикла после синхронного закрытия сокета;
-    /// затем останавливает фоновую очередь DLL. Каждое пробрасываемое исключение логируется.
-    /// </summary>
+    /// <param name="cancellationToken">Ограничение ожидания при остановке службы.</param>
+    /// <returns>Задача завершения DLL.</returns>
+    /// <exception cref="AggregateException">Ошибки Stop или рабочего цикла, уже записанные в журнал.</exception>
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (loaded is null) return;
         List<Exception> errors = [];
         try { stop.Cancel(); }
         catch (Exception ex) { logger?.Error($"{Name}: исключение отмены рабочего цикла.", ex); errors.Add(ex); }
-        try { tcpHost?.Stop(); }
-        catch (Exception ex) { logger?.Error($"{Name}: исключение закрытия TCP host.", ex); errors.Add(ex); }
-        try { if (runTask is not null) await runTask.WaitAsync(cancellationToken).ConfigureAwait(false); }
-        catch (Exception ex) { logger?.Error($"{Name}: исключение ожидания TCP-цикла.", ex); errors.Add(ex); }
         try { loaded.Instance.Stop(); }
-        catch (Exception ex) { logger?.Error($"{Name}: исключение остановки драйвера.", ex); errors.Add(ex); }
+        catch (Exception ex) { logger?.Error($"{Name}: исключение сигнала остановки драйвера.", ex); errors.Add(ex); }
+        try { if (runTask is not null) await runTask.WaitAsync(cancellationToken).ConfigureAwait(false); }
+        catch (OperationCanceledException) when (stop.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
+        {
+            logger?.Service($"{Name}: рабочая задача DLL завершилась по штатной отмене.");
+        }
+        catch (Exception ex) { logger?.Error($"{Name}: исключение ожидания рабочего цикла DLL.", ex); errors.Add(ex); }
         if (errors.Count != 0) throw new AggregateException($"{Name}: ошибки остановки.", errors);
     }
 
-    /// <summary>Синхронно и повторно безопасно освобождает DLL, listener и токены.</summary>
+    /// <summary>
+    /// Синхронно и повторно безопасно освобождает экземпляр DLL и токены после StopAsync.
+    /// Исключение освобождения не подавляется и логируется вызывающим менеджером.
+    /// </summary>
     public void Dispose()
     {
         if (disposed) return;
         disposed = true;
-        tcpHost?.Dispose();
-        loaded?.Dispose();
-        linkedStop?.Dispose();
-        stop.Dispose();
+        try { loaded?.Dispose(); }
+        finally
+        {
+            linkedStop?.Dispose();
+            stop.Dispose();
+        }
     }
 }

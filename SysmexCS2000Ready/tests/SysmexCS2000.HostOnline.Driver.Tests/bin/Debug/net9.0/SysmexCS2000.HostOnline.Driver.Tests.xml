@@ -10,8 +10,11 @@
         <member name="M:Program.Main">
             <summary>Запускает проверки и возвращает код процесса.</summary>
         </member>
-        <member name="M:Program.DriverUsesHostLibraries">
-            <summary>Драйвер без локальных зависимостей использует общие сборки службы.</summary>
+        <member name="M:Program.HostSharesOnlyDriverContract">
+            <summary>Хост не ссылается на транспорт/ЛИС, а изолированный драйвер разделяет только контракт.</summary>
+        </member>
+        <member name="M:Program.RuntimeAcceptsFileDriver">
+            <summary>Проверяет работу Runtime с DLL файлового обмена без IP, порта и TCP-зависимостей.</summary>
         </member>
         <member name="M:Program.ParseInquiry">
             <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>
@@ -61,8 +64,8 @@
         <member name="M:Program.LoaderExceptionIsWrittenToFile">
             <summary>Проверяет файловое логирование исключения, которое затем пробрасывается.</summary>
         </member>
-        <member name="M:Program.ServiceOwnsTcpHost">
-            <summary>Проверяет сквозной путь через Host-owned TcpHost и динамически загруженный DLL.</summary>
+        <member name="M:Program.DriverOwnsTcpHost">
+            <summary>Проверяет, что загруженная DLL сама запускает TcpHost, а Runtime знает только её RunAsync.</summary>
         </member>
         <member name="M:Program.DeleteTestDirectory(System.String,System.String)">
             <summary>Удаляет только проверенный тестовый каталог внутри явного родителя.</summary>
@@ -72,6 +75,21 @@
         </member>
         <member name="M:Program.Equal``1(``0,``0,System.String)">
             <summary>Сравнивает ожидаемое и фактическое значение.</summary>
+        </member>
+        <member name="T:FileExchangeProbeDriver">
+            <summary>Тестовая DLL без TCP: показывает, что хосту достаточно общего контракта.</summary>
+        </member>
+        <member name="M:FileExchangeProbeDriver.Initialize(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
+            <summary>Проверяет конфигурацию файлового обмена без IP-адреса и порта.</summary>
+        </member>
+        <member name="M:FileExchangeProbeDriver.RunAsync(System.Threading.CancellationToken)">
+            <summary>Возвращает задачу работы до Stop; сетевого ожидания нет.</summary>
+        </member>
+        <member name="M:FileExchangeProbeDriver.Stop">
+            <summary>Синхронно сообщает об остановке; ожидание отменяется перед этим в Runtime.</summary>
+        </member>
+        <member name="M:FileExchangeProbeDriver.Dispose">
+            <summary>Освобождает тестовый драйвер без внешних ресурсов.</summary>
         </member>
     </members>
 </doc>

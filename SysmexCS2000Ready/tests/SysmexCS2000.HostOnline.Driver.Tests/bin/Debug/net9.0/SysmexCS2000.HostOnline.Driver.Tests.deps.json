@@ -708,9 +708,6 @@
       "AnalyzerService.Host/1.0.0": {
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
-          "AnalyzerService.LisDatabase": "1.0.0",
-          "AnalyzerService.ResultFiles": "1.0.0",
-          "AnalyzerService.Transport": "1.0.0",
           "Microsoft.Extensions.Hosting": "9.0.14",
           "Microsoft.Extensions.Hosting.WindowsServices": "9.0.14"
         },
@@ -759,7 +756,8 @@
         "dependencies": {
           "AnalyzerService.Contracts": "1.0.0",
           "AnalyzerService.LisDatabase": "1.0.0",
-          "AnalyzerService.ResultFiles": "1.0.0"
+          "AnalyzerService.ResultFiles": "1.0.0",
+          "AnalyzerService.Transport": "1.0.0"
         },
         "runtime": {
           "SysmexCS2000.HostOnline.Driver.dll": {

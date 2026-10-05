@@ -1,9 +1,11 @@
-using System.Net;
 using AnalyzerService.Contracts;
 
 namespace AnalyzerService.Host.Configuration;
 
-/// <summary>Проверяет конфигурацию до загрузки и исполнения сторонней DLL.</summary>
+/// <summary>
+/// Проверяет только поля JSON, нужные хосту для выбора и загрузки DLL.
+/// Тип подключения, протокол и его параметры проверяет сам драйвер.
+/// </summary>
 public sealed class AnalyzerSettingsValidator
 {
     /// <summary>
@@ -16,15 +18,8 @@ public sealed class AnalyzerSettingsValidator
     {
         List<string> errors = [];
         if (string.IsNullOrWhiteSpace(settings.AnalyzerName)) errors.Add("AnalyzerName обязателен");
-        if (!string.Equals(settings.ConnectionType, "TCPIP", StringComparison.OrdinalIgnoreCase)) errors.Add("поддерживается только ConnectionType=TCPIP");
-        if (!IPAddress.TryParse(settings.IPaddress, out _)) errors.Add("IPaddress должен быть IP-адресом локального интерфейса");
-        if (settings.Port is < 1 or > 65535) errors.Add("Port должен быть от 1 до 65535");
         if (!settings.Isdll) errors.Add("Isdll должен быть true");
         if (string.IsNullOrWhiteSpace(settings.DllPath)) errors.Add("DllPath обязателен");
-        if (!string.Equals(settings.Protocol, "SYSMEX_HOST_ONLINE", StringComparison.OrdinalIgnoreCase))
-            errors.Add("Protocol должен быть SYSMEX_HOST_ONLINE");
-        if (string.IsNullOrWhiteSpace(settings.OutputFolder)) errors.Add("OutputFolder обязателен");
-        if (string.IsNullOrWhiteSpace(settings.ResultsFolder)) errors.Add("ResultsFolder обязателен");
         if (errors.Count != 0) throw new InvalidDataException($"Ошибки {sourcePath}: {string.Join("; ", errors)}");
     }
 }

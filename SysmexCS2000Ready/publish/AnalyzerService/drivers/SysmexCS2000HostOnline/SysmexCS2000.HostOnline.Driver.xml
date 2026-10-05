@@ -16,14 +16,30 @@
             Синхронно создаёт обработчики без открытия сети; исключения инициализации
             поднимаются в AnalyzerRuntime, который пишет их в файловый журнал.
             </summary>
-            <param name="logger">Журнал данного анализатора.</param>
-            <param name="settings">Проверенный JSON.</param>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Start">
             <summary>Синхронно запускает очередь; TCP listener запускает AnalyzerRuntime.</summary>
             <exception cref="T:System.IO.IOException">Не удалось создать каталог сырых результатов.</exception>
         </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(AnalyzerService.Contracts.IAnalyzerConnection,System.Threading.CancellationToken)">
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.RunAsync(System.Threading.CancellationToken)">
+            <summary>
+            Синхронно открывает TCP listener по настройкам DLL и возвращает асинхронный
+            рабочий цикл. Сервис-хост не участвует в создании сокета или приёме клиента.
+            </summary>
+            <param name="token">Отмена работы анализатора.</param>
+            <returns>Задача приёма TCP-сеансов до остановки.</returns>
+            <exception cref="T:System.Exception">Ошибка запуска логируется сервис-хостом и пробрасывается.</exception>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.RunConnectionsAsync(AnalyzerService.Transport.TcpHost,System.Threading.CancellationToken)">
+            <summary>
+            Асинхронно ждёт клиента и вызывает прикладной протокол для каждого сеанса.
+            Ожидание Accept/Read необходимо, чтобы не блокировать поток службы.
+            </summary>
+            <param name="host">TCP-сервер, принадлежащий этому драйверу.</param>
+            <param name="token">Отмена работы драйвера.</param>
+            <returns>Задача до закрытия listener.</returns>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.HandleConnectionAsync(AnalyzerService.Transport.ITcpConnection,System.Threading.CancellationToken)">
             <summary>
             Асинхронно принимает тексты в одном уже принятом соединении. Здесь ожидаются
             только байты потока; SQL-запрос GetOrder и запись .raw выполняются синхронно.
@@ -59,7 +75,7 @@
             <param name="token">Отмена чтения.</param>
             <returns>ASCII-тело и точные входные байты кадра.</returns>
         </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.WriteTextAsync(AnalyzerService.Contracts.IAnalyzerConnection,System.String,System.Threading.CancellationToken)">
+        <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.WriteTextAsync(AnalyzerService.Transport.ITcpConnection,System.String,System.Threading.CancellationToken)">
             <summary>
             Асинхронно пишет один S221 в поток и фиксирует TX. Проверка ASCII предотвращает
             незаметную замену символов на '?', характерную для Encoding.ASCII.GetBytes.
@@ -70,10 +86,13 @@
             <returns>Задача завершения отправки.</returns>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Stop">
-            <summary>Синхронно завершает обработку накопленных файлов после закрытия TCP host.</summary>
+            <summary>
+            Синхронно закрывает TCP listener/клиента, разблокируя ожидающий RunAsync.
+            Очередь файлов останавливается в finally рабочего цикла; без RunAsync - здесь.
+            </summary>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Dispose">
-            <summary>Синхронно освобождает очередь; TCP-сокетом владеет AnalyzerRuntime.</summary>
+            <summary>Синхронно освобождает TCP host и очередь после завершения RunAsync.</summary>
         </member>
         <member name="T:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler">
             <summary>
@@ -247,17 +266,13 @@
             Метод будет вызван из Analyzer после загрузки DLL. Инициализирует драйвер анализатора.
             </summary>
         </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.Start">
-            <summary>Синхронно запускает файловую очередь после загрузки DLL сервис-хостом.</summary>
-        </member>
-        <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.HandleConnectionAsync(AnalyzerService.Contracts.IAnalyzerConnection,System.Threading.CancellationToken)">
-            <summary>Асинхронно обрабатывает поток прибора; ожидание требуется только для чтения/записи.</summary>
-            <param name="connection">Открытое сервис-хостом соединение.</param>
+        <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.RunAsync(System.Threading.CancellationToken)">
+            <summary>Запускает собственный TCP listener и возвращает задачу его рабочего цикла.</summary>
             <param name="cancellationToken">Сигнал остановки.</param>
-            <returns>Задача протокольного сеанса.</returns>
+            <returns>Задача до завершения работы прибора.</returns>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.Stop">
-            <summary>Синхронно останавливает фоновую очередь после закрытия сокета сервисом.</summary>
+            <summary>Синхронно просит драйвер закрыть свои ресурсы и завершить RunAsync.</summary>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.SysmexCS2000HostOnlineDriver.Dispose">
             <summary>Синхронно освобождает обработчик и файловую очередь.</summary>

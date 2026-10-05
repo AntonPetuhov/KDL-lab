@@ -20,7 +20,8 @@ if (Test-Path -LiteralPath $publishRoot) {
 
 dotnet publish (Join-Path $projectRoot "src\AnalyzerService.Host\AnalyzerService.Host.csproj") -c Release -r $Runtime --self-contained false -p:PublishSingleFile=true -p:PublishTrimmed=false -o $hostOutput --disable-build-servers --maxcpucount:1
 if ($LASTEXITCODE -ne 0) { throw "Ошибка публикации службы: $LASTEXITCODE" }
-# Общие библиотеки и их зависимости публикуются службой; ссылки драйвера исключают runtime-активы.
+# Служба содержит только Contracts; транспорт, БД и файлы результатов
+# публикуются рядом с DLL конкретного драйвера.
 dotnet publish (Join-Path $projectRoot "src\SysmexCS2000.HostOnline.Driver\SysmexCS2000.HostOnline.Driver.csproj") -c Release -r $Runtime --self-contained false -o $hostOnlineOutput --disable-build-servers --maxcpucount:1
 if ($LASTEXITCODE -ne 0) { throw "Ошибка публикации драйвера: $LASTEXITCODE" }
 Copy-Item -LiteralPath (Join-Path $projectRoot "configs\SysmexCS2000.json") -Destination (Join-Path $hostOutput "configs\SysmexCS2000.json") -Force

@@ -5,6 +5,7 @@ using AnalyzerService.ResultFiles;
 using AnalyzerService.Host.Drivers;
 using AnalyzerService.Host.Logging;
 using AnalyzerService.Host.Runtime;
+using AnalyzerService.Host.Configuration;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using System.Net;
 using System.Net.Sockets;
@@ -21,7 +22,8 @@ internal static class Program
         try
         {
             ParseInquiry();
-            DriverUsesHostLibraries();
+            HostSharesOnlyDriverContract();
+            RuntimeAcceptsFileDriver().GetAwaiter().GetResult();
             ParseResult();
             NumericResultsFromStand();
             BuildOrder();
@@ -33,16 +35,19 @@ internal static class Program
             EmptyResultGoesToErrors().GetAwaiter().GetResult();
             TcpHostReportsStatus().GetAwaiter().GetResult();
             LoaderExceptionIsWrittenToFile();
-            ServiceOwnsTcpHost().GetAwaiter().GetResult();
+            DriverOwnsTcpHost().GetAwaiter().GetResult();
             Console.WriteLine("All Host Online protocol tests passed.");
             return 0;
         }
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
     }
 
-    /// <summary>Драйвер без локальных зависимостей использует общие сборки службы.</summary>
-    private static void DriverUsesHostLibraries()
+    /// <summary>Хост не ссылается на транспорт/ЛИС, а изолированный драйвер разделяет только контракт.</summary>
+    private static void HostSharesOnlyDriverContract()
     {
+        string[] references = typeof(AnalyzerRuntime).Assembly.GetReferencedAssemblies().Select(a => a.Name ?? "").ToArray();
+        foreach (string name in new[] { "AnalyzerService.Transport", "AnalyzerService.LisDatabase", "AnalyzerService.ResultFiles" })
+            Equal(false, references.Contains(name), "host reference " + name);
         string root = Path.Combine(Path.GetTempPath(), "SharedDriver-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         try
@@ -62,6 +67,28 @@ internal static class Program
         }
     }
 
+    /// <summary>Проверяет работу Runtime с DLL файлового обмена без IP, порта и TCP-зависимостей.</summary>
+    private static async Task RuntimeAcceptsFileDriver()
+    {
+        string name = "FileDriver_" + Guid.NewGuid().ToString("N");
+        string logRoot = Path.Combine(AppContext.BaseDirectory, name);
+        AnalyzerSettings settings = new()
+        {
+            AnalyzerName = name, ConnectionType = "File", Isdll = true,
+            DllPath = typeof(Program).Assembly.Location
+        };
+        new AnalyzerSettingsValidator().ValidateAndThrow(settings, "file-test.json");
+        try
+        {
+            using AnalyzerRuntime runtime = new(settings, new DriverLoader(), new AnalyzerLoggerFactory());
+            await runtime.StartAsync(CancellationToken.None);
+            Equal(false, runtime.Completion.IsCompleted, "file driver running");
+            await runtime.StopAsync(CancellationToken.None);
+            Equal(true, runtime.Completion.IsCanceled, "file driver stopped by cancellation");
+        }
+        finally { DeleteTestDirectory(logRoot, AppContext.BaseDirectory); }
+    }
+
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
     private static void CheckSharedDriver(string driverPath, string root)
     {
@@ -69,14 +96,10 @@ internal static class Program
             {
                 var context = System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(driver.Instance.GetType().Assembly)!;
                 Equal(false, ReferenceEquals(context, System.Runtime.Loader.AssemblyLoadContext.Default), "isolated driver");
-                foreach (string name in new[] { "AnalyzerService.Contracts", "AnalyzerService.Transport", "AnalyzerService.LisDatabase", "AnalyzerService.ResultFiles" })
-                {
-                    var identity = new System.Reflection.AssemblyName(name);
-                    var shared = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyName(identity);
-                    // Даже оставшаяся локальная копия не должна создавать вторую идентичность типов.
-                    File.Copy(shared.Location, Path.Combine(root, Path.GetFileName(shared.Location)));
-                    Equal(true, ReferenceEquals(shared, context.LoadFromAssemblyName(identity)), name + " shared identity");
-                }
+                var identity = new System.Reflection.AssemblyName("AnalyzerService.Contracts");
+                var shared = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyName(identity);
+                File.Copy(shared.Location, Path.Combine(root, Path.GetFileName(shared.Location)));
+                Equal(true, ReferenceEquals(shared, context.LoadFromAssemblyName(identity)), "shared contract identity");
             }
     }
 
@@ -328,7 +351,7 @@ internal static class Program
     }
 
     /// <summary>Тестовый адаптер потока без TcpListener и TcpClient.</summary>
-    private sealed class TestConnection(Stream stream) : IAnalyzerConnection
+    private sealed class TestConnection(Stream stream) : ITcpConnection
     {
         public Stream Stream => stream;
         public void RecordRead() { }
@@ -379,8 +402,8 @@ internal static class Program
         finally { DeleteTestDirectory(logRoot, AppContext.BaseDirectory); }
     }
 
-    /// <summary>Проверяет сквозной путь через Host-owned TcpHost и динамически загруженный DLL.</summary>
-    private static async Task ServiceOwnsTcpHost()
+    /// <summary>Проверяет, что загруженная DLL сама запускает TcpHost, а Runtime знает только её RunAsync.</summary>
+    private static async Task DriverOwnsTcpHost()
     {
         string name = "HostTcp_" + Guid.NewGuid().ToString("N");
         string logRoot = Path.Combine(AppContext.BaseDirectory, name);
@@ -394,7 +417,8 @@ internal static class Program
             AnalyzerName = name, ConnectionType = "TCPIP", IPaddress = "127.0.0.1", Port = port,
             DllPath = Path.Combine(AppContext.BaseDirectory, "SysmexCS2000.HostOnline.Driver.dll"),
             ResultsFolder = results, OutputFolder = Path.Combine(results, "Patient"),
-            ConnectionString = "unused", Protocol = "SYSMEX_HOST_ONLINE", ResultHandlerStatus = true
+            ConnectionString = "unused", Protocol = "SYSMEX_HOST_ONLINE", ResultHandlerStatus = true,
+            AnalyzerCode = "915", AnalyzerConfigurationCode = "SYS2000"
         };
         try
         {
@@ -447,4 +471,24 @@ internal static class Program
     {
         if (!EqualityComparer<T>.Default.Equals(expected, actual)) throw new InvalidOperationException($"{name}: expected {expected}, actual {actual}");
     }
+}
+
+/// <summary>Тестовая DLL без TCP: показывает, что хосту достаточно общего контракта.</summary>
+public sealed class FileExchangeProbeDriver : IAnalyzerDriver
+{
+    /// <summary>Проверяет конфигурацию файлового обмена без IP-адреса и порта.</summary>
+    public void Initialize(IAnalyzerLogger logger, AnalyzerSettings settings)
+    {
+        if (settings.ConnectionType != "File") throw new InvalidDataException("Ожидался File-драйвер.");
+        logger.Service("Тестовый файловый драйвер инициализирован.");
+    }
+
+    /// <summary>Возвращает задачу работы до Stop; сетевого ожидания нет.</summary>
+    public Task RunAsync(CancellationToken cancellationToken) => Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+
+    /// <summary>Синхронно сообщает об остановке; ожидание отменяется перед этим в Runtime.</summary>
+    public void Stop() { }
+
+    /// <summary>Освобождает тестовый драйвер без внешних ресурсов.</summary>
+    public void Dispose() { }
 }

@@ -28,3 +28,13 @@ C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.H
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\SysmexCS2000.HostOnline.Driver.pdb
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\ref\SysmexCS2000.HostOnline.Driver.dll
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\SysmexCS.9FBE8CBF.Up2Date
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.dll
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.pdb
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Release\net9.0\win-x64\AnalyzerService.Transport.xml
+C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Release\net9.0\win-x64\SysmexCS.9FBE8CBF.Up2Date

@@ -22,9 +22,9 @@ public class LoadedDriver(IAnalyzerDriver instance, DriverLoadContext context) :
         if (disposed) return;
         disposed = true;
 
-        if (Instance is not null) Instance.Dispose();
-        if (context is not null) context.Unload();
-
-        GC.SuppressFinalize(this); // ? нужно ли???
+        // Выгрузка контекста должна быть запрошена и при ошибке Dispose драйвера.
+        // Исключение DLL не скрывается: AnalyzerManager запишет его в Error.
+        try { Instance.Dispose(); }
+        finally { context.Unload(); }
     }
 }

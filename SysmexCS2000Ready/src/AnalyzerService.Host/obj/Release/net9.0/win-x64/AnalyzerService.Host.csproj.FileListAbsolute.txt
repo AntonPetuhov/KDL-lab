@@ -51,47 +51,7 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerServ
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Release\net9.0\win-x64\AnalyzerService.Host.genruntimeconfig.cache
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\obj\Release\net9.0\win-x64\ref\AnalyzerService.Host.dll
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\SysmexCS2000.json
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Transport.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Transport.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Transport.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\examples\SysmexCS2000i.json
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Bcl.Cryptography.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Data.SqlClient.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Data.SqlClient.Extensions.Abstractions.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Data.SqlClient.Internal.Logging.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Extensions.Caching.Abstractions.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Extensions.Caching.Memory.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.IdentityModel.Abstractions.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.IdentityModel.Logging.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.IdentityModel.Protocols.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.IdentityModel.Tokens.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.SqlServer.Server.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\System.Configuration.ConfigurationManager.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\System.IdentityModel.Tokens.Jwt.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\System.Security.Cryptography.Pkcs.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\System.Security.Cryptography.ProtectedData.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\cs\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\de\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\es\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\fr\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\it\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\ja\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\ko\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\pl\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\pt-BR\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\ru\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\tr\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\zh-Hans\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\zh-Hant\Microsoft.Data.SqlClient.resources.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\Microsoft.Data.SqlClient.SNI.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.dll
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.LisDatabase.xml
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.pdb
-C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.ResultFiles.xml
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\examples\SysmexCS2000i.json
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\configs\SysmexCS2000.json
 C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Release\net9.0\win-x64\AnalyzerService.Host.exe

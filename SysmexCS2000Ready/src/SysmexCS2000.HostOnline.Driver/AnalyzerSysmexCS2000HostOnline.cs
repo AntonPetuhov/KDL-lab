@@ -1,7 +1,10 @@
 using System.Text;
+using System.Net;
+using System.Net.Sockets;
 using AnalyzerService.Contracts;
 using AnalyzerService.LisDatabase;
 using AnalyzerService.ResultFiles;
+using AnalyzerService.Transport;
 using SysmexCS2000.HostOnline.Driver.Lis;
 using SysmexCS2000.HostOnline.Driver.Protocol;
 
@@ -23,6 +26,8 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     private readonly HostOnlineResultHandler resultHandler;
     private readonly RawResultQueue resultQueue;
     private readonly Dictionary<string, SortedDictionary<int, (string Body, byte[] Raw)>> blocks = new(StringComparer.Ordinal);
+    private TcpHost? tcpHost;
+    private Task? runTask;
 
     /// <summary>
     /// Синхронно создаёт обработчики без открытия сети; исключения инициализации
@@ -47,6 +52,85 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     }
 
     /// <summary>
+    /// Синхронно открывает TCP listener по настройкам DLL и возвращает асинхронный
+    /// рабочий цикл. Сервис-хост не участвует в создании сокета или приёме клиента.
+    /// </summary>
+    /// <param name="token">Отмена работы анализатора.</param>
+    /// <returns>Задача приёма TCP-сеансов до остановки.</returns>
+    /// <exception cref="Exception">Ошибка запуска логируется сервис-хостом и пробрасывается.</exception>
+    public Task RunAsync(CancellationToken token)
+    {
+        if (runTask is not null) throw new InvalidOperationException("Рабочий цикл Sysmex уже запущен.");
+        Start();
+        TcpHost host = new(logger, settings.AnalyzerName);
+        try
+        {
+            host.Start(IPAddress.Parse(settings.IPaddress!), settings.Port);
+            tcpHost = host;
+            runTask = RunConnectionsAsync(host, token);
+            logger.Service($"Host Online TCP listener {settings.IPaddress}:{settings.Port} запущен драйвером.");
+            return runTask;
+        }
+        catch
+        {
+            host.Dispose();
+            if (settings.ResultHandlerStatus) resultQueue.Stop();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Асинхронно ждёт клиента и вызывает прикладной протокол для каждого сеанса.
+    /// Ожидание Accept/Read необходимо, чтобы не блокировать поток службы.
+    /// </summary>
+    /// <param name="host">TCP-сервер, принадлежащий этому драйверу.</param>
+    /// <param name="token">Отмена работы драйвера.</param>
+    /// <returns>Задача до закрытия listener.</returns>
+    private async Task RunConnectionsAsync(TcpHost host, CancellationToken token)
+    {
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                TcpClient? client = null;
+                try
+                {
+                    client = await host.AcceptAsync(token).ConfigureAwait(false);
+                    await HandleConnectionAsync(new TcpAnalyzerConnection(client.GetStream(), host), token)
+                        .ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (token.IsCancellationRequested) { break; }
+                catch (Exception) when (token.IsCancellationRequested) { break; }
+                catch (EndOfStreamException)
+                {
+                    logger.Transport($"{settings.AnalyzerName}: прибор закрыл соединение; ожидается новое подключение.");
+                }
+                catch (Exception ex)
+                {
+                    host.RecordError(ex);
+                    logger.Error($"{settings.AnalyzerName}: исключение обработки TCP-сеанса; клиент будет отключён.", ex);
+                }
+                finally
+                {
+                    if (client is not null)
+                        try { host.ReleaseClient(client); }
+                        catch (Exception ex)
+                        {
+                            logger.Error($"{settings.AnalyzerName}: исключение освобождения TCP-клиента.", ex);
+                            throw;
+                        }
+                }
+            }
+        }
+        finally
+        {
+            host.Stop();
+            if (settings.ResultHandlerStatus) resultQueue.Stop();
+            logger.Service($"{settings.AnalyzerName}: рабочий цикл Host Online завершён.");
+        }
+    }
+
+    /// <summary>
     /// Асинхронно принимает тексты в одном уже принятом соединении. Здесь ожидаются
     /// только байты потока; SQL-запрос GetOrder и запись .raw выполняются синхронно.
     /// Ошибки логируются и пробрасываются в AnalyzerRuntime для закрытия сеанса.
@@ -54,7 +138,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// <param name="connection">Поток и счётчики общего TCP-host.</param>
     /// <param name="token">Отмена службы.</param>
     /// <returns>Задача до закрытия соединения прибором или сервисом.</returns>
-    public async Task HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken token)
+    public async Task HandleConnectionAsync(ITcpConnection connection, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(connection);
         blocks.Clear();
@@ -219,7 +303,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// <param name="body">Подготовленный текст S221.</param>
     /// <param name="token">Отмена записи.</param>
     /// <returns>Задача завершения отправки.</returns>
-    private async Task WriteTextAsync(IAnalyzerConnection connection, string body, CancellationToken token)
+    private async Task WriteTextAsync(ITcpConnection connection, string body, CancellationToken token)
     {
         if (body.Any(c => c > 0x7F))
             throw new HostOnlineProtocolException("Text Distinction Error", "Исходящий текст содержит не-ASCII символы.");
@@ -232,9 +316,21 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         logger.Protocol($"TX: {body}");
     }
 
-    /// <summary>Синхронно завершает обработку накопленных файлов после закрытия TCP host.</summary>
-    public void Stop() { if (settings.ResultHandlerStatus) resultQueue.Stop(); }
+    /// <summary>
+    /// Синхронно закрывает TCP listener/клиента, разблокируя ожидающий RunAsync.
+    /// Очередь файлов останавливается в finally рабочего цикла; без RunAsync - здесь.
+    /// </summary>
+    public void Stop()
+    {
+        tcpHost?.Stop();
+        if (runTask is null && settings.ResultHandlerStatus) resultQueue.Stop();
+    }
 
-    /// <summary>Синхронно освобождает очередь; TCP-сокетом владеет AnalyzerRuntime.</summary>
-    public void Dispose() => resultQueue.Dispose();
+    /// <summary>Синхронно освобождает TCP host и очередь после завершения RunAsync.</summary>
+    public void Dispose()
+    {
+        Stop();
+        tcpHost?.Dispose();
+        resultQueue.Dispose();
+    }
 }

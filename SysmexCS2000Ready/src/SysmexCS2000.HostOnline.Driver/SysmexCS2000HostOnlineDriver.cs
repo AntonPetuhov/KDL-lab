@@ -1,4 +1,5 @@
 using AnalyzerService.Contracts;
+using System.Net;
 
 namespace SysmexCS2000.HostOnline.Driver;
 
@@ -18,8 +19,18 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
         ArgumentNullException.ThrowIfNull(logger);
         ArgumentNullException.ThrowIfNull(settings);
 
-        if (!string.Equals(settings.Protocol, "SYSMEX_HOST_ONLINE", StringComparison.OrdinalIgnoreCase))
-            throw new ArgumentException("Драйвер требует Protocol = SYSMEX_HOST_ONLINE.", nameof(settings));
+        // Только DLL знает, какие поля JSON обязательны для её реализации.
+        List<string> errors = [];
+        if (!string.Equals(settings.Protocol, "SYSMEX_HOST_ONLINE", StringComparison.OrdinalIgnoreCase)) errors.Add("Protocol=SYSMEX_HOST_ONLINE");
+        if (!string.Equals(settings.ConnectionType, "TCPIP", StringComparison.OrdinalIgnoreCase)) errors.Add("ConnectionType=TCPIP");
+        if (!IPAddress.TryParse(settings.IPaddress, out _)) errors.Add("локальный IPaddress");
+        if (settings.Port is < 1 or > 65535) errors.Add("Port 1..65535");
+        if (string.IsNullOrWhiteSpace(settings.ResultsFolder)) errors.Add("ResultsFolder");
+        if (string.IsNullOrWhiteSpace(settings.OutputFolder)) errors.Add("OutputFolder");
+        if (string.IsNullOrWhiteSpace(settings.ConnectionString)) errors.Add("ConnectionString");
+        if (string.IsNullOrWhiteSpace(settings.AnalyzerConfigurationCode)) errors.Add("AnalyzerConfigurationCode");
+        if (string.IsNullOrWhiteSpace(settings.AnalyzerCode)) errors.Add("AnalyzerCode");
+        if (errors.Count != 0) throw new InvalidDataException($"Для Sysmex Host Online нужны: {string.Join(", ", errors)}.");
 
         analyzer = new AnalyzerSysmexCS2000HostOnline(logger, settings);
 
@@ -27,17 +38,13 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
     }
     #endregion
 
-    /// <summary>Синхронно запускает файловую очередь после загрузки DLL сервис-хостом.</summary>
-    public void Start() => (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).Start();
-
-    /// <summary>Асинхронно обрабатывает поток прибора; ожидание требуется только для чтения/записи.</summary>
-    /// <param name="connection">Открытое сервис-хостом соединение.</param>
+    /// <summary>Запускает собственный TCP listener и возвращает задачу его рабочего цикла.</summary>
     /// <param name="cancellationToken">Сигнал остановки.</param>
-    /// <returns>Задача протокольного сеанса.</returns>
-    public Task HandleConnectionAsync(IAnalyzerConnection connection, CancellationToken cancellationToken) =>
-        (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).HandleConnectionAsync(connection, cancellationToken);
+    /// <returns>Задача до завершения работы прибора.</returns>
+    public Task RunAsync(CancellationToken cancellationToken) =>
+        (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).RunAsync(cancellationToken);
 
-    /// <summary>Синхронно останавливает фоновую очередь после закрытия сокета сервисом.</summary>
+    /// <summary>Синхронно просит драйвер закрыть свои ресурсы и завершить RunAsync.</summary>
     public void Stop() => analyzer?.Stop();
 
     /// <summary>Синхронно освобождает обработчик и файловую очередь.</summary>
