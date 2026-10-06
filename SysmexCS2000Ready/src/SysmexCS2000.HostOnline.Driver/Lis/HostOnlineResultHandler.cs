@@ -33,10 +33,13 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
         int sequence = 0;
         foreach (HostOnlineResultItem item in result.Items)
         {
-            string? psm = repository.TranslateResultCode(item.ParameterCode);
+            // Low - повторное измерение того же теста. Сырое сообщение и
+            // ParameterCode не меняем; заменяем код только при поиске теста ЛИС.
+            string lisCode = MapLisResultCode(item.ParameterCode);
+            string? psm = repository.TranslateResultCode(lisCode);
             if (string.IsNullOrWhiteSpace(psm))
             {
-                logger.Result($"Код {item.ParameterCode} не сопоставлен с PSMV2.");
+                logger.Result($"Код прибора {item.ParameterCode} (код для ЛИС {lisCode}) не сопоставлен с PSMV2.");
                 continue;
             }
             if (!decimal.TryParse(item.Data, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out _))
@@ -45,7 +48,7 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
                 continue;
             }
             string lisValue = FormatLisValue(item);
-            logger.Result($"Образец {sampleId}: код {item.ParameterCode}, значение прибора={item.Data}, значение ЛИС={lisValue}, флаг='{item.Flag}', код PSMV2={psm}.");
+            logger.Result($"Образец {sampleId}: код прибора={item.ParameterCode}, код для ЛИС={lisCode}, значение прибора={item.Data}, значение ЛИС={lisValue}, флаг='{item.Flag}', код PSMV2={psm}.");
             //content.AppendLine($"R|{++sequence}|^^^{psm}^^^^{settings.AnalyzerCode}|{lisValue}|||{item.Flag}|F||SYSMEX^||{DateTime.Now:yyyyMMddHHmmss}|{settings.AnalyzerCode}");
             content.AppendLine($"R|{++sequence}|^^^{psm}^^^^{settings.AnalyzerCode}|{lisValue}|||N||F||SYS2000^||{DateTime.Now:yyyyMMddHHmmss}|{settings.AnalyzerCode}");
         }
@@ -55,6 +58,20 @@ public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzer
         Write(Path.Combine(output, fullFName + ".ok"), "ok" + Environment.NewLine);
         logger.Result($"Host Online: создано результатов {sequence} для {sampleId}.");
     }
+
+    /// <summary>
+    /// Синхронно выбирает код сопоставления с ЛИС: повторные low 872/662
+    /// относятся к тем же тестам, что med 882/652. Параметров I/O нет,
+    /// поэтому асинхронность не нужна.
+    /// </summary>
+    /// <param name="instrumentCode">Исходный код результата прибора.</param>
+    /// <returns>Код для поиска теста в ЛИС.</returns>
+    public static string MapLisResultCode(string instrumentCode) => instrumentCode switch
+    {
+        "872" => "882",
+        "662" => "652",
+        _ => instrumentCode
+    };
 
     /// <summary>
     /// Синхронно округляет уже расшифрованное число до одного десятичного знака

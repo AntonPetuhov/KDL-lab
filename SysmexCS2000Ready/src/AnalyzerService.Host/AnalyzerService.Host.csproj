@@ -3,6 +3,10 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.14" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.14" />
     <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" />
+    <!-- Publish-time references: AnalyzerRuntime does not invoke their APIs. -->
+    <ProjectReference Include="..\AnalyzerService.Transport\AnalyzerService.Transport.csproj" />
+    <ProjectReference Include="..\AnalyzerService.LisDatabase\AnalyzerService.LisDatabase.csproj" />
+    <ProjectReference Include="..\AnalyzerService.ResultFiles\AnalyzerService.ResultFiles.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\configs\**\*.json" Link="configs\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />

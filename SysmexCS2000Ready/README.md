@@ -28,20 +28,22 @@
 
 В Protocol сохраняется точный `RX:`/`TX:` текст, а для D121/D221 дополнительно записываются тип сообщения, штатив, позиция, образец и разобранные значения/флаги. Пояснения во всех журналах помечаются `Info:` и сдвигаются вправо; ошибки помечаются `Error:`.
 
+Результаты low с кодами `872` и `662` являются повторным измерением соответствующих тестов med `882` и `652`. При поиске сопоставления с PSMV2 обработчик использует соответственно `882` и `652`; исходный код, значение и весь сырой кадр остаются без изменений. Если прибор отправил и med, и low, для обоих создаются отдельные строки результата с одним кодом теста ЛИС; порядок строк соответствует порядку в D-сообщении.
+
 ## Сборка и публикация
 
-Откройте `AnalyzerService.sln` в Visual Studio 2022 с установленным SDK .NET 9 и выполните **Build Solution**. Для готового каталога запустите в PowerShell из корня проекта `./package.ps1`. Скрипт публикует один исполняемый файл `publish/AnalyzerService/AnalyzerService.Host.exe` (для запуска требуется установленный .NET 9 Runtime) и отдельную папку DLL-драйвера `publish/AnalyzerService/drivers/SysmexCS2000HostOnline`. Рядом с DLL должны остаться её `.deps.json` и зависимые сборки. `configs/SysmexCS2000.json` должен лежать в `publish/AnalyzerService/configs`.
+Откройте `AnalyzerService.sln` в Visual Studio 2022 с установленным SDK .NET 9 и выполните **Build Solution**. Для готового каталога запустите в PowerShell из корня проекта `./package.ps1`. Скрипт публикует `publish/AnalyzerService/AnalyzerService.Host.exe` с общими библиотеками в однофайловом пакете (для запуска требуется установленный .NET 9 Runtime) и отдельную папку `publish/AnalyzerService/drivers/SysmexCS2000HostOnline` только с `SysmexCS2000.HostOnline.Driver.dll` и `SysmexCS2000.HostOnline.Driver.deps.json`. `configs/SysmexCS2000.json` должен лежать в `publish/AnalyzerService/configs`.
 
 ### Изоляция зависимостей драйверов
 
-Служба разделяет с DLL только `AnalyzerService.Contracts`. `DriverLoadContext` загружает все остальные зависимости из папки конкретного драйвера: `AnalyzerService.Transport`, `AnalyzerService.LisDatabase`, `AnalyzerService.ResultFiles`, SQL Client и нативные компоненты. Поэтому однофайловый Host не содержит TCP или SQL-код Sysmex. Переносить нужно всю опубликованную папку драйвера, а не только его главную DLL.
+Служба и DLL разделяют `AnalyzerService.Contracts`, `AnalyzerService.Transport`, `AnalyzerService.LisDatabase` и `AnalyzerService.ResultFiles`. Они публикуются вместе с Host; `DriverLoadContext` возвращает для этих имён сборки основного контекста. В `AnalyzerRuntime` по-прежнему нет транспортных вызовов: ссылки Host служат упаковке, а выбор TCP, COM или файлового обмена остаётся за драйвером. Пакет SQL Client входит в зависимости Host; нативные библиотеки включаются в однофайловый пакет с извлечением при запуске. Если будущему драйверу понадобятся собственные библиотеки, их размещение и правила загрузки потребуется явно добавить в пакет и `DriverLoadContext`.
 
-В проекте драйвера только ссылка на `AnalyzerService.Contracts` имеет `Private="false" ExcludeAssets="runtime;native"`. Прочие ссылки публикуются в его каталог как частные зависимости. При обновлении используйте свежую папку публикации, чтобы не сохранить старые лишние DLL.
+Скрипт публикует драйвер во временный каталог, а затем переносит в `drivers` только его DLL и `.deps.json`. Скопируйте весь готовый каталог `publish/AnalyzerService`; отдельные сборки `AnalyzerService.*` в `drivers` помещать не нужно.
 
 Для нового прибора реализуйте `IAnalyzerDriver` в отдельной DLL: `Initialize` проверяет собственные поля JSON, `RunAsync` запускает нужный обмен и возвращает задачу полного рабочего цикла, `Stop` разблокирует ожидания, `Dispose` освобождает ресурсы. Ссылку на DLL укажите в существующем `DllPath`. Добавлять ссылку на транспорт или протокол в Host не нужно. Папка `drivers/common` автоматически не просматривается.
 
 Проверки: `dotnet build AnalyzerService.sln --maxcpucount:1`, `dotnet run --project tests/SysmexCS2000.HostOnline.Driver.Tests` и после публикации `./tests/PublishedPackageSmoke.ps1`. Последний скрипт создаёт временную копию пакета, запускает Host с loopback TCP и проверяет приём контрольного кадра; боевую конфигурацию он не меняет. После установки службы её учётной записи нужны доступ к БД ЛИС и права записи в `ResultsFolder`, `OutputFolder` и каталоги журналов.
 
-DLL в папке `drivers` - управляемый плагин проекта, а не документированная фирменная DLL производителя. В текущем коде вызова внешней native DLL Sysmex нет. Для будущего прибора создайте DLL с реализацией `IAnalyzerDriver`, поместите её с `.deps.json` и зависимостями в отдельную подпапку `drivers`, укажите путь в `DllPath`; запуск TCP/COM/файлового обмена полностью останется в плагине.
+DLL в папке `drivers` - управляемый плагин проекта, а не документированная фирменная DLL производителя. В текущем коде вызова внешней native DLL Sysmex нет. Для будущего прибора создайте DLL с реализацией `IAnalyzerDriver`, поместите её с `.deps.json` в отдельную подпапку `drivers`, укажите путь в `DllPath`; запуск TCP/COM/файлового обмена полностью останется в плагине.
 
 ACK/NAK поверх TCP для Host Online в этой версии не добавлялись: этот режим ранее был отложен до проверки на анализаторе.

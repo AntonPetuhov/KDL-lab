@@ -11,9 +11,9 @@ using SysmexCS2000.HostOnline.Driver.Protocol;
 namespace SysmexCS2000.HostOnline.Driver;
 
 /// <summary>
-/// Разбирает прикладной протокол Sysmex Host Online в уже открытом потоке.
-/// Вызовы Start/Stop и владение TCP-сокетом принадлежат сервис-хосту; DLL владеет
-/// только кодеком, запросом в ЛИС и очередью сырых результатов.
+/// Запускает TCP listener и разбирает прикладной протокол Sysmex Host Online.
+/// DLL владеет сокетом, кодеком, запросами в ЛИС и очередью сырых результатов;
+/// сервис-хост вызывает только методы жизненного цикла IAnalyzerDriver.
 /// </summary>
 public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
 {
@@ -43,7 +43,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         resultQueue = new RawResultQueue(settings, logger, ProcessStoredResult);
     }
 
-    /// <summary>Синхронно запускает очередь; TCP listener запускает AnalyzerRuntime.</summary>
+    /// <summary>Синхронно запускает очередь результатов; TCP listener откроет RunAsync.</summary>
     /// <exception cref="IOException">Не удалось создать каталог сырых результатов.</exception>
     public void Start()
     {

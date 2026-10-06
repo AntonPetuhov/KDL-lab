@@ -1,6 +1,11 @@
 $ErrorActionPreference = 'Stop'
 $project = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path.TrimEnd('\')
 $source = Join-Path $project 'publish\AnalyzerService'
+$driverFiles = @(Get-ChildItem -LiteralPath (Join-Path $source 'drivers\SysmexCS2000HostOnline') -File -Recurse)
+$expectedDriverFiles = @('SysmexCS2000.HostOnline.Driver.dll', 'SysmexCS2000.HostOnline.Driver.deps.json')
+if (@($driverFiles | Where-Object { $_.Name -notin $expectedDriverFiles }).Count -ne 0 -or $driverFiles.Count -ne 2) {
+    throw "Driver folder contains unexpected files: $($driverFiles.Name -join ', ')"
+}
 $target = Join-Path $PSScriptRoot 'smoke-driver-owned'
 if (Test-Path -LiteralPath $target) { throw "Temporary folder already exists: $target" }
 Copy-Item -LiteralPath $source -Destination $target -Recurse

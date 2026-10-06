@@ -17,13 +17,13 @@
             <summary>Уникальное имя анализатора.</summary>
         </member>
         <member name="P:AnalyzerService.Contracts.AnalyzerSettings.ConnectionType">
-            <summary>Тип подключения ("TCPIP", "Serial", "File")</summary>
+            <summary>Тип подключения, смысл которого определяет DLL.</summary>
         </member>
         <member name="P:AnalyzerService.Contracts.AnalyzerSettings.IPaddress">
-            <summary>Локальный IP-адрес ЛИС, который слушает служба.</summary>
+            <summary>Локальный IP-адрес для TCP-драйвера; хост его не использует.</summary>
         </member>
         <member name="P:AnalyzerService.Contracts.AnalyzerSettings.Port">
-            <summary>Локальный TCP-порт ЛИС.</summary>
+            <summary>Локальный TCP-порт для драйвера, которому он нужен.</summary>
         </member>
         <member name="P:AnalyzerService.Contracts.AnalyzerSettings.Isdll">
             <summary>Признак загрузки драйвера из DLL.</summary>
@@ -61,21 +61,6 @@
         <member name="P:AnalyzerService.Contracts.AnalyzerSettings.Protocol">
             <summary> Формат протокола.</summary>
         </member>
-        <member name="T:AnalyzerService.Contracts.IAnalyzerConnection">
-            <summary>
-            Передаёт загруженному DLL-драйверу поток одного уже принятого соединения.
-            Сервис-хост владеет сокетом и счётчиками; драйвер владеет только разбором протокола.
-            </summary>
-        </member>
-        <member name="P:AnalyzerService.Contracts.IAnalyzerConnection.Stream">
-            <summary>Получает поток байтов для чтения и отправки сообщений.</summary>
-        </member>
-        <member name="M:AnalyzerService.Contracts.IAnalyzerConnection.RecordRead">
-            <summary>Синхронно отмечает полностью принятое сообщение в журнале состояния TCP.</summary>
-        </member>
-        <member name="M:AnalyzerService.Contracts.IAnalyzerConnection.RecordWrite">
-            <summary>Синхронно отмечает отправленное сообщение в журнале состояния TCP.</summary>
-        </member>
         <member name="T:AnalyzerService.Contracts.IAnalyzerDriver">
             <summary>
             Определяет стабильный контракт управляемого DLL-драйвера анализатора.
@@ -87,22 +72,19 @@
             Инициализация драйвера, передаем логгер конкретного анализатора и проверенную JSON-конфигурацию
             </summary>
         </member>
-        <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.Start">
+        <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.RunAsync(System.Threading.CancellationToken)">
             <summary>
-            Синхронно запускает внутренние ресурсы драйвера после инициализации.
+            Запускает работу анализатора после инициализации и возвращает задачу всего
+            рабочего цикла. Драйвер сам выбирает транспорт и освобождает его при отмене.
             </summary>
-        </member>
-        <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.HandleConnectionAsync(AnalyzerService.Contracts.IAnalyzerConnection,System.Threading.CancellationToken)">
-            <summary>
-            Асинхронно обрабатывает один поток соединения; TCP listener и принятие клиента
-            принадлежат сервис-хосту, а здесь остаётся только прикладной протокол прибора.
-            </summary>
-            <param name="connection">Поток прибора и счётчики обмена.</param>
             <param name="cancellationToken">Сигнал остановки.</param>
-            <returns>Задача сеанса.</returns>
+            <returns>Задача, завершающаяся после остановки драйвера или с его ошибкой.</returns>
         </member>
         <member name="M:AnalyzerService.Contracts.IAnalyzerDriver.Stop">
-            <summary>Синхронно останавливает фоновые ресурсы драйвера после закрытия TCP-хоста.</summary>
+            <summary>
+            Синхронно подаёт сигнал остановки внутренних ресурсов драйвера.
+            Не должен ждать длительных операций: хост отдельно ожидает задачу RunAsync.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Contracts.IAnalyzerLogger">
             <summary>

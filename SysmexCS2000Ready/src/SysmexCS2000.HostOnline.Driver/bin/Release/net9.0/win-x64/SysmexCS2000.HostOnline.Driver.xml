@@ -109,6 +109,15 @@
             Сохраняет результат
             </summary>
         </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.MapLisResultCode(System.String)">
+            <summary>
+            Синхронно выбирает код сопоставления с ЛИС: повторные low 872/662
+            относятся к тем же тестам, что med 882/652. Параметров I/O нет,
+            поэтому асинхронность не нужна.
+            </summary>
+            <param name="instrumentCode">Исходный код результата прибора.</param>
+            <returns>Код для поиска теста в ЛИС.</returns>
+        </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.FormatLisValue(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResultItem)">
             <summary>
             Синхронно округляет уже расшифрованное число до одного десятичного знака

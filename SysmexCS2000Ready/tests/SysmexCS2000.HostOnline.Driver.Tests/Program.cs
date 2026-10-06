@@ -22,7 +22,8 @@ internal static class Program
         try
         {
             ParseInquiry();
-            HostSharesOnlyDriverContract();
+            HostSharesCommonLibraries();
+            LowResultsUseMedLisCodes();
             RuntimeAcceptsFileDriver().GetAwaiter().GetResult();
             ParseResult();
             NumericResultsFromStand();
@@ -42,12 +43,9 @@ internal static class Program
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
     }
 
-    /// <summary>Хост не ссылается на транспорт/ЛИС, а изолированный драйвер разделяет только контракт.</summary>
-    private static void HostSharesOnlyDriverContract()
+    /// <summary>Хост публикует общие зависимости, а драйвер разделяет их экземпляры.</summary>
+    private static void HostSharesCommonLibraries()
     {
-        string[] references = typeof(AnalyzerRuntime).Assembly.GetReferencedAssemblies().Select(a => a.Name ?? "").ToArray();
-        foreach (string name in new[] { "AnalyzerService.Transport", "AnalyzerService.LisDatabase", "AnalyzerService.ResultFiles" })
-            Equal(false, references.Contains(name), "host reference " + name);
         string root = Path.Combine(Path.GetTempPath(), "SharedDriver-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(root);
         try
@@ -96,11 +94,23 @@ internal static class Program
             {
                 var context = System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(driver.Instance.GetType().Assembly)!;
                 Equal(false, ReferenceEquals(context, System.Runtime.Loader.AssemblyLoadContext.Default), "isolated driver");
-                var identity = new System.Reflection.AssemblyName("AnalyzerService.Contracts");
-                var shared = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyName(identity);
-                File.Copy(shared.Location, Path.Combine(root, Path.GetFileName(shared.Location)));
-                Equal(true, ReferenceEquals(shared, context.LoadFromAssemblyName(identity)), "shared contract identity");
+                foreach (string name in new[] { "AnalyzerService.Contracts", "AnalyzerService.Transport", "AnalyzerService.LisDatabase", "AnalyzerService.ResultFiles" })
+                {
+                    var identity = new System.Reflection.AssemblyName(name);
+                    var shared = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyName(identity);
+                    Equal(true, ReferenceEquals(shared, context.LoadFromAssemblyName(identity)), "shared identity " + name);
+                }
             }
+    }
+
+    /// <summary>Проверяет обе пары low/med, не меняя код других результатов.</summary>
+    private static void LowResultsUseMedLisCodes()
+    {
+        Equal("882", HostOnlineResultHandler.MapLisResultCode("872"), "low 872 to med 882");
+        Equal("652", HostOnlineResultHandler.MapLisResultCode("662"), "low 662 to med 652");
+        Equal("882", HostOnlineResultHandler.MapLisResultCode("882"), "med 882 unchanged");
+        Equal("652", HostOnlineResultHandler.MapLisResultCode("652"), "med 652 unchanged");
+        Equal("392", HostOnlineResultHandler.MapLisResultCode("392"), "other code unchanged");
     }
 
     /// <summary>Проверяет позиции Sample ID и кода параметра R221.</summary>

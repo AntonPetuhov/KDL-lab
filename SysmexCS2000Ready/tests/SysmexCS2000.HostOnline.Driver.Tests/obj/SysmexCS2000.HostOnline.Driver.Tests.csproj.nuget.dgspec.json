@@ -40,7 +40,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },
@@ -99,6 +99,15 @@
             "projectReferences": {
               "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj": {
                 "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj"
+              },
+              "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj": {
+                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj"
+              },
+              "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj": {
+                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj"
+              },
+              "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj": {
+                "projectPath": "C:\\Development\\Analyzer Configuration Manager\\SysmexCS2000Ready\\src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj"
               }
             }
           }
@@ -109,7 +118,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },
@@ -188,7 +197,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },
@@ -263,7 +272,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },
@@ -332,7 +341,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },
@@ -411,7 +420,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },
@@ -486,7 +495,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "false",
+          "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
         },

@@ -13,9 +13,10 @@ public class DriverLoadContext(string mainAssemblyPath) : AssemblyLoadContext(is
     // Переопределяем метод Load, чтобы разрешать зависимости сборок
     protected override Assembly? Load(AssemblyName assemblyName)
     {
-        // Только контракт принадлежит хосту; транспорт, БД и прочие зависимости
-        // разрешаются из каталога конкретного драйвера.
-        if (assemblyName.Name is "AnalyzerService.Contracts")
+        // Общие библиотеки публикуются вместе с Host. Их идентичность должна
+        // совпадать у Host и всех DLL, иначе возможны ошибки приведения типов.
+        if (assemblyName.Name is "AnalyzerService.Contracts" or "AnalyzerService.Transport"
+            or "AnalyzerService.LisDatabase" or "AnalyzerService.ResultFiles")
             return Default.LoadFromAssemblyName(assemblyName);
 
         // Пытаемся разрешить сборку через Resolver
