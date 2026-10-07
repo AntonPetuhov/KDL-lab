@@ -6,13 +6,13 @@ namespace AnalyzerService.ResultFiles;
 /// Сохраняет исходные сообщения прибора и передаёт пациентские результаты отдельному
 /// потоку. Драйвер отвечает за разбор протокола, а очередь - только за жизненный цикл файлов.
 /// </summary>
-public sealed class RawResultQueue : IDisposable
+public class RawResultQueue : IDisposable
 {
     private readonly string root;
     private readonly IAnalyzerLogger logger;
     private readonly Action<byte[], string> process;
     private readonly AutoResetEvent wake = new(false);
-    private readonly object gate = new();
+    private readonly object locker = new();
     private Thread? worker;
     private bool stopping;
 
@@ -27,9 +27,11 @@ public sealed class RawResultQueue : IDisposable
     {
         if (string.IsNullOrWhiteSpace(settings.ResultsFolder))
             throw new ArgumentException("ResultsFolder обязателен.", nameof(settings));
-        root = Path.IsPathRooted(settings.ResultsFolder)
+
+        root = Path.IsPathRooted(settings.ResultsFolder) // является ли путь абсолютным, начинается ли путь с корня
             ? Path.GetFullPath(settings.ResultsFolder)
             : Path.GetFullPath(settings.ResultsFolder, Path.Combine(AppContext.BaseDirectory, settings.AnalyzerName));
+
         this.logger = logger;
         this.process = process;
     }
@@ -42,17 +44,25 @@ public sealed class RawResultQueue : IDisposable
     /// </summary>
     public void Start()
     {
-        lock (gate)
+        lock (locker)
         {
-            if (worker is not null) throw new InvalidOperationException("Очередь уже запущена.");
+            if (worker is not null) 
+                throw new InvalidOperationException("Очередь обработки результатов уже запущена.");
+
             Directory.CreateDirectory(root);
             Directory.CreateDirectory(Path.Combine(root, "archive"));
             Directory.CreateDirectory(Path.Combine(root, "errors"));
             Directory.CreateDirectory(Path.Combine(root, "QualityControl"));
             stopping = false;
-            worker = new Thread(Run) { IsBackground = true, Name = "Raw results: " + Path.GetFileName(root) };
+
+            worker = new Thread(Run) 
+            { 
+                IsBackground = true, Name = "Raw results: " + Path.GetFileName(root) 
+            };
+
             worker.Start();
-            logger.Service($"Очередь сырых результатов запущена: {root}.");
+
+            logger.Service($"Поток обработки сырых данных с прибора запущен: {root}.");
         }
     }
 
@@ -124,7 +134,9 @@ public sealed class RawResultQueue : IDisposable
         finally { if (File.Exists(temporary)) File.Delete(temporary); }
     }
 
-    /// <summary>Синхронный цикл выделенного потока: стартовый backlog и периодическая проверка новых файлов.</summary>
+    /// <summary>
+    /// Логика работы очереди
+    /// </summary>
     private void Run()
     {
         while (!stopping)
@@ -133,11 +145,15 @@ public sealed class RawResultQueue : IDisposable
             {
                 foreach (string file in Directory.EnumerateFiles(root, "*.raw", SearchOption.TopDirectoryOnly).OrderBy(x => x))
                 {
-                    if (stopping) break;
+                    if (stopping) 
+                        break;
                     ProcessFile(file);
                 }
             }
-            catch (Exception ex) { logger.Error($"Ошибка сканирования очереди {root}.", ex); }
+            catch (Exception ex) 
+            { 
+                logger.Error($"Ошибка сканирования очереди {root}.", ex); 
+            }
             wake.WaitOne(TimeSpan.FromSeconds(2));
         }
     }

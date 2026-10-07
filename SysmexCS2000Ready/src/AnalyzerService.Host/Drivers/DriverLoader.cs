@@ -18,7 +18,8 @@ public class DriverLoader
             ? Path.GetFullPath(configuredPath)
             : Path.GetFullPath(configuredPath, AppContext.BaseDirectory);
 
-        if (!File.Exists(assemblyPath)) throw new FileNotFoundException("DLL файл драйвера не найден.", assemblyPath);
+        if (!File.Exists(assemblyPath)) 
+            throw new FileNotFoundException("DLL файл драйвера не найден в папке.", assemblyPath);
 
         // Создаём изолированный контекст
         DriverLoadContext context = new(assemblyPath);
@@ -40,7 +41,7 @@ public class DriverLoader
 
             // Создаём экземпляр драйвера (вызов конструктора без параметров)
             var driverInstance = (IAnalyzerDriver?)Activator.CreateInstance(driverType) ?? throw new InvalidOperationException("Не удалось создать драйвер.");
-
+            // возвращаем драйвер и его загруженный контекст
             return new LoadedDriver(driverInstance, context);
         }
         catch

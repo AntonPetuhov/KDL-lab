@@ -38,3 +38,12 @@ C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.Transport.pdb
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.Transport.xml
 C:\Development\Analyzer Configuration Manager\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\obj\Debug\net9.0\SysmexCS.9FBE8CBF.Up2Date
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.LisDatabase.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.ResultFiles.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.Transport.dll
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.LisDatabase.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.LisDatabase.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.ResultFiles.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.ResultFiles.xml
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.Transport.pdb
+C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\SysmexCS2000.HostOnline.Driver\bin\Debug\net9.0\AnalyzerService.Transport.xml

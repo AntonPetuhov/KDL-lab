@@ -3,16 +3,40 @@
   "WorkspaceRootPath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.host\\runtime\\analyzerruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|solutionrelative:src\\analyzerservice.host\\runtime\\analyzerruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AAEAFEC6-5002-45FA-9C7C-8B0CBD188F87}|src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.resultfiles\\rawresultqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AAEAFEC6-5002-45FA-9C7C-8B0CBD188F87}|src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj|solutionrelative:src\\analyzerservice.resultfiles\\rawresultqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{66666666-6666-4666-8666-666666666666}|src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\sysmexcs2000.hostonline.driver\\analyzersysmexcs2000hostonline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66666666-6666-4666-8666-666666666666}|src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj|solutionrelative:src\\sysmexcs2000.hostonline.driver\\analyzersysmexcs2000hostonline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{66666666-6666-4666-8666-666666666666}|src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\sysmexcs2000.hostonline.driver\\lis\\hostonlineresulthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{66666666-6666-4666-8666-666666666666}|src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj|solutionrelative:src\\sysmexcs2000.hostonline.driver\\lis\\hostonlineresulthandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{66666666-6666-4666-8666-666666666666}|src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\sysmexcs2000.hostonline.driver\\sysmexcs2000hostonlinedriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{66666666-6666-4666-8666-666666666666}|src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000.HostOnline.Driver.csproj|solutionrelative:src\\sysmexcs2000.hostonline.driver\\sysmexcs2000hostonlinedriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55555555-5555-4555-8555-555555555555}|src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.lisdatabase\\lisdbprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55555555-5555-4555-8555-555555555555}|src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj|solutionrelative:src\\analyzerservice.lisdatabase\\lisdbprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.host\\runtime\\analyzerruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|solutionrelative:src\\analyzerservice.host\\runtime\\analyzerruntime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.host\\drivers\\loadeddriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|solutionrelative:src\\analyzerservice.host\\drivers\\loadeddriver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.host\\runtime\\analyzermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|solutionrelative:src\\analyzerservice.host\\runtime\\analyzermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|c:\\users\\anton.petuhov\\source\\repos\\kdl-lab\\sysmexcs2000ready\\src\\analyzerservice.host\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{22222222-2222-4222-8222-222222222222}|src\\AnalyzerService.Host\\AnalyzerService.Host.csproj|solutionrelative:src\\analyzerservice.host\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,19 +46,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AnalyzerRuntime.cs",
-              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
-              "RelativeDocumentMoniker": "src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
-              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
-              "RelativeToolTip": "src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAmwCcAAAAVAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "HostOnlineResultHandler.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\Lis\\HostOnlineResultHandler.cs",
+              "RelativeDocumentMoniker": "src\\SysmexCS2000.HostOnline.Driver\\Lis\\HostOnlineResultHandler.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\Lis\\HostOnlineResultHandler.cs",
+              "RelativeToolTip": "src\\SysmexCS2000.HostOnline.Driver\\Lis\\HostOnlineResultHandler.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAowA0AAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-05T12:41:30.362Z",
+              "WhenOpened": "2026-10-07T13:59:28.986Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RawResultQueue.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\RawResultQueue.cs",
+              "RelativeDocumentMoniker": "src\\AnalyzerService.ResultFiles\\RawResultQueue.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.ResultFiles\\RawResultQueue.cs",
+              "RelativeToolTip": "src\\AnalyzerService.ResultFiles\\RawResultQueue.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAAwI0AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T13:55:43.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LisDBProvider.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\LisDBProvider.cs",
+              "RelativeDocumentMoniker": "src\\AnalyzerService.LisDatabase\\LisDBProvider.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\LisDBProvider.cs",
+              "RelativeToolTip": "src\\AnalyzerService.LisDatabase\\LisDBProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T13:55:33.857Z",
               "EditorCaption": ""
             },
             {
@@ -45,22 +95,74 @@
               "RelativeDocumentMoniker": "src\\SysmexCS2000.HostOnline.Driver\\AnalyzerSysmexCS2000HostOnline.cs",
               "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\AnalyzerSysmexCS2000HostOnline.cs",
               "RelativeToolTip": "src\\SysmexCS2000.HostOnline.Driver\\AnalyzerSysmexCS2000HostOnline.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAIwCgAAABRAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAMwCYAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-05T12:27:28.593Z",
+              "WhenOpened": "2026-10-07T13:52:02.614Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "SysmexCS2000HostOnlineDriver.cs",
               "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000HostOnlineDriver.cs",
               "RelativeDocumentMoniker": "src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000HostOnlineDriver.cs",
               "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000HostOnlineDriver.cs",
               "RelativeToolTip": "src\\SysmexCS2000.HostOnline.Driver\\SysmexCS2000HostOnlineDriver.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABYAAABDAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAADAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-05T12:19:22.556Z",
+              "WhenOpened": "2026-10-07T13:09:49.411Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "LoadedDriver.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Drivers\\LoadedDriver.cs",
+              "RelativeDocumentMoniker": "src\\AnalyzerService.Host\\Drivers\\LoadedDriver.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Drivers\\LoadedDriver.cs",
+              "RelativeToolTip": "src\\AnalyzerService.Host\\Drivers\\LoadedDriver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T12:56:20.943Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AnalyzerRuntime.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
+              "RelativeDocumentMoniker": "src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
+              "RelativeToolTip": "src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAYwEEAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T10:01:55.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AnalyzerManager.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Runtime\\AnalyzerManager.cs",
+              "RelativeDocumentMoniker": "src\\AnalyzerService.Host\\Runtime\\AnalyzerManager.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Runtime\\AnalyzerManager.cs",
+              "RelativeToolTip": "src\\AnalyzerService.Host\\Runtime\\AnalyzerManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFIAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T08:39:02.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Worker.cs",
+              "DocumentMoniker": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Worker.cs",
+              "RelativeDocumentMoniker": "src\\AnalyzerService.Host\\Worker.cs",
+              "ToolTip": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.Host\\Worker.cs",
+              "RelativeToolTip": "src\\AnalyzerService.Host\\Worker.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAgwCsAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T07:22:01.157Z",
               "EditorCaption": ""
             }
           ]

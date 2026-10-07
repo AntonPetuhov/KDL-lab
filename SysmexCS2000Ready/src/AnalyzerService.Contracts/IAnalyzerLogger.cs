@@ -1,18 +1,18 @@
 namespace AnalyzerService.Contracts;
 
 /// <summary>
-/// Определяет синхронное структурированное логирование операций одного анализатора.
+/// структурированное логирование операций одного анализатора.
 /// </summary>
 public interface IAnalyzerLogger
 {
-    /// <summary>Записывает событие жизненного цикла.</summary>
+    // Записывает событие жизненного цикла.
     void Service(string message);
-    /// <summary>Записывает сетевое событие.</summary>
+    // Записывает сетевое событие.
     void Transport(string message);
-    /// <summary>Записывает событие протокола.</summary>
+    // Записывает событие протокола, обмен данными с анализатором.
     void Protocol(string message);
-    /// <summary>Записывает событие обработки результата.</summary>
+    // Записывает событие обработки результата.
     void Result(string message);
-    /// <summary>Записывает ошибку с контекстом.</summary>
+    // Записывает ошибку с контекстом.
     void Error(string message, Exception exception);
 }

@@ -15,16 +15,24 @@ public class LoadedDriver(IAnalyzerDriver instance, DriverLoadContext context) :
     public IAnalyzerDriver Instance { get; } = instance;
 
     /// <summary>
-    /// Синхронно освобождает драйвер и помечает контекст для выгрузки.
+    /// Освобождает драйвер и помечает контекст для выгрузки.
     /// </summary>
     public void Dispose()
     {
-        if (disposed) return;
+        if (disposed) 
+            return;
+
         disposed = true;
 
         // Выгрузка контекста должна быть запрошена и при ошибке Dispose драйвера.
         // Исключение DLL не скрывается: AnalyzerManager запишет его в Error.
-        try { Instance.Dispose(); }
-        finally { context.Unload(); }
+        try 
+        { 
+            Instance.Dispose(); 
+        }
+        finally 
+        { 
+            context.Unload(); 
+        }
     }
 }

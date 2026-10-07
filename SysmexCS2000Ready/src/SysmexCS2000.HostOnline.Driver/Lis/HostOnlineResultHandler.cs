@@ -7,9 +7,9 @@ using SysmexCS2000.HostOnline.Driver.Protocol;
 namespace SysmexCS2000.HostOnline.Driver.Lis;
 
 /// <summary>
-/// Преобразует D121/D221 в .res/.ok файлы для ЛИС.
+/// Преобразует файлы с D121/D221 в .res/.ok файлы для службы ЛИС.
 /// </summary>
-public sealed class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzerLogger logger, LisDBProvider repository)
+public class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzerLogger logger, LisDBProvider repository)
 {
     static HostOnlineResultHandler() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

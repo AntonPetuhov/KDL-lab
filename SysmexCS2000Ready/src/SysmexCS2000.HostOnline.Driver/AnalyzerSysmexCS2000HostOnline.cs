@@ -30,7 +30,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     private Task? runTask;
 
     /// <summary>
-    /// Синхронно создаёт обработчики без открытия сети; исключения инициализации
+    /// Создаёт обработчики без открытия сети; исключения инициализации
     /// поднимаются в AnalyzerRuntime, который пишет их в файловый журнал.
     /// </summary>
     public AnalyzerSysmexCS2000HostOnline(IAnalyzerLogger logger, AnalyzerSettings settings)

@@ -18,7 +18,9 @@ public class AnalyzerLoggerFactory
         return new FileAnalyzerLogger(Path.GetFullPath(logs, basePath));
     }
 
-    /// <summary>Создаёт общий файловый журнал ошибок до загрузки настроек приборов.</summary>
+    /// <summary>
+    /// Создаёт общий файловый журнал ошибок до загрузки настроек приборов.
+    /// </summary>
     /// <returns>Логгер службы в каталоге Logs рядом с EXE.</returns>
     public IAnalyzerLogger CreateServiceLogger() =>
         new FileAnalyzerLogger(Path.Combine(AppContext.BaseDirectory, "Logs"));

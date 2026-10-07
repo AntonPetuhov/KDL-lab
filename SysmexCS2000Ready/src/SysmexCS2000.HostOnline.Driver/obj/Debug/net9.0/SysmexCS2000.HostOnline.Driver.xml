@@ -6,9 +6,9 @@
     <members>
         <member name="T:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline">
             <summary>
-            Разбирает прикладной протокол Sysmex Host Online в уже открытом потоке.
-            Вызовы Start/Stop и владение TCP-сокетом принадлежат сервис-хосту; DLL владеет
-            только кодеком, запросом в ЛИС и очередью сырых результатов.
+            Запускает TCP listener и разбирает прикладной протокол Sysmex Host Online.
+            DLL владеет сокетом, кодеком, запросами в ЛИС и очередью сырых результатов;
+            сервис-хост вызывает только методы жизненного цикла IAnalyzerDriver.
             </summary>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings)">
@@ -18,7 +18,7 @@
             </summary>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.Start">
-            <summary>Синхронно запускает очередь; TCP listener запускает AnalyzerRuntime.</summary>
+            <summary>Синхронно запускает очередь результатов; TCP listener откроет RunAsync.</summary>
             <exception cref="T:System.IO.IOException">Не удалось создать каталог сырых результатов.</exception>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.AnalyzerSysmexCS2000HostOnline.RunAsync(System.Threading.CancellationToken)">
@@ -108,6 +108,15 @@
             <summary>
             Сохраняет результат
             </summary>
+        </member>
+        <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.MapLisResultCode(System.String)">
+            <summary>
+            Синхронно выбирает код сопоставления с ЛИС: повторные low 872/662
+            относятся к тем же тестам, что med 882/652. Параметров I/O нет,
+            поэтому асинхронность не нужна.
+            </summary>
+            <param name="instrumentCode">Исходный код результата прибора.</param>
+            <returns>Код для поиска теста в ЛИС.</returns>
         </member>
         <member name="M:SysmexCS2000.HostOnline.Driver.Lis.HostOnlineResultHandler.FormatLisValue(SysmexCS2000.HostOnline.Driver.Protocol.HostOnlineResultItem)">
             <summary>

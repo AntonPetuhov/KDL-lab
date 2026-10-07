@@ -15,7 +15,7 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
 
     /// <summary>
     /// Регистрируем новый анализатор в словаре analyzers (анализаторы, которые будут запущены). 
-    /// Выбрасывается исключение, если анализатор с таким именем уже есть.
+    /// Исключение, если анализатор с таким именем уже есть.
     /// </summary>
     public void Add(AnalyzerSettings settings)
     {
@@ -31,11 +31,13 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
     /// </summary>
     public async Task StartAllAsync(CancellationToken token)
     {
+        
         foreach (AnalyzerRuntime analyzer in analyzers.Values) 
         {
             //await analyzer.StartAsync(token).ConfigureAwait(false);
             await analyzer.StartAsync(token);
         }
+        // ждем когда все задачи завершатся
         await Task.WhenAll(analyzers.Values.Select(analyzer => analyzer.Completion)).ConfigureAwait(false);
     }
 
@@ -60,7 +62,10 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
             }
             finally
             {
-                try { analyzer.Dispose(); }
+                try 
+                { 
+                    analyzer.Dispose(); 
+                }
                 catch (Exception ex)
                 {
                     serviceLog.Error($"{analyzer.Name}: исключение освобождения ресурсов; будет включено в AggregateException.", ex);
@@ -69,24 +74,30 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
             }
         }
             
-        if (errors.Count != 0) throw new AggregateException("Ошибки остановки анализаторов.", errors);
+        if (errors.Count != 0) 
+            throw new AggregateException("Ошибки остановки анализаторов.", errors);
     }
 
-    /// <summary>Освобождает ресурсы всех анализаторов синхронно; ошибки пишет в файл и агрегирует.</summary>
-    /// <exception cref="AggregateException">Один или несколько анализаторов не удалось освободить.</exception>
+    /// <summary>
+    /// Освобождает ресурсы всех анализаторов; ошибки пишет в файл и аггрегирует.
+    /// </summary>
     public void Dispose() 
     {
         List<Exception> errors = [];
         IAnalyzerLogger serviceLog = loggerFactory.CreateServiceLogger();
         foreach (AnalyzerRuntime analyzer in analyzers.Values) 
         {
-            try { analyzer.Dispose(); }
+            try 
+            { 
+                analyzer.Dispose(); 
+            }
             catch (Exception ex)
             {
                 serviceLog.Error($"{analyzer.Name}: исключение освобождения ресурсов при Dispose.", ex);
                 errors.Add(ex);
             }
         }
-        if (errors.Count != 0) throw new AggregateException("Ошибки освобождения анализаторов.", errors);
+        if (errors.Count != 0) 
+            throw new AggregateException("Ресурсы одного или нескольких анализаторов не удалось освободить. Есть ошибки освобождения ресурсов анализаторов.", errors);
     }
 }
