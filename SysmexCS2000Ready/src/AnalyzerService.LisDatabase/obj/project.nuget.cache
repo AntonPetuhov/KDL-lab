@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6hGDcgI0Eig=",
+  "dgSpecHash": "bWB2c0oEH+Y=",
   "success": true,
   "projectFilePath": "C:\\Users\\anton.petuhov\\source\\repos\\KDL-lab\\SysmexCS2000Ready\\src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj",
   "expectedPackageFiles": [
@@ -21,12 +21,16 @@
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.identitymodel.protocols\\8.16.0\\microsoft.identitymodel.protocols.8.16.0.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\8.16.0\\microsoft.identitymodel.protocols.openidconnect.8.16.0.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.16.0\\microsoft.identitymodel.tokens.8.16.0.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.20\\microsoft.net.illink.tasks.9.0.20.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.13\\system.configuration.configurationmanager.9.0.13.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\system.diagnostics.eventlog\\9.0.13\\system.diagnostics.eventlog.9.0.13.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.16.0\\system.identitymodel.tokens.jwt.8.16.0.nupkg.sha512",
     "C:\\Users\\anton.petuhov\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.13\\system.security.cryptography.pkcs.9.0.13.nupkg.sha512",
-    "C:\\Users\\anton.petuhov\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.13\\system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.13\\system.security.cryptography.protecteddata.9.0.13.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\9.0.20\\microsoft.netcore.app.runtime.win-x64.9.0.20.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\9.0.20\\microsoft.windowsdesktop.app.runtime.win-x64.9.0.20.nupkg.sha512",
+    "C:\\Users\\anton.petuhov\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\9.0.20\\microsoft.aspnetcore.app.runtime.win-x64.9.0.20.nupkg.sha512"
   ],
   "logs": []
 }
