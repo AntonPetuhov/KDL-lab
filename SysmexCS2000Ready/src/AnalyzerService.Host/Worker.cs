@@ -40,6 +40,7 @@ public class Worker(JsonAnalyzerSettingsProvider settingsProvider, AnalyzerSetti
         }
         catch (Exception ex)
         {
+            File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"), ex.ToString());
             serviceLog.Error($"Исключение запуска службы. Каталог настроек: {directory}.", ex);
             logger.LogCritical(ex, "Служба конфигурации анализаторов аварийно завершена.");
             throw;

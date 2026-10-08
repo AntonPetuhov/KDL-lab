@@ -1,0 +1,21 @@
+﻿08.10.2026 16:31:38 Error: Исключение запуска службы. Каталог настроек: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\configs.
+System.IO.FileNotFoundException: DLL файл драйвера не найден в папке.
+File name: 'C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.dll'
+   at AnalyzerService.Host.Drivers.DriverLoader.Load(String configuredPath) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Drivers\DriverLoader.cs:line 22
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(CancellationToken serviceToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 58
+   at AnalyzerService.Host.Runtime.AnalyzerManager.StartAllAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerManager.cs:line 39
+   at AnalyzerService.Host.Worker.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Worker.cs:line 35
+08.10.2026 16:36:19 Error: Исключение запуска службы. Каталог настроек: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\configs.
+System.IO.FileNotFoundException: DLL файл драйвера не найден в папке.
+File name: 'C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.dll'
+   at AnalyzerService.Host.Drivers.DriverLoader.Load(String configuredPath) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Drivers\DriverLoader.cs:line 22
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(CancellationToken serviceToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 58
+   at AnalyzerService.Host.Runtime.AnalyzerManager.StartAllAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerManager.cs:line 39
+   at AnalyzerService.Host.Worker.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Worker.cs:line 35
+08.10.2026 16:37:22 Error: Исключение запуска службы. Каталог настроек: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\configs.
+System.IO.FileNotFoundException: DLL файл драйвера не найден в папке.
+File name: 'C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\drivers\SysmexCS2000HostOnline\SysmexCS2000.HostOnline.Driver.dll'
+   at AnalyzerService.Host.Drivers.DriverLoader.Load(String configuredPath) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Drivers\DriverLoader.cs:line 22
+   at AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(CancellationToken serviceToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerRuntime.cs:line 58
+   at AnalyzerService.Host.Runtime.AnalyzerManager.StartAllAsync(CancellationToken token) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Runtime\AnalyzerManager.cs:line 39
+   at AnalyzerService.Host.Worker.ExecuteAsync(CancellationToken stoppingToken) in C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\Worker.cs:line 35

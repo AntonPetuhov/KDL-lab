@@ -12,11 +12,8 @@
         </member>
         <member name="M:AnalyzerService.Host.Configuration.AnalyzerSettingsValidator.ValidateAndThrow(AnalyzerService.Contracts.AnalyzerSettings,System.String)">
             <summary>
-            Синхронно проверяет все обязательные параметры и выбрасывает одну ошибку со списком нарушений.
+            проверяем все обязательные параметры в файле JSON и выбрасываем исключение со списком ошибок.
             </summary>
-            <param name="settings">Проверяемые настройки.</param>
-            <param name="sourcePath">Путь для диагностического сообщения.</param>
-            <exception cref="T:System.IO.InvalidDataException">Обнаружены ошибки конфигурации.</exception>
         </member>
         <member name="T:AnalyzerService.Host.Configuration.JsonAnalyzerSettingsProvider">
             <summary>
@@ -68,7 +65,7 @@
         </member>
         <member name="M:AnalyzerService.Host.Drivers.LoadedDriver.Dispose">
             <summary>
-            Синхронно освобождает драйвер и помечает контекст для выгрузки.
+            Освобождает драйвер и помечает контекст для выгрузки.
             </summary>
         </member>
         <member name="T:AnalyzerService.Host.Logging.AnalyzerLoggerFactory">
@@ -82,7 +79,9 @@
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Logging.AnalyzerLoggerFactory.CreateServiceLogger">
-            <summary>Создаёт общий файловый журнал ошибок до загрузки настроек приборов.</summary>
+            <summary>
+            Создаёт общий файловый журнал ошибок до загрузки настроек приборов.
+            </summary>
             <returns>Логгер службы в каталоге Logs рядом с EXE.</returns>
         </member>
         <member name="T:AnalyzerService.Host.Logging.FileAnalyzerLogger">
@@ -92,25 +91,14 @@
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.#ctor(System.String)">
-            <summary>Создаёт логгер и каталог журналов.</summary>
-        </member>
-        <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Service(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Transport(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Protocol(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Result(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Error(System.String,System.Exception)">
-            <inheritdoc />
+            <summary>
+            Создаёт логгер и каталог журналов.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Logging.FileAnalyzerLogger.Write(System.String,System.String)">
-            <summary>Добавляет одну запись в лог, сохраняя порядок сообщений.</summary>
+            <summary>
+            Добавляет одну запись в лог, сохраняя порядок сообщений.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Host.Runtime.AnalyzerManager">
             <summary>
@@ -127,7 +115,7 @@
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.Add(AnalyzerService.Contracts.AnalyzerSettings)">
             <summary>
             Регистрируем новый анализатор в словаре analyzers (анализаторы, которые будут запущены). 
-            Выбрасывается исключение, если анализатор с таким именем уже есть.
+            Исключение, если анализатор с таким именем уже есть.
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.StartAllAsync(System.Threading.CancellationToken)">
@@ -142,8 +130,9 @@
             </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerManager.Dispose">
-            <summary>Освобождает ресурсы всех анализаторов синхронно; ошибки пишет в файл и агрегирует.</summary>
-            <exception cref="T:System.AggregateException">Один или несколько анализаторов не удалось освободить.</exception>
+            <summary>
+            Освобождает ресурсы всех анализаторов; ошибки пишет в файл и аггрегирует.
+            </summary>
         </member>
         <member name="T:AnalyzerService.Host.Runtime.AnalyzerRuntime">
             <summary>
@@ -160,28 +149,27 @@
             </summary>
         </member>
         <member name="P:AnalyzerService.Host.Runtime.AnalyzerRuntime.Name">
-            <summary>Имя анализатора из JSON для диагностики.</summary>
+            <summary>
+            Имя анализатора из JSON для диагностики.
+            </summary>
         </member>
         <member name="P:AnalyzerService.Host.Runtime.AnalyzerRuntime.Completion">
-            <summary>Задача полного рабочего цикла DLL; менеджер наблюдает её ошибки.</summary>
+            <summary>
+            Задача полного рабочего цикла драйвера DLL; 
+            менеджер наблюдает её ошибки.
+            </summary>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.StartAsync(System.Threading.CancellationToken)">
             <summary>
-            Синхронно загружает и инициализирует DLL, затем отдаёт ей команду RunAsync.
+            Загружает и инициализирует DLL, затем отдаёт ей команду RunAsync.
             Task возвращается для контракта менеджера; ожидание I/O остаётся внутри DLL.
             </summary>
-            <param name="serviceToken">Отмена Windows Service.</param>
-            <returns>Уже завершённая задача запуска; работа драйвера доступна через Completion.</returns>
-            <exception cref="T:System.Exception">Ошибка загрузки или запуска логируется и пробрасывается.</exception>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.StopAsync(System.Threading.CancellationToken)">
             <summary>
             Сначала отменяет рабочий цикл и вызывает синхронный Stop драйвера, чтобы
-            разблокировать его I/O, затем асинхронно ожидает RunAsync. Тип I/O неизвестен хосту.
+            разблокировать его I/O, затем асинхронно ожидает RunAsync.
             </summary>
-            <param name="cancellationToken">Ограничение ожидания при остановке службы.</param>
-            <returns>Задача завершения DLL.</returns>
-            <exception cref="T:System.AggregateException">Ошибки Stop или рабочего цикла, уже записанные в журнал.</exception>
         </member>
         <member name="M:AnalyzerService.Host.Runtime.AnalyzerRuntime.Dispose">
             <summary>

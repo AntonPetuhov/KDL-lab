@@ -14,13 +14,11 @@
             <summary>
             Синхронно создаёт очередь из существующего ResultsFolder JSON; сеть и ожидание здесь не нужны.
             </summary>
-            <param name="settings">Настройки анализатора.</param>
-            <param name="logger">Логгер операций с файлами.</param>
-            <param name="process">Преобразование одного сырого сообщения в файлы ЛИС; исключение означает ошибку файла.</param>
-            <exception cref="T:System.ArgumentException">Папка результатов не указана.</exception>
         </member>
         <member name="P:AnalyzerService.ResultFiles.RawResultQueue.Root">
-            <summary>Возвращает абсолютную папку накопления для диагностики.</summary>
+            <summary>
+            Возвращает абсолютную папку накопления для диагностики.
+            </summary>
         </member>
         <member name="M:AnalyzerService.ResultFiles.RawResultQueue.Start">
             <summary>
@@ -57,13 +55,19 @@
             <summary>Синхронно освобождает поток и сигнал; исключения остановки не скрываются.</summary>
         </member>
         <member name="M:AnalyzerService.ResultFiles.RawResultQueue.Save(System.String,System.String,System.String,System.Byte[])">
-            <summary>Синхронно создаёт уникальный файл через временное имя и атомарное переименование.</summary>
+            <summary>
+            Cоздаёт уникальный файл через временное имя, чтобы не было ситуации с неполностью записанным файлом
+            </summary>
         </member>
         <member name="M:AnalyzerService.ResultFiles.RawResultQueue.Run">
-            <summary>Синхронный цикл выделенного потока: стартовый backlog и периодическая проверка новых файлов.</summary>
+            <summary>
+            Логика работы очереди
+            </summary>
         </member>
         <member name="M:AnalyzerService.ResultFiles.RawResultQueue.ProcessFile(System.String)">
-            <summary>Преобразует один файл и перемещает его в archive или errors; ошибки переноса сохраняют исходник.</summary>
+            <summary>
+            Преобразует один файл и перемещает его в archive или errors.
+            </summary>
         </member>
     </members>
 </doc>

@@ -10,7 +10,7 @@ public class RawResultQueue : IDisposable
 {
     private readonly string root;
     private readonly IAnalyzerLogger logger;
-    private readonly Action<byte[], string> process;
+    private readonly Action<byte[], string> process; // Преобразование одного сырого сообщения в файлы ЛИС; исключение означает ошибку файла.
     private readonly AutoResetEvent wake = new(false);
     private readonly object locker = new();
     private Thread? worker;
@@ -19,10 +19,6 @@ public class RawResultQueue : IDisposable
     /// <summary>
     /// Синхронно создаёт очередь из существующего ResultsFolder JSON; сеть и ожидание здесь не нужны.
     /// </summary>
-    /// <param name="settings">Настройки анализатора.</param>
-    /// <param name="logger">Логгер операций с файлами.</param>
-    /// <param name="process">Преобразование одного сырого сообщения в файлы ЛИС; исключение означает ошибку файла.</param>
-    /// <exception cref="ArgumentException">Папка результатов не указана.</exception>
     public RawResultQueue(AnalyzerSettings settings, IAnalyzerLogger logger, Action<byte[], string> process)
     {
         if (string.IsNullOrWhiteSpace(settings.ResultsFolder))
@@ -36,7 +32,9 @@ public class RawResultQueue : IDisposable
         this.process = process;
     }
 
-    /// <summary>Возвращает абсолютную папку накопления для диагностики.</summary>
+    /// <summary>
+    /// Возвращает абсолютную папку накопления для диагностики.
+    /// </summary>
     public string Root => root;
 
     /// <summary>
@@ -104,34 +102,54 @@ public class RawResultQueue : IDisposable
     public void Stop()
     {
         Thread? current;
-        lock (gate) { stopping = true; current = worker; wake.Set(); }
-        if (current is null) return;
-        if (Thread.CurrentThread == current) throw new InvalidOperationException("Поток очереди не может остановить сам себя.");
+        lock (locker) 
+        { 
+            stopping = true; 
+            current = worker; 
+            wake.Set(); 
+        }
+        if (current is null) 
+            return;
+        if (Thread.CurrentThread == current) 
+            throw new InvalidOperationException("Поток очереди не может остановить сам себя.");
         current.Join();
-        lock (gate) worker = null;
-        logger.Service($"Очередь сырых результатов остановлена: {root}.");
+        lock (locker) 
+            worker = null;
+
+        logger.Service($"Поток обработки очереди сырых результатов остановлен: {root}.");
     }
 
     /// <summary>Синхронно освобождает поток и сигнал; исключения остановки не скрываются.</summary>
-    public void Dispose() { Stop(); wake.Dispose(); }
+    public void Dispose() 
+    { 
+        Stop(); 
+        wake.Dispose(); 
+    }
 
-    /// <summary>Синхронно создаёт уникальный файл через временное имя и атомарное переименование.</summary>
+    /// <summary>
+    /// Cоздаёт уникальный файл через временное имя, чтобы не было ситуации с неполностью записанным файлом
+    /// </summary>
     private static string Save(string directory, string prefix, string sampleId, byte[] raw)
     {
         Directory.CreateDirectory(directory);
         string safeId = string.Concat(sampleId.Trim().Take(60).Select(c =>
             char.IsLetterOrDigit(c) || c is '-' or '_' ? c : '_'));
-        if (safeId.Length == 0) safeId = "UNKNOWN";
+        if (safeId.Length == 0) 
+            safeId = "UNKNOWN";
         string name = $"{prefix}_{safeId}_{DateTime.UtcNow:yyyyMMddHHmmssfffffff}.raw";
         string path = Path.Combine(directory, name);
         string temporary = path + ".tmp";
         try
         {
-            File.WriteAllBytes(temporary, raw);
-            File.Move(temporary, path);
+            File.WriteAllBytes(temporary, raw); // сначала байты пишем во временный файл
+            File.Move(temporary, path, overwrite: true); // перезаписываем
             return path;
         }
-        finally { if (File.Exists(temporary)) File.Delete(temporary); }
+        finally 
+        { 
+            if (File.Exists(temporary)) 
+                File.Delete(temporary); 
+        }
     }
 
     /// <summary>
@@ -147,6 +165,7 @@ public class RawResultQueue : IDisposable
                 {
                     if (stopping) 
                         break;
+
                     ProcessFile(file);
                 }
             }
@@ -158,7 +177,9 @@ public class RawResultQueue : IDisposable
         }
     }
 
-    /// <summary>Преобразует один файл и перемещает его в archive или errors; ошибки переноса сохраняют исходник.</summary>
+    /// <summary>
+    /// Преобразует один файл и перемещает его в archive или errors.
+    /// </summary>
     private void ProcessFile(string file)
     {
         string destination = "archive";
@@ -166,7 +187,7 @@ public class RawResultQueue : IDisposable
         {
             byte[] raw = File.ReadAllBytes(file);
             process(raw, Path.GetFileNameWithoutExtension(file));
-            logger.Result($"Сырой файл обработан: {file}.");
+            logger.Result($"Сырой файл с результатами обработан: {file}.");
         }
         catch (Exception ex)
         {
@@ -176,9 +197,12 @@ public class RawResultQueue : IDisposable
         try
         {
             string target = Path.Combine(root, destination, Path.GetFileName(file));
-            File.Move(file, target);
+            File.Move(file, target, overwrite: true);
             logger.Result($"Файл перемещён: {target}.");
         }
-        catch (Exception ex) { logger.Error($"Не удалось переместить файл {file} в {destination}; он остаётся в очереди.", ex); }
+        catch (Exception ex) 
+        { 
+            logger.Error($"Не удалось переместить файл {file} в {destination}; он остаётся в очереди.", ex); 
+        }
     }
 }

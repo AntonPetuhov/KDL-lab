@@ -15,7 +15,7 @@ namespace SysmexCS2000.HostOnline.Driver;
 /// DLL владеет сокетом, кодеком, запросами в ЛИС и очередью сырых результатов;
 /// сервис-хост вызывает только методы жизненного цикла IAnalyzerDriver.
 /// </summary>
-public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
+public class AnalyzerSysmexCS2000HostOnline : IDisposable
 {
     private const byte Stx = 0x02;
     private const byte Etx = 0x03;
@@ -37,31 +37,37 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     {
         this.logger = logger;
         this.settings = settings;
+
         // Создаём зависимости
         dbProvider = new LisDBProvider(settings, logger);
         resultHandler = new HostOnlineResultHandler(settings, logger, dbProvider);
         resultQueue = new RawResultQueue(settings, logger, ProcessStoredResult);
     }
 
-    /// <summary>Синхронно запускает очередь результатов; TCP listener откроет RunAsync.</summary>
-    /// <exception cref="IOException">Не удалось создать каталог сырых результатов.</exception>
-    public void Start()
+    /// <summary>
+    /// Запускает обработку результатов; TCP listener откроет RunAsync.
+    /// </summary>
+    public void StartResultsProcessing()
     {
-        if (settings.ResultHandlerStatus) resultQueue.Start();
-        logger.Service($"Host Online драйвер {settings.AnalyzerName} запущен; ResultHandlerStatus={settings.ResultHandlerStatus}.");
+        if (settings.ResultHandlerStatus) 
+            resultQueue.Start();
+
+        logger.Service($"Host Online драйвер {settings.AnalyzerName} запущен; Обработка результатов (ResultHandlerStatus) = {settings.ResultHandlerStatus}.");
     }
 
     /// <summary>
     /// Синхронно открывает TCP listener по настройкам DLL и возвращает асинхронный
     /// рабочий цикл. Сервис-хост не участвует в создании сокета или приёме клиента.
     /// </summary>
-    /// <param name="token">Отмена работы анализатора.</param>
-    /// <returns>Задача приёма TCP-сеансов до остановки.</returns>
-    /// <exception cref="Exception">Ошибка запуска логируется сервис-хостом и пробрасывается.</exception>
     public Task RunAsync(CancellationToken token)
     {
-        if (runTask is not null) throw new InvalidOperationException("Рабочий цикл Sysmex уже запущен.");
-        Start();
+        if (runTask is not null) 
+            throw new InvalidOperationException("Рабочий цикл Sysmex cs2000i уже запущен.");
+
+        // Запуск обработки файлов с результатами
+        StartResultsProcessing();
+
+        // Запуск TCP хоста
         TcpHost host = new(logger, settings.AnalyzerName);
         try
         {
@@ -74,7 +80,10 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         catch
         {
             host.Dispose();
-            if (settings.ResultHandlerStatus) resultQueue.Stop();
+
+            if (settings.ResultHandlerStatus) 
+                resultQueue.Stop();
+
             throw;
         }
     }
@@ -83,9 +92,6 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// Асинхронно ждёт клиента и вызывает прикладной протокол для каждого сеанса.
     /// Ожидание Accept/Read необходимо, чтобы не блокировать поток службы.
     /// </summary>
-    /// <param name="host">TCP-сервер, принадлежащий этому драйверу.</param>
-    /// <param name="token">Отмена работы драйвера.</param>
-    /// <returns>Задача до закрытия listener.</returns>
     private async Task RunConnectionsAsync(TcpHost host, CancellationToken token)
     {
         try
@@ -96,11 +102,18 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                 try
                 {
                     client = await host.AcceptAsync(token).ConfigureAwait(false);
+
                     await HandleConnectionAsync(new TcpAnalyzerConnection(client.GetStream(), host), token)
                         .ConfigureAwait(false);
                 }
-                catch (OperationCanceledException) when (token.IsCancellationRequested) { break; }
-                catch (Exception) when (token.IsCancellationRequested) { break; }
+                catch (OperationCanceledException) when (token.IsCancellationRequested) 
+                { 
+                    break; 
+                }
+                catch (Exception) when (token.IsCancellationRequested) 
+                { 
+                    break; 
+                }
                 catch (EndOfStreamException)
                 {
                     logger.Transport($"{settings.AnalyzerName}: прибор закрыл соединение; ожидается новое подключение.");
@@ -113,7 +126,10 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                 finally
                 {
                     if (client is not null)
-                        try { host.ReleaseClient(client); }
+                        try 
+                        { 
+                            host.ReleaseClient(client); 
+                        }
                         catch (Exception ex)
                         {
                             logger.Error($"{settings.AnalyzerName}: исключение освобождения TCP-клиента.", ex);
@@ -131,46 +147,49 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     }
 
     /// <summary>
-    /// Асинхронно принимает тексты в одном уже принятом соединении. Здесь ожидаются
-    /// только байты потока; SQL-запрос GetOrder и запись .raw выполняются синхронно.
+    /// Асинхронно принимает тексты в одном уже принятом соединении. Здесь ожидаются только байты потока;
     /// Ошибки логируются и пробрасываются в AnalyzerRuntime для закрытия сеанса.
     /// </summary>
-    /// <param name="connection">Поток и счётчики общего TCP-host.</param>
-    /// <param name="token">Отмена службы.</param>
-    /// <returns>Задача до закрытия соединения прибором или сервисом.</returns>
     public async Task HandleConnectionAsync(ITcpConnection connection, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(connection);
+
         blocks.Clear();
         try
         {
             while (!token.IsCancellationRequested)
             {
+                // считываем данные и формируем кортеж, строка и массив байт
                 (string body, byte[] rawFrame) = await ReadTextAsync(connection.Stream, token).ConfigureAwait(false);
                 connection.RecordRead();
+
                 logger.Protocol($"RX: {body}");
+
                 if (body.StartsWith("DS21", StringComparison.Ordinal))
                 {
                     logger.Protocol("Получен DS21: информационный текст, результат не создаётся.");
                     continue;
                 }
+
                 (string Body, byte[] Raw)? complete = AddBlock(body, rawFrame);
-                if (complete is null) continue;
+                if (complete is null) 
+                    continue;
 
                 // Если сообщение с запросом задания
                 if (complete.Value.Body[0] == 'R')
                 {
                     HostOnlineInquiry inquiry = codec.ParseInquiry(complete.Value.Body);
-                    logger.Protocol($"Запрос R221: штатив='{inquiry.Header.RackNumber.Trim()}', " +
-                                    $"позиция='{inquiry.Header.TubePosition}', образец='{inquiry.Header.SampleId}', " +
-                                    $"группы прибора=[{string.Join(",", inquiry.ExistingParameters)}].");
+
+                    logger.Protocol($"Запрос R221: штатив = '{inquiry.Header.RackNumber.Trim()}', " +
+                                    $"позиция = '{inquiry.Header.TubePosition}', образец = '{inquiry.Header.SampleId}', " +
+                                    $"методики прибора = [{string.Join(",", inquiry.ExistingParameters)}].");
                     LisOrder? order = dbProvider.GetOrder(inquiry.Header.SampleId);
                     string emptyCode = order is null ? "999" : "000";
                     IReadOnlyList<string> responses = codec.BuildOrder(inquiry, order, emptyCode);
-                    logger.Protocol($"Задание {inquiry.Header.SampleId}: кандидаты ЛИС=[{string.Join(",", order?.Parameters ?? [])}], " +
-                                    $"коды S221=[{string.Join(",", responses.SelectMany(HostOnlineCodec.ReadOrderCodes))}], " +
-                                    $"блоков={responses.Count}; ID Information={responses[0][42]}, " +
-                                    $"поле пациента='{responses[0].Substring(43, 15).TrimEnd()}'.");
+                    logger.Protocol($"Задание {inquiry.Header.SampleId}: тесты ЛИС = [{string.Join(",", order?.Parameters ?? [])}], " +
+                                    $"коды S221 = [{string.Join(",", responses.SelectMany(HostOnlineCodec.ReadOrderCodes))}], " +
+                                    $"блоков = {responses.Count}; ID Information = {responses[0][42]}, " +
+                                    $"пациент = '{responses[0].Substring(43, 15).TrimEnd()}'.");
                     foreach (string response in responses)
                         await WriteTextAsync(connection, response, token).ConfigureAwait(false);
                 }
@@ -181,11 +200,12 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                     string sampleId = complete.Value.Body.Substring(27, 15).Trim();
                     string messageType = complete.Value.Body[..4];
                     bool qualityControl = complete.Value.Body[8] == 'C';
-                    logger.Protocol($"Получено сообщение {messageType}: образец='{sampleId}', " +
-                                    $"штатив='{complete.Value.Body.Substring(19, 6).Trim()}', " +
-                                    $"позиция='{complete.Value.Body.Substring(25, 2)}', " +
-                                    $"тип={(qualityControl ? "контроль качества" : "пациентский результат")}, " +
-                                    $"байт={complete.Value.Raw.Length}.");
+                    logger.Protocol($"Получено сообщение {messageType}: образец ='{sampleId}', " +
+                                    $"штатив = '{complete.Value.Body.Substring(19, 6).Trim()}', " +
+                                    $"позиция = '{complete.Value.Body.Substring(25, 2)}', " +
+                                    $"тип = {(qualityControl ? "контроль качества" : "пациентский результат")}, " +
+                                    $"байт = {complete.Value.Raw.Length}.");
+
                     // Если Контроль качества
                     if (qualityControl)
                         resultQueue.SaveQualityControl(sampleId, complete.Value.Raw);
@@ -196,7 +216,7 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
                         logger.Protocol($"Результат {sampleId}: " +
                                         (received.Items.Count == 0 ? "показателей нет" :
                                          string.Join("; ", received.Items.Select(item =>
-                                             $"код={item.ParameterCode}, значение='{item.Data}', флаг='{item.Flag}'"))));
+                                             $"код = {item.ParameterCode}, значение = '{item.Data}', флаг = '{item.Flag}'"))));
                     }
                 }
                 else logger.Protocol($"Текст типа {complete.Value.Body[0]} принят без прикладной обработки.");
@@ -216,9 +236,6 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// Синхронно объединяет несколько кадров сообщения, оставляя точные входные байты
     /// для сохранения результатов. Ошибки номеров являются ошибками протокола.
     /// </summary>
-    /// <param name="body">Тело принятого кадра.</param>
-    /// <param name="rawFrame">Байты с STX/ETX.</param>
-    /// <returns>Полное сообщение либо null до прихода последнего блока.</returns>
     private (string Body, byte[] Raw)? AddBlock(string body, byte[] rawFrame)
     {
         if (body.Length < HostOnlineCodec.HeaderLength)
@@ -243,11 +260,9 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     }
 
     /// <summary>
-    /// Синхронно восстанавливает сохранённые STX/ETX-кадры и создаёт выход ЛИС
+    /// Восстанавливает сохранённые STX/ETX-кадры и создаёт выходные файлы для ЛИС
     /// на выделенном потоке RawResultQueue; ошибка переводит .raw в errors.
     /// </summary>
-    /// <param name="raw">Исходные байты результата.</param>
-    /// <param name="sourceId">Имя файла для идемпотентного выхода .res/.ok.</param>
     private void ProcessStoredResult(byte[] raw, string sourceId)
     {
         List<string> parts = [];
@@ -272,12 +287,8 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     }
 
     /// <summary>
-    /// Асинхронно читает один ограниченный STX/ETX-кадр; ожидание TCP-байтов
+    /// Читает один ограниченный STX/ETX-кадр; ожидание TCP-байтов
     /// нельзя выполнить синхронно без блокировки потока службы.
-    /// </summary>
-    /// <param name="stream">Открытый поток из сервиса.</param>
-    /// <param name="token">Отмена чтения.</param>
-    /// <returns>ASCII-тело и точные входные байты кадра.</returns>
     private static async Task<(string Body, byte[] Raw)> ReadTextAsync(Stream stream, CancellationToken token)
     {
         List<byte> body = [];
@@ -299,10 +310,6 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
     /// Асинхронно пишет один S221 в поток и фиксирует TX. Проверка ASCII предотвращает
     /// незаметную замену символов на '?', характерную для Encoding.ASCII.GetBytes.
     /// </summary>
-    /// <param name="connection">Поток и счётчик TX.</param>
-    /// <param name="body">Подготовленный текст S221.</param>
-    /// <param name="token">Отмена записи.</param>
-    /// <returns>Задача завершения отправки.</returns>
     private async Task WriteTextAsync(ITcpConnection connection, string body, CancellationToken token)
     {
         if (body.Any(c => c > 0x7F))
@@ -326,7 +333,9 @@ public sealed class AnalyzerSysmexCS2000HostOnline : IDisposable
         if (runTask is null && settings.ResultHandlerStatus) resultQueue.Stop();
     }
 
-    /// <summary>Синхронно освобождает TCP host и очередь после завершения RunAsync.</summary>
+    /// <summary>
+    /// Синхронно освобождает TCP host и очередь после завершения RunAsync.
+    /// </summary>
     public void Dispose()
     {
         Stop();

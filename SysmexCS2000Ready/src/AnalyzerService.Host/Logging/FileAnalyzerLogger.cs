@@ -7,7 +7,7 @@ namespace AnalyzerService.Host.Logging;
 /// Записывает журналы одного анализатора по категориям и дням.
 /// Связан с драйвером только через IAnalyzerLogger.
 /// </summary>
-public sealed class FileAnalyzerLogger : IAnalyzerLogger
+public class FileAnalyzerLogger : IAnalyzerLogger
 {
     private readonly string root;
     private readonly object locker = new();

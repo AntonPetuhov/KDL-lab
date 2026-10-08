@@ -6,7 +6,7 @@ namespace SysmexCS2000.HostOnline.Driver;
 /// <summary>
 /// Точка входа DLL собственного протокола Sysmex Host Online.
 /// </summary>
-public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
+public class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
 {
     private AnalyzerSysmexCS2000HostOnline? analyzer;
 
@@ -53,15 +53,19 @@ public sealed class SysmexCS2000HostOnlineDriver : IAnalyzerDriver
     }
     #endregion
 
-    /// <summary>Запускает собственный TCP listener и возвращает задачу его рабочего цикла.</summary>
-    /// <param name="cancellationToken">Сигнал остановки.</param>
-    /// <returns>Задача до завершения работы прибора.</returns>
+    /// <summary>
+    /// Запускает собственный TCP listener и возвращает задачу Task его рабочего цикла.
+    /// </summary>
     public Task RunAsync(CancellationToken cancellationToken) =>
         (analyzer ?? throw new InvalidOperationException("Драйвер не инициализирован.")).RunAsync(cancellationToken);
 
-    /// <summary>Синхронно просит драйвер закрыть свои ресурсы и завершить RunAsync.</summary>
+    /// <summary>
+    /// Просит драйвер закрыть свои ресурсы и завершить RunAsync.
+    /// </summary>
     public void Stop() => analyzer?.Stop();
 
-    /// <summary>Синхронно освобождает обработчик и файловую очередь.</summary>
+    /// <summary>
+    /// Освобождает обработчик и файловую очередь.
+    /// </summary>
     public void Dispose() => analyzer?.Dispose();
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AnalyzerService.LisDatabase")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd5aadcbad5e0fdc524655c2b03a3e8c73ec1513")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+505d3cfcf4989a37f7971d041fdca631e7870c5d")]
 [assembly: System.Reflection.AssemblyProductAttribute("AnalyzerService.LisDatabase")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AnalyzerService.LisDatabase")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

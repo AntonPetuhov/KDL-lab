@@ -31,12 +31,16 @@ public class AnalyzerManager(AnalyzerLoggerFactory loggerFactory) : IDisposable
     /// </summary>
     public async Task StartAllAsync(CancellationToken token)
     {
-        
+        IAnalyzerLogger serviceLog = loggerFactory.CreateServiceLogger();
+
         foreach (AnalyzerRuntime analyzer in analyzers.Values) 
         {
             //await analyzer.StartAsync(token).ConfigureAwait(false);
             await analyzer.StartAsync(token);
+            serviceLog.Service($"Менеджер запустил анализатор {analyzer.Name}");
         }
+
+        serviceLog.Service($"Ждем когда все анализаторы завершат работу");
         // ждем когда все задачи завершатся
         await Task.WhenAll(analyzers.Values.Select(analyzer => analyzer.Completion)).ConfigureAwait(false);
     }

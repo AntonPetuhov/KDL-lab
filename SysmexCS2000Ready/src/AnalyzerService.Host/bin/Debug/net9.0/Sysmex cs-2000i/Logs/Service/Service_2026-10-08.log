@@ -1,0 +1,10 @@
+﻿08.10.2026 16:38:24     Info: Инициализация драйвера анализатора Sysmex cs-2000i выполнена.
+08.10.2026 16:38:24     Info: Поток обработки сырых данных с прибора запущен: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\Sysmex cs-2000i\Results.
+08.10.2026 16:38:24     Info: Host Online драйвер Sysmex cs-2000i запущен; Обработка результатов (ResultHandlerStatus) = True.
+08.10.2026 16:38:24     Info: Host Online TCP listener 10.129.1.40:8027 запущен драйвером.
+08.10.2026 16:38:24     Info: Sysmex cs-2000i: рабочий цикл DLL драйвера запущен.
+08.10.2026 16:41:24     Info: Инициализация драйвера анализатора Sysmex cs-2000i выполнена.
+08.10.2026 16:41:24     Info: Поток обработки сырых данных с прибора запущен: C:\Users\anton.petuhov\source\repos\KDL-lab\SysmexCS2000Ready\src\AnalyzerService.Host\bin\Debug\net9.0\Sysmex cs-2000i\Results.
+08.10.2026 16:41:24     Info: Host Online драйвер Sysmex cs-2000i запущен; Обработка результатов (ResultHandlerStatus) = True.
+08.10.2026 16:41:25     Info: Host Online TCP listener 10.129.1.40:8027 запущен драйвером.
+08.10.2026 16:41:25     Info: Sysmex cs-2000i: рабочий цикл DLL драйвера запущен.

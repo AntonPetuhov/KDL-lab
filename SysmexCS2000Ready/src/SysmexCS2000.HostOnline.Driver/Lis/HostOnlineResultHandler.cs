@@ -74,12 +74,9 @@ public class HostOnlineResultHandler(AnalyzerSettings settings, IAnalyzerLogger 
     };
 
     /// <summary>
-    /// Синхронно округляет уже расшифрованное число до одного десятичного знака
+    /// Округляет уже расшифрованное число до одного десятичного знака
     /// и записывает запятую для файлов ЛИС. Неизвестный масштаб блокирует передачу.
     /// </summary>
-    /// <param name="item">Результат, разобранный кодеком по настройке кода Host Online.</param>
-    /// <returns>Число в виде «28,6».</returns>
-    /// <exception cref="InvalidDataException">Нет масштаба кода или данные не являются числом.</exception>
     public static string FormatLisValue(HostOnlineResultItem item)
     {
         if (!HostOnlineCodec.HasDecimalPlaces(item.ParameterCode))

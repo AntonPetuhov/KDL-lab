@@ -6,7 +6,7 @@ namespace AnalyzerService.LisDatabase;
 /// <summary>
 /// Выполняет запросы к БД ЛИС
 /// </summary>
-public sealed class LisDBProvider(AnalyzerSettings settings, IAnalyzerLogger logger)
+public class LisDBProvider(AnalyzerSettings settings, IAnalyzerLogger logger)
 {
     /// <summary>
     /// Запрос задания. Получаем пациента и незавершённые тесты по RID.

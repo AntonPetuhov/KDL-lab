@@ -9,7 +9,7 @@ namespace AnalyzerService.Host.Runtime;
 /// Передаёт настройки и логгер в IAnalyzerDriver, наблюдает RunAsync и подаёт
 /// Stop при остановке службы. TCP, COM и файловый обмен принадлежат драйверам.
 /// </summary>
-public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader loader, AnalyzerLoggerFactory loggerFactory) : IDisposable
+public class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader loader, AnalyzerLoggerFactory loggerFactory) : IDisposable
 {
     private readonly CancellationTokenSource stop = new();
     private CancellationTokenSource? linkedStop;
@@ -35,7 +35,7 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
     /// </summary>
     public Task StartAsync(CancellationToken serviceToken)
     {
-        logger.Service($"Запуск работы анализатора {Name}. Загрузка dll и инициализация драйвера...");
+        //logger?.Service($"Запуск работы анализатора {Name}. Загрузка dll и инициализация драйвера...");
 
         // если объект анализатора уже был освобожден
         if (disposed) 
@@ -65,7 +65,9 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
 
             if (runTask.IsFaulted) 
                 runTask.GetAwaiter().GetResult();
-            logger.Service($"{Name}: рабочий цикл DLL запущен.");
+
+            logger.Service($"{Name}: рабочий цикл DLL драйвера запущен.");
+
             return Task.CompletedTask;
         }
         catch (Exception ex)
@@ -99,26 +101,56 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
 
     /// <summary>
     /// Сначала отменяет рабочий цикл и вызывает синхронный Stop драйвера, чтобы
-    /// разблокировать его I/O, затем асинхронно ожидает RunAsync. Тип I/O неизвестен хосту.
+    /// разблокировать его I/O, затем асинхронно ожидает RunAsync.
     /// </summary>
-    /// <param name="cancellationToken">Ограничение ожидания при остановке службы.</param>
-    /// <returns>Задача завершения DLL.</returns>
-    /// <exception cref="AggregateException">Ошибки Stop или рабочего цикла, уже записанные в журнал.</exception>
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        if (loadedDriver is null) return;
+        if (loadedDriver is null)
+        {
+            logger.Service($"Анализатор {settings.AnalyzerName} не запущен.");
+            return;
+        }
+
+        logger.Service($"Остановка анализатора {settings.AnalyzerName}");
+
         List<Exception> errors = [];
-        try { stop.Cancel(); }
-        catch (Exception ex) { logger?.Error($"{Name}: исключение отмены рабочего цикла.", ex); errors.Add(ex); }
-        try { loadedDriver.Instance.Stop(); }
-        catch (Exception ex) { logger?.Error($"{Name}: исключение сигнала остановки драйвера.", ex); errors.Add(ex); }
-        try { if (runTask is not null) await runTask.WaitAsync(cancellationToken).ConfigureAwait(false); }
+        try 
+        { 
+            stop.Cancel(); 
+        }
+        catch (Exception ex) 
+        { 
+            logger?.Error($"{Name}: исключение отмены рабочего цикла.", ex); 
+            errors.Add(ex); 
+        }
+
+        try 
+        { 
+            loadedDriver.Instance.Stop(); 
+        }
+        catch (Exception ex) 
+        { 
+            logger?.Error($"{Name}: исключение сигнала остановки драйвера.", ex); 
+            errors.Add(ex); 
+        }
+
+        try 
+        { 
+            if (runTask is not null) 
+                await runTask.WaitAsync(cancellationToken).ConfigureAwait(false); 
+        }
         catch (OperationCanceledException) when (stop.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
         {
             logger?.Service($"{Name}: рабочая задача DLL завершилась по штатной отмене.");
         }
-        catch (Exception ex) { logger?.Error($"{Name}: исключение ожидания рабочего цикла DLL.", ex); errors.Add(ex); }
-        if (errors.Count != 0) throw new AggregateException($"{Name}: ошибки остановки.", errors);
+        catch (Exception ex) 
+        { 
+            logger?.Error($"{Name}: исключение ожидания рабочего цикла DLL.", ex); 
+            errors.Add(ex); 
+        }
+
+        if (errors.Count != 0) 
+            throw new AggregateException($"{Name}: ошибки остановки.", errors);
     }
 
     /// <summary>
@@ -127,9 +159,13 @@ public sealed class AnalyzerRuntime(AnalyzerSettings settings, DriverLoader load
     /// </summary>
     public void Dispose()
     {
-        if (disposed) return;
+        if (disposed) 
+            return;
         disposed = true;
-        try { loadedDriver?.Dispose(); }
+        try 
+        { 
+            loadedDriver?.Dispose(); 
+        }
         finally
         {
             linkedStop?.Dispose();

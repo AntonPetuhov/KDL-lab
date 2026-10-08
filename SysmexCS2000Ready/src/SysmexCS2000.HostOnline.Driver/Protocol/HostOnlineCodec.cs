@@ -119,12 +119,9 @@ public class HostOnlineCodec
     }
 
     /// <summary>
-    /// Синхронно преобразует трёхзначный код результата в код заказа: два знака
+    /// преобразует трёхзначный код результата в код заказа: два знака
     /// группы анализа и ноль согласно разделам 5.4 и 6 Host Online PDF.
     /// </summary>
-    /// <param name="source">Код из сопоставления ЛИС.</param>
-    /// <returns>Трёхзначный код группы для S221.</returns>
-    /// <exception cref="InvalidDataException">Код ЛИС не состоит из трёх ASCII-цифр.</exception>
     public static string NormalizeOrderCode(string source)
     {
         string code = source.Trim();
@@ -133,9 +130,10 @@ public class HostOnlineCodec
         return code is "000" or "999" ? code : code[..2] + "0";
     }
 
-    /// <summary>Синхронно извлекает коды из сформированного S221 для диагностического журнала.</summary>
-    /// <param name="body">Тело одного блока S221.</param>
-    /// <returns>Коды всех параметров этого блока.</returns>
+    /// <summary>
+    /// извлекает коды из сформированного S221 для диагностического журнала.
+    /// </summary>
+
     public static IEnumerable<string> ReadOrderCodes(string body)
     {
         for (int offset = HeaderLength; offset + 9 <= body.Length; offset += 9)
@@ -198,13 +196,9 @@ public class HostOnlineCodec
     }
 
     /// <summary>
-    /// Синхронно транслитерирует ФИО в ASCII и ограничивает его полем 15 символов.
+    /// Транслитерирует ФИО в ASCII и ограничивает его полем 15 символов.
     /// Документ допускает в S221 только имя пациента; даты рождения и пола в нём нет.
     /// </summary>
-    /// <param name="lastName">Фамилия из БД.</param>
-    /// <param name="firstName">Имя из БД.</param>
-    /// <returns>ASCII-поле без завершающих пробелов.</returns>
-    /// <exception cref="InvalidDataException">В имени встретился неподдерживаемый символ.</exception>
     public static string FormatPatientName(string? lastName, string? firstName)
     {
         string original = $"{lastName} {firstName}".Trim().ToUpperInvariant();
