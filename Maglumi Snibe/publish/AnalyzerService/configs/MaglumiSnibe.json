@@ -1,0 +1,17 @@
+{
+  "AnalyzerName": "Maglumi X8",
+  "ConnectionType": "TCPIP",
+  "IPaddress": "127.0.0.1",
+  "Port": 8030,
+  "Isdll": true,
+  "DllPath": "drivers\\MaglumiSnibe\\Maglumi.Snibe.Driver.dll",
+  "ResultsFolder": "Results",
+  "ActiveStatus": false,
+  "WorkStatus": true,
+  "ResultHandlerStatus": true,
+  "OutputFolder": "CGM\\Exchange",
+  "ConnectionString": "Server=YOUR_SQL_SERVER;Database=YOUR_DATABASE;Integrated Security=true;TrustServerCertificate=True;",
+  "AnalyzerCode": "YOUR_ANALYZER_CODE",
+  "AnalyzerConfigurationCode": "YOUR_MAGLUMI_CONFIGURATION_CODE",
+  "Protocol": "MAGLUMI_X8_HL7"
+}

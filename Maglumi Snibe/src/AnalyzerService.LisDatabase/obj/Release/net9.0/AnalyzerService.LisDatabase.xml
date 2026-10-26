@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AnalyzerService.LisDatabase</name>
+    </assembly>
+    <members>
+        <member name="T:AnalyzerService.LisDatabase.LisDBProvider">
+            <summary>
+            Выполняет запросы к БД ЛИС
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.LisDatabase.LisDBProvider.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger)">
+            <summary>
+            Выполняет запросы к БД ЛИС
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.LisDatabase.LisDBProvider.GetOrder(System.String)">
+            <summary>
+            Запрос задания. Получаем пациента и незавершённые тесты по RID.
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.LisDatabase.LisDBProvider.TranslateResultCode(System.String)">
+            <summary>
+            Преобразует код прибора в код PSMV2.
+            </summary>
+        </member>
+        <member name="T:AnalyzerService.LisDatabase.LisOrder">
+            <summary>
+            Содержит заказ ЛИС для ответа анализатору
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.LisDatabase.LisOrder.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>
+            Содержит заказ ЛИС для ответа анализатору
+            </summary>
+        </member>
+        <member name="T:AnalyzerService.LisDatabase.LisResult">
+            <summary>
+            Содержит один результат, принятый от анализатора.
+            </summary>
+        </member>
+        <member name="M:AnalyzerService.LisDatabase.LisResult.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Содержит один результат, принятый от анализатора.
+            </summary>
+        </member>
+    </members>
+</doc>

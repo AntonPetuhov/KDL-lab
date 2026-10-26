@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Maglumi.Snibe.Driver</name>
+    </assembly>
+    <members>
+        <member name="T:Maglumi.Snibe.Driver.AnalyzerMaglumiX8">
+            <summary>Владеет TCP listener, сеансом HL7, запросами ЛИС и общей очередью файлов.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.AnalyzerMaglumiX8.#ctor(AnalyzerService.Contracts.IAnalyzerLogger,AnalyzerService.Contracts.AnalyzerSettings,System.Func{System.String,AnalyzerService.LisDatabase.LisOrder},System.Func{System.String,System.String})">
+            <summary>Позволяет проверять полный TCP/файловый цикл без изменения общего LisDBProvider.</summary>
+        </member>
+        <member name="T:Maglumi.Snibe.Driver.Lis.X8ResultHandler">
+            <summary>Адаптер X8 к существующему файловому интерфейсу ЛИС (.res/.ok, Windows-1251).</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Lis.X8ResultHandler.#ctor(AnalyzerService.Contracts.AnalyzerSettings,AnalyzerService.Contracts.IAnalyzerLogger,System.Func{System.String,System.String})">
+            <summary>Явная зависимость для проверки файлового обмена без рабочей БД.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Lis.X8ResultHandler.FormatValue(System.String)">
+            <summary>Сохраняет все переданные десятичные знаки, меняет только разделитель для ЛИС.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Lis.X8ResultHandler.NumericValue">
+            <remarks>
+            Pattern:<br/>
+            <code>\\A[+-]?(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)\\z</code><br/>
+            Options:<br/>
+            <code>RegexOptions.CultureInvariant</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match a character in the set [+-] atomically, optionally.<br/>
+            ○ Match with 2 alternative expressions.<br/>
+                ○ Match a sequence of expressions.<br/>
+                    ○ Match a character in the set [0-9] greedily at least once.<br/>
+                    ○ Optional (greedy).<br/>
+                        ○ Match '.'.<br/>
+                        ○ Match a character in the set [0-9] atomically at least once.<br/>
+                ○ Match a sequence of expressions.<br/>
+                    ○ Match '.'.<br/>
+                    ○ Match a character in the set [0-9] atomically at least once.<br/>
+            ○ Match if at the end of the string.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="T:Maglumi.Snibe.Driver.MaglumiSnibeDriver">
+            <summary>Управляемая DLL для HL7-интерфейса MAGLUMI X8.</summary>
+        </member>
+        <member name="T:Maglumi.Snibe.Driver.Protocol.Hl7Segment">
+            <summary>Поля нумеруются по HL7, включая особую нумерацию MSH.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Protocol.Hl7Segment.#ctor(System.String)">
+            <summary>Поля нумеруются по HL7, включая особую нумерацию MSH.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Protocol.Hl7Message.Parse(System.String)">
+            <summary>Руководство допускает несколько сообщений MSH в одном MLLP.</summary>
+        </member>
+        <member name="T:Maglumi.Snibe.Driver.Protocol.MllpCodec">
+            <summary>Обрамление X8: VT + UTF-8 HL7 + FS + CR. Один экземпляр на TCP-сеанс.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Protocol.MllpCodec.#ctor(System.Int32)">
+            <summary>Обрамление X8: VT + UTF-8 HL7 + FS + CR. Один экземпляр на TCP-сеанс.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Protocol.MllpCodec.Feed(System.Byte[],System.Int32)">
+            <summary>Возвращает точные байты кадров независимо от границ TCP-чтения.</summary>
+        </member>
+        <member name="M:Maglumi.Snibe.Driver.Protocol.X8ResultCodec.Parse(System.Collections.Generic.IReadOnlyList{Maglumi.Snibe.Driver.Protocol.Hl7Message})">
+            <summary>Поддерживает несколько SPM и MSH. Связь OBR/OBX проверяется, а не исправляется догадкой.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.NumericValue_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the NumericValue method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.NumericValue_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NumericValue_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.NumericValue_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NumericValue_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.NumericValue_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NumericValue_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NumericValue_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NumericValue_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32)">
+            <summary>Pushes 1 value onto the backtracking stack.</summary>
+        </member>
+    </members>
+</doc>

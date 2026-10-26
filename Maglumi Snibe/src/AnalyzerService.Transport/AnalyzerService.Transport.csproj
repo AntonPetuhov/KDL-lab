@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>AnalyzerService.Transport</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>Maglumi.Snibe.Driver</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnalyzerService.Contracts\AnalyzerService.Contracts.csproj" Private="false" ExcludeAssets="runtime;native" />
+    <ProjectReference Include="..\AnalyzerService.Transport\AnalyzerService.Transport.csproj" />
+    <ProjectReference Include="..\AnalyzerService.LisDatabase\AnalyzerService.LisDatabase.csproj" />
+    <ProjectReference Include="..\AnalyzerService.ResultFiles\AnalyzerService.ResultFiles.csproj" />
+  </ItemGroup>
+</Project>

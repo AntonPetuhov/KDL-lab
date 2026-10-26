@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Maglumi.Snibe.Driver\Maglumi.Snibe.Driver.csproj" />
+    <ProjectReference Include="..\..\src\AnalyzerService.Host\AnalyzerService.Host.csproj" />
+  </ItemGroup>
+</Project>

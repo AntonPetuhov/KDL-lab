@@ -1,0 +1,118 @@
+[
+  {
+    "Path": "src\\AnalyzerService.Host\\AnalyzerService.Host.csproj",
+    "SHA256": "32B8EFA3CDC183F6B28201854F3942BC5758CECAB4E6ECFD14A0CD2721F27980"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\AnalyzerService.Host.csproj.user",
+    "SHA256": "FE8495CAD6BF79710B4EB6CB4251ADD189160B0534BB5DEC97AC1D78792F6CE2"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Program.cs",
+    "SHA256": "4E2F1F34597B4806EBC91E0CEF0DD8007038C9DC4A8417428132637309617856"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Worker.cs",
+    "SHA256": "D2F9CDA8EFF323410C606E43C99ECBF7969405B0F0654DFE6943FDC091F69E03"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Configuration\\AnalyzerSettingsValidator.cs",
+    "SHA256": "4B7A25438FE0D41DF537A5F97D2F8550178FEDDF552113A44AE32E5E680BFC45"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Configuration\\JsonAnalyzerSettingsProvider.cs",
+    "SHA256": "D1A47F963F67A46096FFE5553E9E483B8A397624D3455C25283186D51A18E9E3"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Drivers\\DriverLoadContext.cs",
+    "SHA256": "F12AD71986DE4AC035F383D9F70D022D953C51DFBD0B5E4CA89EB7BCCCB309AA"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Drivers\\DriverLoader.cs",
+    "SHA256": "FF48C91346C863DDEBE32823A3F55216745C0D6C97EFCC295E598511E5B21F38"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Drivers\\LoadedDriver.cs",
+    "SHA256": "E6E1318F08E2240CAF3A849C035C165FB077A771635787B92BAA222435C71D4F"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Logging\\AnalyzerLoggerFactory.cs",
+    "SHA256": "C60DF6DA6486837297F2F0666CF362ED023DBBAE36BB989E4920E34F770298D5"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Logging\\FileAnalyzerLogger.cs",
+    "SHA256": "ACA7C67B300250E6F06779BB408AF364A359A1B3E9A318E692E7D93EDDF82578"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Properties\\PublishProfiles\\FolderProfile.pubxml",
+    "SHA256": "2353A6A55A1A50835279C0C367584D462BED5A6F81A7A7B63075EAAFC53BABD8"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Properties\\PublishProfiles\\FolderProfile.pubxml.user",
+    "SHA256": "B516A1E80C98372FB914DBC1E3708EA412D57DE720C56E4659BE4D305D4DFE18"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Runtime\\AnalyzerManager.cs",
+    "SHA256": "9DDB98A52E704C86EF34CECB575598626FEF49E10D5850C9A5663584FD91161C"
+  },
+  {
+    "Path": "src\\AnalyzerService.Host\\Runtime\\AnalyzerRuntime.cs",
+    "SHA256": "1F8741DFFD220FD22E5EDFF8FC9923A85570845209EDA5F17C619C8320745E79"
+  },
+  {
+    "Path": "src\\AnalyzerService.Contracts\\AnalyzerService.Contracts.csproj",
+    "SHA256": "E6FCB8E1E93A724D47A829CFFD19D47840A5EB088E9ACE43F3A34BBAF1524B07"
+  },
+  {
+    "Path": "src\\AnalyzerService.Contracts\\AnalyzerSettings.cs",
+    "SHA256": "7ECA611E177723CA63BC74C11361428625484A8320B0C6D4C5B76CD6744297D8"
+  },
+  {
+    "Path": "src\\AnalyzerService.Contracts\\IAnalyzerDriver.cs",
+    "SHA256": "FA0D590D7B1EBCF3C98D3B29D4911F3FB991C4334A97E1CA103CF534D5484DC0"
+  },
+  {
+    "Path": "src\\AnalyzerService.Contracts\\IAnalyzerLogger.cs",
+    "SHA256": "FC4F674578F1D7BCC62BD63FF327E2D6B82E77B16B4AA8E114F669F088E97E38"
+  },
+  {
+    "Path": "src\\AnalyzerService.Transport\\AnalyzerService.Transport.csproj",
+    "SHA256": "C992C7206BA4968DE24B4FCFCA37B68A8CE1E6D5681358B1B99835D3DC4F3304"
+  },
+  {
+    "Path": "src\\AnalyzerService.Transport\\ITcpConnection.cs",
+    "SHA256": "F0F29920CDD7EB92B1CF6A5D4AB11ACDA15F91B5447C511BACF852B0C97DD5BE"
+  },
+  {
+    "Path": "src\\AnalyzerService.Transport\\ITcpHost.cs",
+    "SHA256": "83BDCC9B1DEB7E1D9630C90E3AD6D2061D4ED0CB36EED89C3173410C8158B001"
+  },
+  {
+    "Path": "src\\AnalyzerService.Transport\\TcpAnalyzerConnection.cs",
+    "SHA256": "CF088DCBCE5EBA08C098A236816155F794FF49532E06AC970DEE12179955112D"
+  },
+  {
+    "Path": "src\\AnalyzerService.Transport\\TcpHost.cs",
+    "SHA256": "0746C31A37B21D970E8444F95AF21D5C331F86E12445C9D7508CEDA38C269A3E"
+  },
+  {
+    "Path": "src\\AnalyzerService.LisDatabase\\AnalyzerService.LisDatabase.csproj",
+    "SHA256": "8428E9B109452D6AB729B4928F91C1B8E729EA825D79DD4CCBA2CCA0AC28EFA0"
+  },
+  {
+    "Path": "src\\AnalyzerService.LisDatabase\\LisDBProvider.cs",
+    "SHA256": "84B09D5C4C4809A362A4902164EFA12304CB2922D4833AD5C01092F6FB28DFC7"
+  },
+  {
+    "Path": "src\\AnalyzerService.LisDatabase\\LisModels.cs",
+    "SHA256": "B79E0DCD16347BF1C99EDC3AFCA6688EAC88F4FDC04BFDC37E246350FE064046"
+  },
+  {
+    "Path": "src\\AnalyzerService.ResultFiles\\AnalyzerService.ResultFiles.csproj",
+    "SHA256": "896596E12E76DBD250D55A2A949A4DC4168BC9788ABEFE642DAEA3B5A1B90EEF"
+  },
+  {
+    "Path": "src\\AnalyzerService.ResultFiles\\RawResultQueue.cs",
+    "SHA256": "64E220E77785D4E6B8EC332F1F077A6C7EB5C78163A245368811D4AF7633C115"
+  }
+]
