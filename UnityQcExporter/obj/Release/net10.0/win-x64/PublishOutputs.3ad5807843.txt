@@ -1,0 +1,4 @@
+C:\Development\Analyzer Configuration Manager\UnityQcExporter\bin\Release\publish\win-x64\exporter.json
+C:\Development\Analyzer Configuration Manager\UnityQcExporter\bin\Release\publish\win-x64\UnityQcExporter.pdb
+C:\Development\Analyzer Configuration Manager\UnityQcExporter\bin\Release\publish\win-x64\Examples\SysmexQC_20261116_1030.csv
+C:\Development\Analyzer Configuration Manager\UnityQcExporter\bin\Release\publish\win-x64\UnityQcExporter.exe

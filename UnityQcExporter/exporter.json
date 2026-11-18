@@ -1,0 +1,11 @@
+{
+  "PollSeconds": 180,
+  "UnityOutputFolder": "Unity",
+  "Sources": [
+    {
+      "Id": "SysmexCS2000",
+      "Unity": false,
+      "ReadyFolder": "Analyzers/SysmexCS2000/Results/QualityControl/Unity/Ready"
+    }
+  ]
+}
